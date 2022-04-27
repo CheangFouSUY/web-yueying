@@ -17,15 +17,15 @@ export default {
 
 <style>
 #headerLogo{
-    width: 90px;
+    width: 80px;
     float: left;
-    margin-top: -10px;
+    margin-top: -5px;
 }
 
 #logoName{
     font-size: 50px;
     font-weight: 100;
-    margin: auto auto auto 70px;
+    margin: auto 10px auto -20px;
     text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 .nav{

@@ -93,10 +93,11 @@ export default {
     margin-left: 10px;
 }
 .ForgetnRegister{
+    width: 420px;
     display:inline-block;
-    margin-left: 800px;
     position: relative;
     top: -20px;
+    text-align: right;
 }
 .ForgetnRegister span:hover{
     color: rgba(121, 163, 177, 0.6);
@@ -114,5 +115,8 @@ input, select, textarea{
 input::placeholder{
   color:  #456268;
 ;
+}
+.login{
+    text-align: center;
 }
 </style>
