@@ -90,11 +90,13 @@ export default {
     font-size: 18px;
     color: #456268;
     cursor: pointer;
-    position: relative;
-    left: 800px;
-    bottom: 20px;
     margin-left: 10px;
-    ;
+}
+.ForgetnRegister{
+    display:inline-block;
+    margin-left: 800px;
+    position: relative;
+    top: -20px;
 }
 .ForgetnRegister span:hover{
     color: rgba(121, 163, 177, 0.6);
