@@ -15,6 +15,22 @@ const routes = [
     name: 'register',
     component: () => import('../views/Register.vue')
   },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('../views/Login.vue')
+  },
+  {
+    path: '/emailverify',
+    name: 'email verify',
+    component: () => import('../views/EmailVerify.vue')
+  },
+  {
+    path: '/sqverify',
+    name: 'security question verify',
+    component: () => import('../views/SQVerify.vue')
+  },
+  
 ]
 
 const router = new VueRouter({
