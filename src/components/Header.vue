@@ -1,11 +1,11 @@
 <template>
 <div class="nav">
-    <a href="#" id="logoName">阅·影</a>
-    <a href="#">主页</a>
+    <a href="/" id="logoName">阅·影</a>
     <a href="#">图书</a>
     <a href="#">影视</a>
     <a href="#">话题</a>
     <a href="#">小组</a>
+    <router-link id='login' to="/login">登录</router-link>
 </div>
 </template>
 <script>
@@ -13,17 +13,18 @@ export default {
     name:'Header'
 }
 </script>
+
 <style>
 #logoName{
     font-size: 50px;
-    margin: auto 40px auto 100px;
+    margin: auto auto auto 70px;
     /* margin-left: 100px;
     margin-top: 0px;
     margin-right: ; */
 }
 .nav{
     height: 70px;
-    padding: 20px;
+    padding: 5px;
     font-size: 32px;
     background-color: #79A3B1;
 }
@@ -36,5 +37,8 @@ a{
     padding-right: 15px;
     color: white;
     text-decoration: none;
+}
+#login{
+    float:right;
 }
 </style>
