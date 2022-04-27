@@ -1,5 +1,6 @@
 <template>
 <div class="nav">
+    <img id="headerLogo" src="../../public/LogoWhite.svg">
     <a href="#" id="logoName">阅·影</a>
     <a href="#">主页</a>
     <a href="#">图书</a>
@@ -14,12 +15,17 @@ export default {
 }
 </script>
 <style>
+#headerLogo{
+    width: 90px;
+    float: left;
+    margin-top: -10px;
+}
+
 #logoName{
     font-size: 50px;
-    margin: auto 40px auto 100px;
-    /* margin-left: 100px;
-    margin-top: 0px;
-    margin-right: ; */
+    font-weight: 100;
+    margin: auto 40px auto -10px;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 .nav{
     height: 70px;
