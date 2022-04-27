@@ -32,8 +32,8 @@ a{
     float: left;
     /* border: 1px black solid; */
     margin-top: 20px;
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 15px;
+    padding-right: 15px;
     color: white;
     text-decoration: none;
 }
