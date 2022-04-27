@@ -1,14 +1,18 @@
 <template>
 <div class="nav">
-    <img id="headerLogo" src="../../public/LogoWhite.svg">
-    <a href="/" id="logoName">阅·影</a>
-    <a href="#">图书</a>
-    <a href="#">影视</a>
-    <a href="#">话题</a>
-    <a href="#">小组</a>
+    <!-- <img id="headerLogo" src="../../public/LogoWhite.svg"> -->
+    <a href="/" id="logoName">
+        <img id="headerLogo" src="../../public/LogoWhite.svg">
+        阅·影
+    </a>
+    <a href="#" class="navLink">图书</a>
+    <a href="#" class="navLink">影视</a>
+    <a href="#" class="navLink">话题</a>
+    <a href="#" class="navLink">小组</a>
     <router-link id='login' to="/login">登录</router-link>
 </div>
 </template>
+
 <script>
 export default {
     name:'Header'
@@ -17,32 +21,40 @@ export default {
 
 <style>
 #headerLogo{
-    width: 80px;
+    width: 55px;
     float: left;
-    margin-top: -5px;
+    margin-left: 30px;
 }
 
 #logoName{
-    font-size: 50px;
+    height: 45px;
+    font-size: 36px;
     font-weight: 100;
-    margin: auto 10px auto -20px;
+    margin: -3px 20px auto -15px;
+    padding: 5px 20px;
     text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 .nav{
-    height: 70px;
-    padding: 5px;
-    font-size: 32px;
+    height: 55px;
+    /* padding: 5px; */
+    font-size: 24px;
     background-color: #79A3B1;
+}
+.navLink:hover{
+    background-color: #6f9caa;
 }
 a{
     display: block;
     float: left;
-    /* border: 1px black solid; */
-    margin-top: 20px;
-    padding-left: 15px;
+    height: 35px;
+    /* outline: 1px black solid; */
+    margin: auto ;
+    /* margin-top: 20px; */
+    padding: 10px 15px;
     padding-right: 15px;
     color: white;
     text-decoration: none;
+
 }
 #login{
     float:right;

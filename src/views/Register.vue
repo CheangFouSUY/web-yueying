@@ -41,7 +41,7 @@
             </div>
             <div>
                 <span></span>
-                <button>登录</button>
+                <button>注册</button>
             </div>
         </div>
     </div>
@@ -59,19 +59,20 @@ export default {
 
 <style scoped>
 #logo{
-    border: 1px black solid;
+    width: 350px;
+    margin: auto;
 }
 
 #logoBook{
+    display: inline-block;
+    vertical-align: middle;
     width: 130px;
-    border: 1px black solid;
-    /* position: relative;
-    top: 20px; */
-    margin: 20px auto;
+    margin: auto 10px;
 }
 
 h1{
     display: inline-block;
+    vertical-align: middle;
     font-size: 80px;
     color: #456268;
     font-weight: 100;
@@ -90,15 +91,15 @@ input:hover{
 
 input{
     display: inline-block;
-    margin: 13px auto;
-    height: 50px;
+    margin: 10px auto;
+    height: 40px;
     width: 350px;
     padding-left: 20px;
     border: none;
     border-radius: 10px;
     background-color: rgba(121, 163, 177, 0.4);
     color: #456268;
-    font-size: 24px;
+    font-size: 20px;
     vertical-align: middle;
 }
 
@@ -111,21 +112,22 @@ form{
 }
 
 button{
-    height: 50px;
+    height: 40px;
     width: 373px;
     margin: 15px auto;
-    background-color: #456268;
+    background-color: #79A3B1;
     border: none;
     color: white;
-    font-size: 26px;
+    font-size: 20px;
     border-radius: 10px;
+    letter-spacing: 2em;
 }
 
 #registerBox span{
     width: 110px;
     display: inline-block;
     color: #456268;
-    margin: auto 20px auto ;
+    margin: auto 15px auto ;
     vertical-align: middle;
     text-align: right;
 }
@@ -133,7 +135,7 @@ button{
 #registerBox{
     height: 700px;
     text-align: center;
-    font-size: 26px;
+    font-size: 20px;
     /* background-color: aquamarine; */
 }
 </style>
