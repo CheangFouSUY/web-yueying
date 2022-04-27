@@ -1,8 +1,11 @@
 <template>
   <div id="app">
     <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+      <router-link to="/">主页</router-link> |
+      <router-link to="/book">图书</router-link>
+      <router-link to="/drama">影视</router-link>
+      <router-link to="/post">话题</router-link>
+      <router-link to="/group">小组</router-link>
     </nav>
     <router-view/>
   </div>
@@ -10,11 +13,11 @@
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* font-family: Avenir, Helvetica, Arial, sans-serif; */
+  /* -webkit-font-smoothing: antialiased; */
+  /* -moz-osx-font-smoothing: grayscale; */
   text-align: center;
-  color: #2c3e50;
+  color: #456268;
 }
 
 nav {
