@@ -4,10 +4,10 @@
         <img id="headerLogo" src="@/assets/LogoWhite.svg">
         阅·影
     </a>
-    <a href="#" class="navLink">图书</a>
-    <a href="#" class="navLink">影视</a>
-    <a href="#" class="navLink">话题</a>
-    <a href="#" class="navLink">小组</a>
+    <a href="/book" class="navLink">图书</a>
+    <a href="/drama" class="navLink">影视</a>
+    <a href="/feed" class="navLink">话题</a>
+    <a href="/group" class="navLink">小组</a>
     <router-link id='login' to="/login">登录</router-link>
 </div>
 </template>

@@ -33,17 +33,22 @@ const routes = [
   {
     path: '/book',
     name: 'book mainpage',
-    component: () => import('../views/SQVerify.vue')
+    component: () => import('../views/BookMainpage.vue')
   },
   {
-    path: '/grama',
+    path: '/drama',
     name: 'drama mainpage',
-    component: () => import('../views/SQVerify.vue')
+    component: () => import('../views/DramaMainpage.vue')
   },
   {
-    path: '/sqverify',
-    name: 'security question verify',
-    component: () => import('../views/SQVerify.vue')
+    path: '/feed',
+    name: 'feed mainpage',
+    component: () => import('../views/FeedMainpage.vue')
+  },
+  {
+    path: '/group',
+    name: 'group mainpage',
+    component: () => import('../views/GroupMainpage.vue')
   },
 ]
 
