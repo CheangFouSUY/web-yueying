@@ -24,6 +24,7 @@ export default {
     width: 55px;
     float: left;
     margin-left: 30px;
+    margin-top: -4px;
 }
 
 #logoName{
@@ -36,7 +37,6 @@ export default {
 }
 .nav{
     height: 55px;
-    /* padding: 5px; */
     font-size: 24px;
     background-color: #79A3B1;
 }
@@ -49,7 +49,6 @@ a{
     height: 35px;
     /* outline: 1px black solid; */
     margin: auto ;
-    /* margin-top: 20px; */
     padding: 10px 15px;
     padding-right: 15px;
     color: white;
