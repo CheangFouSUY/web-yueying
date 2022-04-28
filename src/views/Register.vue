@@ -3,7 +3,7 @@
         <Header></Header>
         <div id="registerBox">
             <div id="logo">
-                <img id="logoBook" src="../../public/LogoBlue.svg">
+                <img id="logoBook" src="@/assets/LogoBlue.svg">
                 <h1>阅·影</h1>
             </div>
             <div>

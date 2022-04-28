@@ -2,22 +2,22 @@
   <div>
     <Header></Header>
     <div id="logo">
-      <img id="logoBook" src="../../public/LogoBlue.svg">
+      <img id="logoBook" src="@/assets/LogoBlue.svg">
       <h1>阅·影</h1>
     </div>
     <h1 class="sqTitle">密保问题验证</h1>
     <div class="verifyBox">
       <button id="getQuest" @click="GetQuest">获取密保问题</button>
       <div class="inputBox">
-        <img class="icon" src="../../public/Email.svg" alt="email_icon">  
+        <img class="icon" src="@/assets/Email.svg" alt="email_icon">  
         <input type="text" v-model="email" placeholder="输入邮箱">
       </div>
       <div class="inputBox">
-        <img class="icon" src="../../public/Question.svg" alt="key_icon">  
+        <img class="icon" src="@/assets/Question.svg" alt="key_icon">  
         <span>请先获取密保问题</span>
       </div>
       <div class="inputBox">
-        <img class="icon" src="../../public/Check.svg" alt="key_icon">  
+        <img class="icon" src="@/assets/Check.svg" alt="key_icon">  
         <input type="text" v-model="verifyKey" placeholder="输入密保答案">
       </div>
       <div class='changeLoginWay'>

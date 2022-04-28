@@ -1,8 +1,7 @@
 <template>
 <div class="nav">
-    <!-- <img id="headerLogo" src="../../public/LogoWhite.svg"> -->
     <a href="/" id="logoName">
-        <img id="headerLogo" src="../../public/LogoWhite.svg">
+        <img id="headerLogo" src="@/assets/LogoWhite.svg">
         阅·影
     </a>
     <a href="#" class="navLink">图书</a>

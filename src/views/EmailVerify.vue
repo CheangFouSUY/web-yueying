@@ -2,18 +2,18 @@
   <div>
     <Header></Header>
     <div id="logo">
-      <img id="logoBook" src="../../public/LogoBlue.svg">
+      <img id="logoBook" src="@/assets/LogoBlue.svg">
       <h1>阅·影</h1>
     </div>
     <h1 class="emailTitle">邮箱验证</h1>
     <div class="verifyBox">
       <button id="sendCode" @click="SendCode">发送验证码</button>
       <div class="inputBox">
-        <img class="icon" src="../../public/Email.svg" alt="email_icon">  
+        <img class="icon" src="@/assets/Email.svg" alt="email_icon">  
         <input type="text" v-model="email" placeholder="输入邮箱">
       </div>
       <div class="inputBox">
-        <img class="icon" src="../../public/Key.svg" alt="key_icon">  
+        <img class="icon" src="@/assets/Key.svg" alt="key_icon">  
         <input type="text" v-model="verifyKey" placeholder="输入验证码">
       </div>
       <div class='changeLoginWay'>

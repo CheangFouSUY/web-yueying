@@ -30,7 +30,21 @@ const routes = [
     name: 'security question verify',
     component: () => import('../views/SQVerify.vue')
   },
-  
+  {
+    path: '/book',
+    name: 'book mainpage',
+    component: () => import('../views/SQVerify.vue')
+  },
+  {
+    path: '/grama',
+    name: 'drama mainpage',
+    component: () => import('../views/SQVerify.vue')
+  },
+  {
+    path: '/sqverify',
+    name: 'security question verify',
+    component: () => import('../views/SQVerify.vue')
+  },
 ]
 
 const router = new VueRouter({
