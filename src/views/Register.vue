@@ -85,12 +85,12 @@ h1{
     text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
-input:focus, select:hover{
+input:focus, select:focus{
     background-color: rgba(121, 163, 177, 0.6);
     outline: none;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
 }
-input:hover, select:hover{
+input:hover{
     background-color: rgba(121, 163, 177, 0.6);
 }
 input, #sQuestion{
@@ -109,7 +109,10 @@ input, #sQuestion{
     -webkit-border-sizing: border-box;
     -moz-border-sizing: border-box;
 }
-
+#sQuestion:hover{
+    background-color: rgba(121, 163, 177, 0.6);
+    cursor: pointer;
+}
 #sQuestion{
     font-family: "Microsoft JhengHei", 微软正黑体, "Microsoft YaHei", 微软雅黑;
     color: #456268;
@@ -153,10 +156,6 @@ button{
     font-family: "Microsoft JhengHei", 微软正黑体, "Microsoft YaHei", 微软雅黑;
     cursor: pointer;
 }
-
-/* #registerBox div{
-    outline: 1px black solid;
-} */
 
 #registerBox span{
     width: 80px;
