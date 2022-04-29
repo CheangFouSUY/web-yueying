@@ -1,11 +1,16 @@
 <template>
     <div class='login'>
         <Header/>
+        <div id='logo'>
+        <img id="logoBook" src="@/assets/LogoBlue.svg">
         <h1>阅·影</h1>
-        <div>
+        </div>
+        <div class='inputBox'>
+        <img class="icon" src="@/assets/Email.svg" alt="email_icon">
         <input type="text" v-model="email" placeholder="输入你的邮箱">
         </div>
-        <div>
+        <div class='inputBox'>
+        <img class="icon" src="@/assets/Password.svg" alt="password_icon">  
         <input type="password" v-model="password" placeholder="输入你的密码">
         </div>
         <div class='ForgetnRegister'>
@@ -41,6 +46,25 @@ export default {
 </script>
 
 <style>
+.login #logo{
+    width: 350px;
+    margin: 80px auto 40px;
+}
+.login #logoBook{
+    display: inline-block;
+    vertical-align: middle;
+    width: 130px;
+    margin: auto 8px;
+}
+#logo h1{
+    display: inline-block;
+    vertical-align: middle;
+    margin: auto;
+    font-size: 80px;
+    color: #456268;
+    font-weight: 100;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
 .login h1{
     margin-top: 50px;
     text-align: center;
@@ -49,22 +73,16 @@ export default {
     text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 .login input{
-    display: block;
-    background: rgba(121, 163, 177, 0.4);
+    display: inline-block;
+    background: none;
+    border: none;
     width: 350px;
     height: 55px;
-    margin: 30px;
-    margin-left: auto;
-    margin-right: auto;
-    border: none;
     font-size:20px;
-    border-radius: 10px;
-    padding-left: 80px;  
+    font-family: "Microsoft JhengHei", 微软正黑体, "Microsoft YaHei", 微软雅黑;
 }
 .login input:focus{
-    background-color: rgba(121, 163, 177, 0.6);
     outline: none;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
 }
 .login button{
     display: block;
@@ -82,7 +100,6 @@ export default {
 .login button:hover{
     cursor: pointer;
     background-color: rgba(121, 163, 177, 0.6);
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
     outline: none;
 }
 .ForgetnRegister span{
@@ -101,6 +118,26 @@ export default {
 }
 .ForgetnRegister span:hover{
     color: rgba(121, 163, 177, 0.6);
+}
+.login .inputBox{
+  width: 420px;
+  height: 55px;
+  margin: 0px auto 40px;
+  border-radius: 10px;
+  background-color: rgba(121, 163, 177, 0.4);
+}
+.login .icon{
+  display: inline;
+  vertical-align: middle;
+  width: 40px;
+  margin: auto 10px 10px 0;
+}
+.login .inputBox:focus-within{
+    background-color: rgba(121, 163, 177, 0.6);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+}
+.login .inputBox:hover{
+    background-color: rgba(121, 163, 177, 0.6);
 }
 #symbol{
     cursor: default;
