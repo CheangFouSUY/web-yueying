@@ -47,7 +47,7 @@ export default {
 }
 .nav{
     height: 55px;
-    font-size: 24px;
+    font-size: 22px;
     background-color: #79A3B1;
 }
 .navLink:hover{
@@ -63,7 +63,6 @@ a{
     padding-right: 15px;
     color: white;
     text-decoration: none;
-
 }
 .searchBox{
     display: inline-block;
