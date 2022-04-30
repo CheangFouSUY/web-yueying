@@ -68,6 +68,69 @@
         <img class="arrow-right" src="../assets/Expand_right.svg" alt="arrow" />
       </div>
     </div>
+    <div class="new-book">
+      <div class="ctg-title">最新上架</div>
+      <div class="poster-list-wrap">
+        <img class="arrow-left" src="../assets/Expand_left.svg" alt="arrow" />
+        <ul class="book-list">
+          <li class="poster-title-wrap">
+            <a href="./DaoMuBiJi.vue">
+              <img src="../assets/poster/DaoMuBiJi.jpg" alt="盗墓笔记" />
+            </a>
+            <div class="title-wrap">
+              <span class="book-title">盗墓笔记</span>
+              <span class="rating">4.6</span>
+            </div>
+          </li>
+          <li class="poster-title-wrap">
+            <a href="./DaoMuBiJi.vue">
+              <img src="../assets/poster/DaoMuBiJi.jpg" alt="盗墓笔记" />
+            </a>
+            <div class="title-wrap">
+              <span class="book-title">盗墓笔记</span>
+              <span class="rating">4.6</span>
+            </div>
+          </li>
+          <li class="poster-title-wrap">
+            <a href="./DaoMuBiJi.vue">
+              <img src="../assets/poster/DaoMuBiJi.jpg" alt="盗墓笔记" />
+            </a>
+            <div class="title-wrap">
+              <span class="book-title">盗墓笔记</span>
+              <span class="rating">4.6</span>
+            </div>
+          </li>
+          <li class="poster-title-wrap">
+            <a href="./DaoMuBiJi.vue">
+              <img src="../assets/poster/DaoMuBiJi.jpg" alt="盗墓笔记" />
+            </a>
+            <div class="title-wrap">
+              <span class="book-title">盗墓笔记</span>
+              <span class="rating">4.6</span>
+            </div>
+          </li>
+          <li class="poster-title-wrap">
+            <a href="./DaoMuBiJi.vue">
+              <img src="../assets/poster/DaoMuBiJi.jpg" alt="盗墓笔记" />
+            </a>
+            <div class="title-wrap">
+              <span class="book-title">盗墓笔记</span>
+              <span class="rating">4.6</span>
+            </div>
+          </li>
+          <li class="poster-title-wrap">
+            <a href="./DaoMuBiJi.vue">
+              <img src="../assets/poster/DaoMuBiJi.jpg" alt="盗墓笔记" />
+            </a>
+            <div class="title-wrap">
+              <span class="book-title">盗墓笔记</span>
+              <span class="rating">4.6</span>
+            </div>
+          </li>
+        </ul>
+        <img class="arrow-right" src="../assets/Expand_right.svg" alt="arrow" />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -124,7 +187,7 @@ ul {
   display: inline-block;
   /* width: 1px; */
   padding: 0;
-  margin: 15px 60px;
+  margin: 15px 50px;
   /* outline: 1px black solid; */
 }
 
@@ -134,22 +197,23 @@ ul {
 }
 .arrow-left {
   display: inline-block;
-  position: fixed;
-  top: 50%;
+  position: absolute;
+  top: 40%;
   /* outline: 1px black solid; */
 }
 .arrow-right {
   display: inline-block;
-  position: fixed;
-  top: 50%;
-  left: 92.25%;
+  position: absolute;
+  top: 40%;
+  left: 95.7%;
   /* outline: 1px black solid; */
 }
-.hot-book {
+.hot-book, .new-book {
   margin: 30px 60px;
   /* outline: 1px black solid; */
 }
 .poster-list-wrap{
+  position: relative;
   margin: auto;
   /* outline: 1px black solid; */
 }
