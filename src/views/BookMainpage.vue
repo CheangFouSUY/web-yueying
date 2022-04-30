@@ -5,6 +5,22 @@
       <img src="../assets/Book.svg" alt="book icon" />
       <span>图书</span>
     </div>
+    <div class="category">
+      <div class="ctg-title">类型</div>
+      <ul class="ctg-list">
+        <li>爱情</li>
+        <li>恐怖</li>
+        <li>悬疑</li>
+        <li>科幻</li>
+        <li>艺术</li>
+        <li>体育</li>
+        <li>烹饪</li>
+        <li>漫画</li>
+        <li>教育</li>
+        <li>哲学</li>
+        <li>文学</li>
+      </ul>
+    </div>
     <div class="hot-book">
       <div class="ctg-title">热门</div>
       <div class="poster-list-wrap">
@@ -146,6 +162,27 @@ export default {
 </script>
 
 <style scoped>
+.ctg-list li:hover,
+.book-title:hover {
+  color: #79a3b1;
+  cursor: pointer;
+}
+.ctg-list li {
+  display: inline-block;
+  margin: 10px 30px 10px 0;
+  font-size: 20px;
+  /* outline: 1px black solid; */
+}
+.ctg-list {
+  padding: 0;
+  margin: 10px 70px;
+  /* outline: 1px black solid; */
+}
+.category {
+  margin: 30px 60px;
+  /* outline: 1px black solid; */
+}
+
 .rating {
   display: block;
   float: right;
@@ -179,11 +216,11 @@ export default {
   height: 270px;
   overflow: hidden;
 }
-li {
+.poster-list-wrap li {
   list-style: none;
   /* outline: 1px black solid; */
 }
-ul {
+.poster-list-wrap ul {
   display: inline-block;
   /* width: 1px; */
   padding: 0;
@@ -192,6 +229,7 @@ ul {
 }
 
 .ctg-title {
+  color: #79a3b1;
   font-size: 26px;
   margin: 0 70px;
 }
@@ -208,11 +246,12 @@ ul {
   left: 95.7%;
   /* outline: 1px black solid; */
 }
-.hot-book, .new-book {
+.hot-book,
+.new-book {
   margin: 30px 60px;
   /* outline: 1px black solid; */
 }
-.poster-list-wrap{
+.poster-list-wrap {
   position: relative;
   margin: auto;
   /* outline: 1px black solid; */
