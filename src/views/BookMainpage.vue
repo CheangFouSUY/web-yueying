@@ -2,7 +2,7 @@
   <div>
     <Header></Header>
     <div class="page-title">
-      <img src="../assets/Book.svg" alt="book icon" />
+      <img src="@/assets/Book.svg" alt="book icon" />
       <span>图书</span>
     </div>
     <div class="category">
@@ -24,11 +24,11 @@
     <div class="hot-book">
       <div class="ctg-title">热门</div>
       <div class="poster-list-wrap">
-        <img class="arrow-left" src="../assets/Expand_left.svg" alt="arrow" />
+        <img class="arrow-left" src="@/assets/Expand_left.svg" alt="arrow" />
         <ul class="book-list">
           <li class="poster-title-wrap">
-            <a href="./DaoMuBiJi.vue">
-              <img src="../assets/poster/DaoMuBiJi.jpg" alt="盗墓笔记" />
+            <a href="./daomubiji">
+              <img src="@/assets/poster/DaoMuBiJi.jpg" alt="盗墓笔记" />
             </a>
             <div class="title-wrap">
               <span class="book-title">盗墓笔记</span>
@@ -37,7 +37,7 @@
           </li>
           <li class="poster-title-wrap">
             <a href="./DaoMuBiJi.vue">
-              <img src="../assets/poster/DaoMuBiJi.jpg" alt="盗墓笔记" />
+              <img src="@/assets/poster/DaoMuBiJi.jpg" alt="盗墓笔记" />
             </a>
             <div class="title-wrap">
               <span class="book-title">盗墓笔记</span>
@@ -46,7 +46,7 @@
           </li>
           <li class="poster-title-wrap">
             <a href="./DaoMuBiJi.vue">
-              <img src="../assets/poster/DaoMuBiJi.jpg" alt="盗墓笔记" />
+              <img src="@/assets/poster/DaoMuBiJi.jpg" alt="盗墓笔记" />
             </a>
             <div class="title-wrap">
               <span class="book-title">盗墓笔记</span>
@@ -55,7 +55,7 @@
           </li>
           <li class="poster-title-wrap">
             <a href="./DaoMuBiJi.vue">
-              <img src="../assets/poster/DaoMuBiJi.jpg" alt="盗墓笔记" />
+              <img src="@/assets/poster/DaoMuBiJi.jpg" alt="盗墓笔记" />
             </a>
             <div class="title-wrap">
               <span class="book-title">盗墓笔记</span>
@@ -64,7 +64,7 @@
           </li>
           <li class="poster-title-wrap">
             <a href="./DaoMuBiJi.vue">
-              <img src="../assets/poster/DaoMuBiJi.jpg" alt="盗墓笔记" />
+              <img src="@/assets/poster/DaoMuBiJi.jpg" alt="盗墓笔记" />
             </a>
             <div class="title-wrap">
               <span class="book-title">盗墓笔记</span>
@@ -73,7 +73,7 @@
           </li>
           <li class="poster-title-wrap">
             <a href="./DaoMuBiJi.vue">
-              <img src="../assets/poster/DaoMuBiJi.jpg" alt="盗墓笔记" />
+              <img src="@/assets/poster/DaoMuBiJi.jpg" alt="盗墓笔记" />
             </a>
             <div class="title-wrap">
               <span class="book-title">盗墓笔记</span>
@@ -81,17 +81,17 @@
             </div>
           </li>
         </ul>
-        <img class="arrow-right" src="../assets/Expand_right.svg" alt="arrow" />
+        <img class="arrow-right" src="@/assets/Expand_right.svg" alt="arrow" />
       </div>
     </div>
     <div class="new-book">
       <div class="ctg-title">最新上架</div>
       <div class="poster-list-wrap">
-        <img class="arrow-left" src="../assets/Expand_left.svg" alt="arrow" />
+        <img class="arrow-left" src="@/assets/Expand_left.svg" alt="arrow" />
         <ul class="book-list">
           <li class="poster-title-wrap">
             <a href="./DaoMuBiJi.vue">
-              <img src="../assets/poster/DaoMuBiJi.jpg" alt="盗墓笔记" />
+              <img src="@/assets/poster/DaoMuBiJi.jpg" alt="盗墓笔记" />
             </a>
             <div class="title-wrap">
               <span class="book-title">盗墓笔记</span>
@@ -100,7 +100,7 @@
           </li>
           <li class="poster-title-wrap">
             <a href="./DaoMuBiJi.vue">
-              <img src="../assets/poster/DaoMuBiJi.jpg" alt="盗墓笔记" />
+              <img src="@/assets/poster/DaoMuBiJi.jpg" alt="盗墓笔记" />
             </a>
             <div class="title-wrap">
               <span class="book-title">盗墓笔记</span>
@@ -109,7 +109,7 @@
           </li>
           <li class="poster-title-wrap">
             <a href="./DaoMuBiJi.vue">
-              <img src="../assets/poster/DaoMuBiJi.jpg" alt="盗墓笔记" />
+              <img src="@/assets/poster/DaoMuBiJi.jpg" alt="盗墓笔记" />
             </a>
             <div class="title-wrap">
               <span class="book-title">盗墓笔记</span>
@@ -118,7 +118,7 @@
           </li>
           <li class="poster-title-wrap">
             <a href="./DaoMuBiJi.vue">
-              <img src="../assets/poster/DaoMuBiJi.jpg" alt="盗墓笔记" />
+              <img src="@/assets/poster/DaoMuBiJi.jpg" alt="盗墓笔记" />
             </a>
             <div class="title-wrap">
               <span class="book-title">盗墓笔记</span>
@@ -127,7 +127,7 @@
           </li>
           <li class="poster-title-wrap">
             <a href="./DaoMuBiJi.vue">
-              <img src="../assets/poster/DaoMuBiJi.jpg" alt="盗墓笔记" />
+              <img src="@/assets/poster/DaoMuBiJi.jpg" alt="盗墓笔记" />
             </a>
             <div class="title-wrap">
               <span class="book-title">盗墓笔记</span>
@@ -136,7 +136,7 @@
           </li>
           <li class="poster-title-wrap">
             <a href="./DaoMuBiJi.vue">
-              <img src="../assets/poster/DaoMuBiJi.jpg" alt="盗墓笔记" />
+              <img src="@/assets/poster/DaoMuBiJi.jpg" alt="盗墓笔记" />
             </a>
             <div class="title-wrap">
               <span class="book-title">盗墓笔记</span>
@@ -144,7 +144,7 @@
             </div>
           </li>
         </ul>
-        <img class="arrow-right" src="../assets/Expand_right.svg" alt="arrow" />
+        <img class="arrow-right" src="@/assets/Expand_right.svg" alt="arrow" />
       </div>
     </div>
     <Footer id="footer"></Footer>

@@ -51,9 +51,14 @@ const routes = [
     component: () => import('../views/GroupMainpage.vue')
   },
   {
-    path: '/feedback',
-    name: 'feedback',
-    component: () => import('../views/Feedback.vue')
+    path: '/daomubiji',
+    name: 'dao mu bi ji',
+    component: () => import('../views/DaoMuBiJi.vue')
+  },
+  {
+  path: '/feedback',
+  name: 'feedback',
+  component: () => import('../views/Feedback.vue')
   },
 ]
 
