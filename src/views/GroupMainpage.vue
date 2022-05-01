@@ -1,7 +1,10 @@
 <template>
-  <div>
+  <div class="group">
     <Header></Header>
-    <h1>Group Mainpage</h1>
+    <button @click="Create">创建小组</button>
+  <div>
+
+  </div>
     <Footer></Footer>
   </div>
 </template>
@@ -15,6 +18,12 @@ export default {
   components: {
     Header,
     Footer,
+  },
+  methods: {
+    Create(){
+      this.$router.push('/creategroup')
+    },
   }
 }
+
 </script>

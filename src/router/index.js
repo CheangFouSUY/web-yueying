@@ -60,6 +60,11 @@ const routes = [
   name: 'feedback',
   component: () => import('../views/Feedback.vue')
   },
+  {
+  path: '/creategroup',
+  name: 'create group',
+  component: () => import('../views/CreateGroup.vue')
+  },
 ]
 
 const router = new VueRouter({
