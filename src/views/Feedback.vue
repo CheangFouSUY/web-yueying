@@ -42,7 +42,11 @@ export default {
   },
     methods: {
         Submit() {
-            alert('提交成功，感谢您的反馈！');
+            this.$message({
+            showClose: true,
+            message: '提交成功，感谢您的反馈！',
+            type: 'success'
+        })
             this.$router.push("/");        
         }
     }

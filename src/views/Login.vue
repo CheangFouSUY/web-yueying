@@ -1,6 +1,7 @@
 <template>
     <div class='login'>
         <Header/>
+        <div class="info">
         <div id='logo'>
         <img id="logoBook" src="@/assets/LogoBlue.svg">
         <h1>阅·影</h1>
@@ -19,6 +20,7 @@
         <span @click='RegisterNow'>立即注册</span>
         </div>
         <button @click='Login'>登录</button>
+        </div>
     </div>
 </template>
 
@@ -112,11 +114,10 @@ export default {
     margin-left: 10px;
 }
 .ForgetnRegister{
-    width: 420px;
-    display:inline-block;
-    position: relative;
-    top: -20px;
-    text-align: right;
+    display: inline-block;
+    margin-left: 220px;
+    width: 190px;
+    margin-bottom: 20px;
 }
 .ForgetnRegister span:hover{
     color: rgba(121, 163, 177, 0.6);
@@ -124,7 +125,7 @@ export default {
 .login .inputBox{
   width: 420px;
   height: 55px;
-  margin: 0px auto 40px;
+  margin: 30px auto 0px;
   border-radius: 10px;
   background-color: rgba(121, 163, 177, 0.4);
 }
@@ -132,7 +133,7 @@ export default {
   display: inline;
   vertical-align: middle;
   width: 40px;
-  margin: auto 10px 10px 0;
+  margin: auto 10px 10px 10px;
 }
 .login .inputBox:focus-within{
     background-color: rgba(121, 163, 177, 0.6);
@@ -153,9 +154,8 @@ input, select, textarea{
 }
 input::placeholder{
   color:  #456268;
-;
 }
-.login{
+.info{
     text-align: center;
 }
 </style>
