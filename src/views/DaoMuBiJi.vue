@@ -39,7 +39,7 @@
           <span class="rating">4.6</span>
           <img class="rating-icon" src="@/assets/Star_fill.svg" alt="" />
         </div>
-        <button class="rate-now">点击评分</button>
+        <span class="rate-now">点击评分</span>
       </div>
       <div class="like-comment-wrap">
         <img src="@/assets/Love.svg" alt="love" />
@@ -83,12 +83,15 @@ export default {
     color: #456268;
 }
 .rate-now{
+    display: block;
     height: 30px;
-    width: 90px;
+    width: 100px;
+    margin: 5px 0;
     color: #79a3b1;
     text-align: center;
-    border: none;
-    background: none;
+    position: relative;
+    z-index: 999;
+    /* outline: 1px black solid; */
 }
 .rating-icon {
   height: 45px;
