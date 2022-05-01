@@ -50,6 +50,11 @@ const routes = [
     name: 'group mainpage',
     component: () => import('../views/GroupMainpage.vue')
   },
+  {
+    path: '/daomubiji',
+    name: 'dao mu bi ji',
+    component: () => import('../views/DaoMuBiJi.vue')
+  },
 ]
 
 const router = new VueRouter({
