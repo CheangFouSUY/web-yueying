@@ -147,16 +147,19 @@
         <img class="arrow-right" src="../assets/Expand_right.svg" alt="arrow" />
       </div>
     </div>
+    <Footer id="footer"></Footer>
   </div>
 </template>
 
 <script>
 import Header from "@/components/Header.vue";
+import Footer from '@/components/Footer.vue';
 
 export default {
   name: "BookMainpage",
   components: {
     Header,
+    Footer,
   },
 };
 </script>
@@ -274,5 +277,9 @@ export default {
 body,
 div {
   color: #456268;
+}
+#footer{
+  position: relative;
+  height: 88px;
 }
 </style>

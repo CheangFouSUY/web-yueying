@@ -50,6 +50,11 @@ const routes = [
     name: 'group mainpage',
     component: () => import('../views/GroupMainpage.vue')
   },
+  {
+    path: '/feedback',
+    name: 'feedback',
+    component: () => import('../views/Feedback.vue')
+  },
 ]
 
 const router = new VueRouter({

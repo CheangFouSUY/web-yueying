@@ -1,8 +1,8 @@
 <template>
   <div>
-    <Header></Header>
-    <h1>Group Mainpage</h1>
-    <Footer></Footer>
+      <Header></Header>
+      <p>I am feedback</p>
+      <Footer></Footer>
   </div>
 </template>
 
@@ -11,10 +11,14 @@ import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 
 export default {
-  name: 'GroupMainpage',
-  components: {
-    Header,
-    Footer,
-  }
+  components: { 
+      Header,
+      Footer,
+    },
+
 }
 </script>
+
+<style>
+
+</style>
