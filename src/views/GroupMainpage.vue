@@ -82,12 +82,71 @@
     </el-table>
       </div></el-col>
     </el-row>
-    <div class="dramas">
-    </div>
-    <div class="others">
-    </div>
   </div>
   <div class="showgroups">
+    <div class="showgroups_title">
+      <span>已加入小组</span>
+      <div id="line2"></div>
+    </div>
+  <el-row id="showgroups_content">
+    <el-col :span="7"><div class="grid-content bg-lightblue">
+      <el-table class="table2"
+      :data="groupData"
+      :show-header="false"
+      :cell-style="{background : '#E9FBFF' }"
+      :cell-class-name="cellCSS2"
+      :max-height="280"
+      style="width: 90%">
+      <el-table-column
+        align="center" 
+        prop="gAvatar"
+        width="50">
+      </el-table-column>
+      <el-table-column 
+        prop="gName"
+        width="290">
+      </el-table-column>
+    </el-table>
+      </div></el-col>
+    <el-col :span="7"><div class="grid-content bg-lightblue">
+      <el-table class="table2"
+      :data="groupData"
+      :show-header="false"
+      :cell-style="{background : '#E9FBFF' }"
+      :cell-class-name="cellCSS2"
+      :max-height="280"
+      style="width: 90%">
+      <el-table-column
+        align="center"
+        prop="gAvatar"
+        width="50">
+      </el-table-column>
+      <el-table-column
+        prop="gName"
+        width="290">
+      </el-table-column>
+    </el-table>
+      </div></el-col>
+    <el-col :span="7"><div class="grid-content bg-lightblue">
+      <el-table class="table2"
+      :data="groupData"
+      :show-header="false"
+      :cell-style="{background : '#E9FBFF' }"
+      :cell-class-name="cellCSS2"
+      :max-height="280"
+      style="width: 90%">
+      <el-table-column
+        align="center"
+        prop="gAvatar"
+        width="50">
+      </el-table-column>
+      <el-table-column
+        prop="gName"
+        width="290">
+      </el-table-column>
+    </el-table>
+      </div></el-col>
+ </el-row>
   </div>
     <Footer id="footer"></Footer>
   </div>
@@ -115,6 +174,9 @@ export default {
         return 'cellCSS2';
       }
       return 'cellCSS3';
+    },
+    cellCSS2({row, rowIndex}) {
+      return 'cellCSS4';
     },
   },
   data() {
@@ -150,8 +212,35 @@ export default {
             name: 'Tommom',
             count: '66'
           }],
+        groupData: [{
+          id:1,
+          gAvatar:<el-avatar icon="el-icon-user-solid"></el-avatar>,
+          gName:'皮卡一家亲',
+        }, {
+          id:2,
+          gAvatar:<el-avatar icon="el-icon-user-solid"></el-avatar>,
+          gName:'皮卡两家亲',
+        }, {
+          id:3,
+          gAvatar:<el-avatar icon="el-icon-user-solid"></el-avatar>,
+          gName:"WHAT?"
+        }, {
+          id:4,
+          gAvatar:<el-avatar icon="el-icon-user-solid"></el-avatar>,
+          gName:'皮卡一家亲',
+        }, {
+          id:5,
+          gAvatar:<el-avatar icon="el-icon-user-solid"></el-avatar>,
+          gName:'皮卡一家亲',
+        }],
+        limitationList: 4
         }
-      }
+      },
+    computed: {
+    filterItems () {
+      return this.groupData && this.groupData.length > 0 && (this.groupData.length - 1) <= this.limitationList  // or any condition u want 
+    }
+  }
 }
 </script>
 
@@ -175,20 +264,23 @@ export default {
   padding-top: 20px;
   /* width: 1536px; */
 }
-/* .books{
-  background-color: #D0E8F2;
-  width: 300px;
-  height: 500px;
-  margin: 0 0 0 50px;
-  border-radius: 20px;
-} */
 .showgroups{
   background-color: #FCF8EC;
   margin-top: 20px;
   margin-bottom: 20px;
-  height: 300px;
+  height: 350px;
   width: 1376px;
   margin-left: 80px;
+  text-align: center;
+}
+.showgroups_title{
+  display: inline-block;
+  width: 180px;
+  height: 45px;
+  font-size: 24px;
+  border-radius: 0 0 10px 10px;
+  padding-top: 5px;
+  margin-bottom: 10px;
 }
 .title{
   background-color: #E9FBFF;
@@ -208,24 +300,30 @@ export default {
   width: 70px;
   margin-left: 15px;
 }
+#line2{
+  background-color: #005773;
+  height: 2px;
+  width: 140px;
+  margin-left: 20px;
+}
 #footer{
   position: relative;
   height: 88px;
 }
-.el-row {
-  margin-bottom: 20px;
+.leaderboard .el-row {
   margin-left: 40px;
   margin-right: 40px;
 }
-.el-col {
+.leaderboard .el-col {
   border-radius: 4px;
   margin-left: 30px;
   margin-right: 20px;
 }
-.bg-blue {
+.leaderboard .bg-blue {
   background-color: #D0E8F2;
+  box-shadow: 0px 3px 20px rgba(0, 0, 0, 0.25);
 }
-.grid-content {
+.leaderboard .grid-content {
   border-radius: 10px;
   min-height: 600px;
 }
@@ -237,6 +335,26 @@ export default {
   margin-left: 20px;
   margin-top: 10px;
 }
+.table2{
+  margin-left: 18px;
+}
+.showgroups .bg-lightblue {
+  background-color: #E9FBFF;
+}
+.showgroups .grid-content {
+  border-radius: 10px;
+  min-height: 280px;
+}
+.showgroups .el-row {
+  margin-left: 40px;
+  margin-right: 40px;
+}
+.showgroups .el-col {
+  border-radius: 4px;
+  margin-left: 30px;
+  margin-right: 20px;
+}
+
 </style>
 
 <style>
@@ -252,6 +370,11 @@ export default {
 .el-table .cellCSS2 {
   color: #0BA7CA;
   font-size: 16px;
+  font-weight: bold;
+}
+.el-table .cellCSS4 {
+  color: #077C96;
+  font-size: 18px;
   font-weight: bold;
 }
 </style>
