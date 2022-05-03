@@ -25,7 +25,12 @@
 
 <script>
 export default {
-    name:'Header'
+    name:'Header',
+    methods:{
+        search(){
+            
+        }
+    }
 }
 </script>
 
