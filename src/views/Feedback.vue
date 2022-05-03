@@ -21,7 +21,7 @@
           </div>
           <div class="concontent">
           <span>反馈详情     :</span>
-          <textarea id="content" name="content" placeholder="请输入反馈详情（不少于15字符）"></textarea>
+          <textarea id="content" name="content" placeholder="请输入反馈详情(不少于15字符)"></textarea>
           </div>
           <button @click='Submit'>提交</button>
       </div>

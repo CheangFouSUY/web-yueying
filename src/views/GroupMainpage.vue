@@ -2,7 +2,7 @@
   <div class="group">
     <Header></Header>
     <div class="create">
-      <el-button icon="el-icon-s-flag">创建小组</el-button>
+      <el-button @click="createGroup" icon="el-icon-s-flag">创建小组</el-button>
     </div>
   <div class="leaderboard">
     <el-row>
@@ -12,6 +12,7 @@
       style="width: 90%"
       :header-cell-style="{background : '#D0E8F2', color : '#456268' }"
       :cell-style="{background : '#D0E8F2' }"
+      @row-click="rowClick"
       :cell-class-name="cellCSS">
       <el-table-column
         type=index
@@ -37,6 +38,7 @@
       style="width: 90%"
       :header-cell-style="{background : '#D0E8F2', color : '#456268' }"
       :cell-style="{background : '#D0E8F2' }"
+      @row-click="rowClick"
       :cell-class-name="cellCSS">
       <el-table-column
         type=index
@@ -62,6 +64,7 @@
       style="width: 90%"
       :header-cell-style="{background : '#D0E8F2', color : '#456268' }"
       :cell-style="{background : '#D0E8F2' }"
+      @row-click="rowClick"
       :cell-class-name="cellCSS">
       <el-table-column
         type=index
@@ -94,6 +97,7 @@
       :data="groupData"
       :show-header="false"
       :cell-style="{background : '#E9FBFF' }"
+      @row-click="rowClick"
       :cell-class-name="cellCSS2"
       :max-height="280"
       style="width: 90%">
@@ -113,6 +117,7 @@
       :data="groupData"
       :show-header="false"
       :cell-style="{background : '#E9FBFF' }"
+      @row-click="rowClick"
       :cell-class-name="cellCSS2"
       :max-height="280"
       style="width: 90%">
@@ -132,6 +137,7 @@
       :data="groupData"
       :show-header="false"
       :cell-style="{background : '#E9FBFF' }"
+      @row-click="rowClick"
       :cell-class-name="cellCSS2"
       :max-height="280"
       style="width: 90%">
@@ -177,6 +183,12 @@ export default {
     },
     cellCSS2({row, rowIndex}) {
       return 'cellCSS4';
+    },
+    rowClick(row, column, event) {   
+      this.$router.push('/group/inner')
+    },
+    createGroup() {
+      this.$router.push('/creategroup')
     },
   },
   data() {
@@ -233,14 +245,8 @@ export default {
           gAvatar:<el-avatar icon="el-icon-user-solid"></el-avatar>,
           gName:'皮卡一家亲',
         }],
-        limitationList: 4
         }
       },
-    computed: {
-    filterItems () {
-      return this.groupData && this.groupData.length > 0 && (this.groupData.length - 1) <= this.limitationList  // or any condition u want 
-    }
-  }
 }
 </script>
 
@@ -362,6 +368,9 @@ export default {
   color: #077C96;
   font-size: 22px;
   font-weight: bold;
+}
+.el-table .cellCSS1:hover,.el-table .cellCSS2:hover,.el-table .cellCSS3:hover,.el-table .cellCSS4:hover {
+  cursor: pointer;
 }
 .el-table .cellCSS3  {
   color: #79A3B1;
