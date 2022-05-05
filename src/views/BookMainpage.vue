@@ -7,10 +7,14 @@
         <span>图书</span>
       </div>
 
-      <el-row class="ctg-title">类型</el-row>
+      <el-row class="ctg-title">分类</el-row>
       <el-row class="ctg-list">
-        <li v-for="item in category" :key="item">{{ item }}</li>
+        <el-col :span="2" class="ctg-list-type">类型</el-col>
+        <el-col :span="18">
+          <li v-for="item in category" :key="item">{{ item }}</li>
+        </el-col>
       </el-row>
+      <el-divider></el-divider>
 
       <el-row class="ctg-title">热门</el-row>
       <el-row>

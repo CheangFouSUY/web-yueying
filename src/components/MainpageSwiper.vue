@@ -13,9 +13,9 @@
               :key="item.id"
               :style="{ minWidth: width }"
             >
-              <a href="/daomubiji">
+              <div class="image-box" @click="gotodetails">
                 <img :src="item.src" alt="" />
-              </a>
+              </div>
               <div class="title-wrap">
                 <a class="book-title" href="item.url">{{ item.name }}</a>
                 <span class="rating">{{ item.rating }}</span>
@@ -61,11 +61,11 @@ export default {
           url: "/daomubiji"
         },
         {
-          id: "B002",
-          name: "盗墓笔记2",
-          rating: 4.6,
-          src: require("../assets/poster/DaoMuBiJi.jpg"),
-          url: "/daomubiji"
+          id: "D002",
+          name: "猎罪图鉴2",
+          rating: 4.8,
+          src: require("../assets/poster/LieZuiTuJian.jpg"),
+          url: "/liezuitujian"
         },
         {
           id: "B003",
@@ -147,6 +147,9 @@ export default {
       if (this.currentOffset >= 0) return;
       this.currentOffset += this.fatherWith / 6;
     },
+    gotodetails(){
+
+    }
   },
 };
 </script>
@@ -190,6 +193,10 @@ export default {
 }
 img {
   width: 100%;
+}
+.image-box{
+  height: 270px;
+  overflow: hidden;
 }
 .item-box a {
   display: block;
