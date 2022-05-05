@@ -95,6 +95,11 @@ export default {
   font-size: 26px;
   margin: 50px 70px 0;
 }
+.ctg-list-type {
+  padding: 10px 0;
+  font-size: 20px;
+  color: #79a3b1;
+}
 
 .page-title img {
   width: 60px;

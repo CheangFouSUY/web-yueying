@@ -13,11 +13,13 @@
               :key="item.id"
               :style="{ minWidth: width }"
             >
-              <div class="image-box" @click="gotodetails">
+              <div class="image-box" @click="gotodetails(item)">
                 <img :src="item.src" alt="" />
               </div>
               <div class="title-wrap">
-                <a class="book-title" href="item.url">{{ item.name }}</a>
+                <span class="book-title" @click="gotodetails(item)">
+                  {{ item.title }}
+                </span>
                 <span class="rating">{{ item.rating }}</span>
               </div>
             </div>
@@ -55,73 +57,73 @@ export default {
       books: [
         {
           id: "B001",
-          name: "盗墓笔记1",
+          title: "盗墓笔记1",
           rating: 4.6,
           src: require("../assets/poster/DaoMuBiJi.jpg"),
-          url: "/daomubiji"
+          name: "daomubiji",
         },
         {
           id: "D002",
-          name: "猎罪图鉴2",
+          title: "猎罪图鉴2",
           rating: 4.8,
           src: require("../assets/poster/LieZuiTuJian.jpg"),
-          url: "/liezuitujian"
+          name: "liezuitujian",
         },
         {
           id: "B003",
-          name: "盗墓笔记3",
+          title: "盗墓笔记3",
           rating: 4.6,
           src: require("../assets/poster/DaoMuBiJi.jpg"),
-          url: "/daomubiji"
+          name: "daomubiji",
         },
         {
           id: "B004",
-          name: "盗墓笔记4",
+          title: "盗墓笔记4",
           rating: 4.6,
           src: require("../assets/poster/DaoMuBiJi.jpg"),
-          url: "/daomubiji"
+          namel: "daomubiji",
         },
         {
           id: "B005",
-          name: "盗墓笔记5",
+          title: "盗墓笔记5",
           rating: 4.6,
           src: require("../assets/poster/DaoMuBiJi.jpg"),
-          url: "/daomubiji"
+          name: "daomubiji",
         },
         {
           id: "B006",
-          name: "盗墓笔记6",
+          title: "盗墓笔记6",
           rating: 4.6,
           src: require("../assets/poster/DaoMuBiJi.jpg"),
-          url: "/daomubiji"
+          name: "daomubiji",
         },
         {
           id: "B007",
-          name: "盗墓笔记7",
+          title: "盗墓笔记7",
           rating: 4.6,
           src: require("../assets/poster/DaoMuBiJi.jpg"),
-          url: "/daomubiji"
+          name: "daomubiji",
         },
         {
           id: "B008",
-          name: "盗墓笔记8",
+          title: "盗墓笔记8",
           rating: 4.6,
           src: require("../assets/poster/DaoMuBiJi.jpg"),
-          url: "/daomubiji"
+          name: "daomubiji",
         },
         {
           id: "B009",
-          name: "盗墓笔记9",
+          title: "盗墓笔记9",
           rating: 4.6,
           src: require("../assets/poster/DaoMuBiJi.jpg"),
-          url: "/daomubiji"
+          name: "daomubiji",
         },
         {
           id: "B0010",
-          name: "盗墓笔记10",
+          title: "盗墓笔记10",
           rating: 4.6,
           src: require("../assets/poster/DaoMuBiJi.jpg"),
-          url: "/daomubiji"
+          name: "daomubiji",
         },
       ],
     };
@@ -147,9 +149,10 @@ export default {
       if (this.currentOffset >= 0) return;
       this.currentOffset += this.fatherWith / 6;
     },
-    gotodetails(){
-
-    }
+    gotodetails(item) {
+      // console.log(this.books)
+      this.$router.push({ name: item.name });
+    },
   },
 };
 </script>
@@ -194,7 +197,7 @@ export default {
 img {
   width: 100%;
 }
-.image-box{
+.image-box {
   height: 270px;
   overflow: hidden;
 }

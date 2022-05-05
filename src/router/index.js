@@ -52,8 +52,13 @@ const routes = [
   },
   {
     path: '/daomubiji',
-    name: 'dao mu bi ji',
+    name: 'daomubiji',
     component: () => import('../views/DaoMuBiJi.vue')
+  },
+  {
+    path: '/liezuitujian',
+    name: 'liezuitujian',
+    component: () => import('../views/LieZuiTuJian.vue')
   },
   {
   path: '/feedback',

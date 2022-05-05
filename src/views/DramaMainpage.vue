@@ -95,13 +95,11 @@ export default {
   padding: 0;
   margin: 10px 70px;
   color: #456268;
-  /* outline: 1px black solid; */
 }
 .ctg-list-type {
   padding: 10px 0;
   font-size: 20px;
   color: #79a3b1;
-  /* outline: 1px black solid; */
 }
 
 .ctg-title {
