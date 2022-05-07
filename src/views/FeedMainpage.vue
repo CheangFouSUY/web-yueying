@@ -1,20 +1,360 @@
 <template>
   <div>
     <Header></Header>
-    <h1>Feed Mainpage</h1>
+    <div class="main">
+      <el-row class="action">
+        <el-col :span="8">发表话题</el-col>
+        <el-col :span="8">
+          <span :style="{ color: allColor }" @click="showAll()">所有</span>
+          <el-divider direction="vertical"></el-divider>
+          <span :style="{ color: followColor }" @click="showFollow()">
+            关注
+          </span>
+        </el-col>
+        <el-col :span="8">编辑已关注话题</el-col>
+      </el-row>
+      <el-row class="feed-box" v-for="item in feeds" :key="item.id">
+        <el-row :gutter="70" align="middle" type="flex">
+          <el-col :span="1">
+            <el-avatar :size="50" icon="el-icon-user-solid"></el-avatar>
+          </el-col>
+          <el-col :span="20">
+            <el-row class="feed-publisher">{{ item.publisher }}</el-row>
+            <el-row class="feed-time">
+              <i class="el-icon-time"></i>
+              {{ item.time }}
+            </el-row>
+          </el-col>
+          <el-row>
+            <button
+              class="feed-follow"
+              v-if="item.isFollow === false"
+              @click="follow(item)"
+            >
+              关注
+            </button>
+            <button class="feed-unfollow" v-else @click="unfollow(item)">
+              取消关注
+            </button>
+          </el-row>
+        </el-row>
+        <el-row class="feed-title">{{ item.title }}</el-row>
+        <el-row class="feed-content">
+          <span v-html="item.content.replace(/(\r\n|\n|\r)/gm, '<br/>')">
+          </span>
+        </el-row>
+        <el-row class="like-comment-wrap">
+          <img
+            v-if="item.isLike === false"
+            @click="like(item)"
+            src="@/assets/Love.svg"
+            alt="love"
+          />
+          <img
+            v-else
+            @click="like(item)"
+            src="@/assets/Love_fill.svg"
+            alt="love"
+          />
+          <span class="like-count">{{ item.likeCount }}</span>
+          <img src="@/assets/Comment.svg" alt="comment" />
+          <span class="comment-count">{{ item.commentCount }}</span>
+        </el-row>
+        <div class="comment-wrap">
+          <el-row class="publish-box">
+            <el-row :gutter="70">
+              <el-col :span="1">
+                <el-avatar :size="50" icon="el-icon-user-solid"></el-avatar>
+              </el-col>
+              <el-col :span="22">
+                <el-row class="comment-publisher">{{ user }}</el-row>
+                <el-row class="publish-write">
+                  <input type="text" placeholder="写下书评" />
+                  <el-row class="publish-action" :span="20">
+                    <i class="el-icon-picture-outline-round"></i>
+                    <i class="el-icon-position"></i>
+                  </el-row>
+                </el-row>
+              </el-col>
+            </el-row>
+          </el-row>
+
+          <el-row class="comment-box" v-for="c in item.comments" :key="c.id">
+            <el-divider></el-divider><br>
+            <el-row :gutter="70">
+              <el-col :span="1">
+                <el-avatar :size="50" icon="el-icon-user-solid"></el-avatar>
+              </el-col>
+              <el-col :span="22">
+                <el-row class="comment-publisher">{{ c.publisher }}</el-row>
+                <el-row>{{ c.contents }}</el-row>
+              </el-col>
+            </el-row>
+            <el-row class="comment-action">
+              <el-col :span="3" :offset="5">
+                <el-row type="flex" justify="center">
+                  <img src="@/assets/Happy.svg" alt="happy icon" />
+                </el-row>
+                <el-row
+                  class="comment-like-count"
+                  type="flex"
+                  justify="center"
+                  >{{ c.likes }}</el-row
+                >
+              </el-col>
+              <el-col :span="3" :offset="1">
+                <el-row type="flex" justify="center">
+                  <img src="@/assets/Sad.svg" alt="sad icon" />
+                </el-row>
+                <el-row
+                  class="comment-like-count"
+                  type="flex"
+                  justify="center"
+                  >{{ c.dislikes }}</el-row
+                >
+              </el-col>
+              <el-col :span="3" :offset="1">
+                <el-row type="flex" justify="center">
+                  <img src="@/assets/Report.svg" alt="report icon" />
+                </el-row>
+              </el-col>
+            </el-row>
+          </el-row>
+        </div>
+      </el-row>
+    </div>
     <Footer></Footer>
   </div>
 </template>
 
 <script>
-import Header from '@/components/Header.vue'
-import Footer from '@/components/Footer.vue'
+import Header from "@/components/Header.vue";
+import Footer from "@/components/Footer.vue";
 
 export default {
-  name: 'FeedMainpage',
+  name: "FeedMainpage",
   components: {
     Header,
-    Footer
-  }
-}
+    Footer,
+  },
+  data() {
+    return {
+      isShowFollow: false,
+      allColor: "#79A3B1",
+      followColor: "#456268",
+      feeds: [
+        {
+          id: "F0001",
+          publisher: "娱乐八卦姐",
+          time: "2022-05-07 21:08",
+          title: "布魯斯威利罹失語症宣布息影　「壓箱作」導演：他是偉大的人",
+          content:
+            "67歲美國影星布魯斯威利（Bruce Willis）在今年3月閃電宣布引退，家人證實他罹患失語症，將漸漸失去說話和閱讀的能力。今年來他接片數量雖不少，但戲份大多不如以往，壓箱作品之一的《終極夜路》（Gasoline Alley），也將於近期在台灣上映。\n\n以洛杉磯街頭為背景的《終極夜路》，由布魯斯威利和戴文沙瓦（Devon Sawa）主演。故事描述一名有前科的刺青師，被警方認定為一宗連續殺人案的嫌疑犯，為了證明自己的清白，他必須設法查出真相。導演愛德華德雷克（Edward Drake）已經是第四次與布魯斯威利合作，對於這位昔日動作天王的表現，他依舊是讚譽有佳：「布魯斯是我有幸認識和合作過的最善良的人之一。」為了向布魯斯威利過去的事蹟致意，他表示劇組很認真的在製作這部電影，「我對這個人的評價不能再高了，他是個偉大的人。」\n\n除了布魯斯威利之外，愛德華德雷克這次還邀請曾演出《絕命終結站》的性格男星戴文沙瓦演出，對於這次和他合作的心得，愛德華德雷克表示：「戴文是我合作過最好的演員之一。他是非凡的。你可以從他的眼神中看出他的角色正在做決定，當他在推測他的選擇可能帶來的後果。」他又說：「當我遇到戴文之後，我才意識到我們有機會製作一部非常特別的作品。」《終極夜路》將於6月2日上映。\n\n转载于：ETtoday新聞雲",
+          likeCount: 204,
+          commentCount: 23,
+          isFollow: true,
+          isLike: true,
+          comments: [
+            {
+              id: "C2001",
+              publisher: "老公是王一博",
+              likes: 12,
+              dislikes: 0,
+              contents: "太帅啦",
+            },
+            {
+              id: "C2002",
+              publisher: "我是我，不一样的花火",
+              likes: 8,
+              dislikes: 2,
+              contents: "布鲁斯威利yyds!!!!",
+            },
+          ],
+        },
+      ],
+    };
+  },
+  methods: {
+    showAll() {
+      this.isShowFollow = false;
+      this.allColor = "#79A3B1";
+      this.followColor = "#456268";
+    },
+    showFollow() {
+      this.isShowFollow = true;
+      this.followColor = "#79A3B1";
+      this.allColor = "#456268";
+    },
+    follow(item) {
+      item.isFollow = true;
+    },
+    unfollow(item) {
+      item.isFollow = false;
+    },
+    like(item) {
+      item.isLike = !item.isLike;
+      if (item.isLike === true) item.likeCount++;
+      else item.likeCount--;
+    },
+  },
+  computed: {},
+};
 </script>
+
+<style scoped>
+.el-icon-picture-outline-round:hover,
+.el-icon-position:hover {
+  cursor: pointer;
+  color: #79a3b1;
+}
+.el-icon-picture-outline-round,
+.el-icon-position {
+  margin: 0 0 5px 20px;
+  font-size: 24px;
+  line-height: 30px;
+}
+.publish-write:focus-within {
+  background-color: rgba(121, 163, 177, 0.2);
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.05);
+}
+.publish-box input:focus {
+  outline: none;
+}
+.publish-box input {
+  width: 1060px;
+  margin: 5px;
+  padding: 10px;
+  border: none;
+  background: none;
+  color: #456268;
+  font-family: "Microsoft JhengHei", 微软正黑体, "Microsoft YaHei", 微软雅黑;
+}
+.publish-write {
+  margin: 5px 0;
+  border-radius: 10px;
+  background: rgba(121, 163, 177, 0.1);
+}
+.comment-like-count {
+  font-size: 12px;
+}
+.comment-action img {
+  height: 28px;
+}
+.comment-action {
+  width: 300px;
+  padding-top: 10px;
+}
+.comment-publisher {
+  font-size: 18px;
+  font-weight: 600;
+}
+.comment-box {
+  padding: 15px 0;
+  /* outline: 1px black solid; */
+}
+
+.like-comment-wrap {
+  padding-top: 20px;
+}
+.like-comment-wrap span {
+  display: inline-block;
+  margin-right: 20px;
+  line-height: 30px;
+  font-size: 16px;
+  vertical-align: middle;
+}
+.like-comment-wrap img {
+  height: 36px;
+  vertical-align: middle;
+}
+.like-comment-wrap img:hover,
+.bookmark:hover {
+  cursor: pointer;
+}
+.comment-wrap {
+  /* width: 1200px; */
+  margin: 30px auto;
+  /* padding: 30px 30px 10px; */
+}
+
+.feed-unfollow:hover,
+.feed-follow:hover {
+  cursor: pointer;
+}
+.feed-unfollow {
+  width: 130px;
+  margin-right: 20px;
+  font-size: 18px;
+  line-height: 32px;
+  font-weight: 600;
+  border-radius: 15px;
+  background: none;
+  color: #456268;
+  border: #456268 1px solid;
+}
+.feed-follow {
+  width: 130px;
+  margin-right: 20px;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 32px;
+  border: 1px #456268 solid;
+  color: #fcf8ec;
+  background-color: #456268;
+  border-radius: 15px;
+}
+.feed-content {
+  font-size: 18px;
+}
+.feed-title {
+  margin: 20px 0;
+  font-size: 28px;
+  font-weight: 600;
+}
+.feed-time {
+  color: grey;
+}
+.feed-publisher {
+  font-size: 22px;
+  font-weight: 600;
+  /* outline: 1px black solid; */
+}
+.feed-box {
+  color: #456268;
+  padding: 50px 60px;
+  background-color: #fcf8ec;
+  box-shadow: 0px 0px 20px 3px rgba(0, 0, 0, 0.25);
+}
+.action span:hover {
+  cursor: pointer;
+}
+.action {
+  margin: 0 0 30px;
+  line-height: 36px;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 24px;
+  /* outline: 1px black solid; */
+}
+.el-divider {
+  position: relative;
+  bottom: 3px;
+  margin: auto 15px;
+}
+.main {
+  width: 1200px;
+  margin: 30px auto;
+}
+.el-row,
+.el-col {
+  /* color: #456268; */
+  /* outline: 1px red solid; */
+}
+button {
+  font-family: "Microsoft JhengHei", 微软正黑体, "Microsoft YaHei", 微软雅黑;
+}
+#footer {
+  position: relative;
+  height: 88px;
+}
+</style>

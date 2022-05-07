@@ -201,6 +201,9 @@ img {
   height: 270px;
   overflow: hidden;
 }
+.item-box img:hover{
+  cursor: pointer;
+}
 .item-box a {
   display: block;
   overflow: hidden;

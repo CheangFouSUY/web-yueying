@@ -149,9 +149,6 @@ export default {
     return {
       user: "陌上花开",
       title: "盗墓笔记",
-      rating: 4.6,
-      likeCount: 50,
-      commentCount: 50,
       author: "南派三叔",
       category: "科幻",
       year: "2007",
