@@ -19,11 +19,11 @@
         <div class="inputBox">
           <div>
             <span>小组名</span>
-            <input type="text" placeholder="输入小组名">
+            <input type="text" v-model="groupCreate.name" placeholder="输入小组名">
           </div>
           <div>
              <span>小组类型</span>
-              <el-radio-group id="radiogroup" fill="rgba(121, 163, 177, 0.4)" v-model="radio1">
+              <el-radio-group id="radiogroup" fill="rgba(121, 163, 177, 0.4)" v-model="groupCreate.type">
                 <el-radio-button id="radiogroupbutton" label="图书"></el-radio-button>
                 <el-radio-button id="radiogroupbutton" label="影视"></el-radio-button>
                 <el-radio-button id="radiogroupbutton" label="其他"></el-radio-button>
@@ -31,7 +31,7 @@
           </div>
           <div>
              <span>小组简介</span>
-            <textarea id="gDesc" placeholder="输入小组简介（最多50字符）"></textarea>
+            <textarea id="gDesc" v-model="groupCreate.desc" placeholder="输入小组简介(最多50字符)"></textarea>
           </div>
         </div>
         <el-button @click="createGroup">创建</el-button>
@@ -57,20 +57,20 @@ export default {
       input: '',
       groupCreate: {
         name:'',
-        type:'',
+        type:'图书',
         desc:'',
       },
-      radio1: '图书',
     };
   },
   methods: {
-    handleAvatarSuccess(res, file) {
+      handleAvatarSuccess(res, file) {
         this.imageUrl = URL.createObjectURL(file.raw);
       },
       beforeAvatarUpload(file) {
         const isTypeTrue = 
           file.type === "image/jpeg" ||
-          file.type === "image/jpg";
+          file.type === "image/jpg" ||
+          file.type === 'image/png';
         const isLt2M = file.size / 1024 / 1024 < 2;
 
         if (!isTypeTrue) {
@@ -119,30 +119,6 @@ export default {
   padding: 10px 0;
   background-color: #f9fafc;
 }
-.avatar-uploader .el-upload {
-  border: 1px dashed #d9d9d9;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-.avatar-uploader .el-upload:hover {
-  border-color: #409EFF;
-}
-.avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 256px;
-  height: 256px;
-  line-height: 256px;
-  text-align: center;
-  background-color: white;
-}
-.avatar {
-  width: 256px;
-  height: 256px;
-  display: block;
-}
 .profilePic{
   margin: auto;
   width: 256px;
@@ -175,6 +151,7 @@ export default {
   float: right;
   margin-right: 55px;
   font-size: 24px;
+  width: 120px;
   background-color: #456268;
   color: #FCF8EC;
 }
@@ -209,6 +186,30 @@ export default {
 }
 .el-radio-button__inner:hover{
   color:grey;
+}
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 256px;
+  height: 256px;
+  line-height: 256px;
+  text-align: center;
+  background-color: white;
+}
+.avatar {
+  width: 256px;
+  height: 256px;
+  display: block;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409EFF;
 }
 </style>
 
