@@ -1,27 +1,38 @@
 <template>
-  <div class="feedback">
+  <div class="report">
       <Header></Header>
       <div class="name">
-          <span id="namespan">反馈者姓名     :</span>
-          <span id='name'>{{ feedbacker }}</span>
+          <el-row>
+          <span id="namespan">举报者姓名&nbsp;:</span>
+          <span id='name'>{{ Report.reporter }}</span>
+          </el-row>
+          <el-row>
+          <span id="conspan">&nbsp;&nbsp;举报内容&nbsp;&nbsp;:</span>
+          <span id="con">[{{ Report.getreport}}] {{ Report.con }}</span>
+          </el-row>
       </div>
       <div class="content">
           <div>
-          <span>反馈标题     :</span>
-          <input type="text" placeholder="反馈标题">
+          <span>举报标题     :</span>
+          <input type="text" placeholder="举报标题">
           </div>
           <div>
-          <span>反馈类型     :</span>
-          <select id="feedbackType" name="feedbackType">
+          <span>举报类型     :</span>
+          <select id="reportType" name="reportType">
                     <option style="display: none"></option>
-                    <option value="bug">网页bug</option>
-                    <option value="suggestions">网页意见</option>
+                    <option value="trash">垃圾内容</option>
+                    <option value="pornography">色情内容</option>
+                    <option value="illegal">非法活动</option>
+                    <option value="copyrights">侵犯版权</option>
+                    <option value="bully">骚扰、欺凌和威胁</option>
+                    <option value="revenge">仇恨言论</option>
+                    <option value="violence">暴力内容</option>
                     <option value="others">其他</option>
                 </select>
           </div>
           <div class="concontent">
-          <span>反馈详情     :</span>
-          <textarea id="content" name="content" placeholder="请输入反馈详情(不少于15字符)"></textarea>
+          <span>举报详情     :</span>
+          <textarea id="content" name="content" placeholder="请输入举报详情(不少于15字符)"></textarea>
           </div>
           <button @click='Submit'>提交</button>
       </div>
@@ -44,7 +55,7 @@ export default {
         Submit() {
             this.$message({
             showClose: true,
-            message: '提交成功，感谢您的反馈！',
+            message: '提交成功，感谢您的举报！',
             type: 'success'
         })
             this.$router.push("/");        
@@ -52,10 +63,16 @@ export default {
     },
     data() {
         return {
-            feedbacker:'小乐子',
+            Report: {
+            reporter:'乐乐',
+            getreport:'黄乐一',
+            con:'惊！到底是道德沦丧还是人性扭曲？为什么会出现这样惊人的现象，我们细看',
+            title:'',
+            type:'',
+            content:'',
+            }
         }
-    }
-
+    },
 }
 </script>
 
@@ -64,8 +81,8 @@ export default {
     background-color: #FCF8EC;
     /* border: black solid 1px; */
     margin: 20px auto auto 100px;
-    width: 500px;
-    height: 55px;
+    width: 800px;
+    height: 110px;
     box-shadow: 0px 4px 5px rgba(0, 9, 236, 0.25);
 }
 .name span{
@@ -75,7 +92,7 @@ export default {
     vertical-align: middle;
     margin-left: 10px;
 }
-#name{
+#name, #con{
     display: inline-block;
     margin-left: 10px;
     height: 40px;
@@ -88,6 +105,15 @@ export default {
     border: none;
     font-size: 22px;
 }
+#conspan{
+    margin-left: 13px;
+}
+#con{
+    width: 620px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
 #namespan{
     text-overflow: ellipsis;
     overflow: hidden;
@@ -99,7 +125,7 @@ export default {
     margin: 20px auto auto 100px;
     padding-top: 12px;
     width: 1300px;
-    height: 480px;
+    height: 430px;
     box-shadow: 0px 4px 5px rgba(0, 9, 236, 0.25);
 }
 .content span{
@@ -130,7 +156,7 @@ export default {
     display: block;
     float: right;
     margin-right: 20px;
-    margin-top: 270px;
+    margin-top: 225px;
     width: 165px;
     height: 50px;
     border: none;
@@ -144,12 +170,12 @@ export default {
     background-color: rgba(121, 163, 177);
     outline: none;
 }
-#feedbackType{
+#reportType{
     width: 300px;
 }
 #content{
     display: inline-block;
-    height: 280px;
+    height: 240px;
     border: none;
     resize: none;
     position: absolute;

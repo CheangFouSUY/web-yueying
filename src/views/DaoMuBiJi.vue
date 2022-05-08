@@ -124,7 +124,7 @@
           </el-col>
           <el-col :span="3" :offset="1">
             <el-row type="flex" justify="center">
-              <img src="@/assets/Report.svg" alt="report icon" />
+              <img id="report" @click="report" src="@/assets/Report.svg" alt="report icon" />
             </el-row>
           </el-col>
         </el-row>
@@ -213,6 +213,9 @@ export default {
         });
       }
     },
+    report() {
+      this.$router.push("/report");
+    }
   },
 };
 </script>
@@ -358,6 +361,9 @@ export default {
 .el-row,
 .el-col {
   color: #456268;
+}
+#report:hover{
+  cursor: pointer;
 }
 #footer {
   position: relative;
