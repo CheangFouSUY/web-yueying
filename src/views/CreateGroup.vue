@@ -23,7 +23,7 @@
           </div>
           <div>
              <span>小组类型</span>
-              <el-radio-group id="radiogroup" fill="rgba(121, 163, 177, 0.4)" v-model="groupCreate.type">
+              <el-radio-group id="radiogroup" fill="#D0E8F2" v-model="groupCreate.type">
                 <el-radio-button id="radiogroupbutton" label="图书"></el-radio-button>
                 <el-radio-button id="radiogroupbutton" label="影视"></el-radio-button>
                 <el-radio-button id="radiogroupbutton" label="其他"></el-radio-button>
@@ -130,7 +130,8 @@ export default {
 .inputBox input{
   font-size: 20px;
   border-radius: 10px;
-  background: rgba(121, 163, 177, 0.4);
+  /* background: rgba(121, 163, 177, 0.4); */
+  background-color: #D0E8F2;
   margin-left: 35px;
   padding-left: 5px;
   padding-right: 5px;
@@ -162,7 +163,8 @@ export default {
   resize: none;
   position: absolute;
   border-radius: 10px;
-  background: rgba(121, 163, 177, 0.4);
+  /* background: rgba(121, 163, 177, 0.4); */
+  background-color: #D0E8F2;
   font-size: 20px;
   margin-left: 10px;
   border: none;
@@ -186,6 +188,7 @@ export default {
 }
 .el-radio-button__inner:hover{
   color:grey;
+  background-color: whitesmoke;
 }
 .avatar-uploader .el-upload {
   border: 1px dashed #d9d9d9;

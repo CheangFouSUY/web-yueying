@@ -75,6 +75,11 @@ const routes = [
     name: 'group inner page',
     component: () => import('../views/GroupInnerpage.vue')
     },
+  {
+    path: '/report',
+    name: 'report',
+    component: () => import('../views/Report.vue')
+   },
 ]
 
 const router = new VueRouter({
