@@ -3,7 +3,6 @@
     <Header></Header>
     <div class="main">
       <el-row class="action">
-        <el-col :span="8">发表话题</el-col>
         <el-col :span="8">
           <span :style="{ color: allColor }" @click="showAll()">所有</span>
           <el-divider direction="vertical"></el-divider>
@@ -11,189 +10,11 @@
             关注
           </span>
         </el-col>
-        <el-col :span="8">编辑已关注话题</el-col>
+        <!-- <el-col :span="8">编辑已关注话题</el-col> -->
+        <!-- <el-col :span="8">发表话题</el-col> -->
       </el-row>
-      <el-row class="feed-box" v-for="item in feeds" :key="item.id">
-        <el-row :gutter="70" align="middle" type="flex">
-          <el-col :span="1">
-            <el-avatar :size="50" icon="el-icon-user-solid"></el-avatar>
-          </el-col>
-          <el-col :span="20">
-            <el-row class="feed-publisher">{{ item.publisher }}</el-row>
-            <el-row class="feed-time">
-              <i class="el-icon-time"></i>
-              {{ dateStr(item.time) }}
-            </el-row>
-          </el-col>
-          <el-row>
-            <button
-              class="feed-follow"
-              v-if="item.isFollow === false"
-              @click="follow(item)"
-            >
-              关注
-            </button>
-            <button class="feed-unfollow" v-else @click="unfollow(item)">
-              取消关注
-            </button>
-          </el-row>
-        </el-row>
-        <el-row class="feed-title">{{ item.title }}</el-row>
-        <el-row class="feed-content">
-          <span v-html="calc(item)"></span>
-        </el-row>
-        <el-row type="flex" justify="end">
-          <button
-            class="expand-button"
-            v-if="item.isExpand === false"
-            @click="changeExpand(item)"
-          >
-            展开<i class="el-icon-arrow-down"></i>
-          </button>
-          <button class="expand-button" v-else @click="changeExpand(item)">
-            收起<i class="el-icon-arrow-up"></i>
-          </button>
-        </el-row>
-        <el-row
-          class="feed-image"
-          v-for="i in item.image"
-          :key="i"
-          type="flex"
-          justify="center"
-        >
-          <img :src="i" alt="feed-image" />
-        </el-row>
-        <el-row class="like-comment-wrap">
-          <img
-            v-if="item.isLike === false"
-            @click="like(item)"
-            src="@/assets/Love.svg"
-            alt="love"
-          />
-          <img
-            v-else
-            @click="like(item)"
-            src="@/assets/Love_fill.svg"
-            alt="love"
-          />
-          <span class="like-count">{{ item.likeCount }}</span>
-          <img src="@/assets/Comment.svg" alt="comment" />
-          <span class="comment-count">{{ item.commentCount }}</span>
-        </el-row>
-        <div class="comment-wrap">
-          <el-row class="publish-box">
-            <el-row :gutter="70">
-              <el-col :span="1">
-                <el-avatar :size="50" icon="el-icon-user-solid"></el-avatar>
-              </el-col>
-              <el-col :span="22">
-                <el-row class="comment-publisher">{{ user }}</el-row>
-                <el-row class="publish-write">
-                  <input
-                    v-model="item.userComment"
-                    type="text"
-                    placeholder="写下评论"
-                  />
-                  <el-row class="publish-action" :span="20">
-                    <el-upload
-                      class="comment-upload-image"
-                      action="#"
-                      list-type="picture"
-                      :on-preview="handlePreview"
-                      :on-remove="handleRemove"
-                      :before-remove="beforeRemove"
-                      multiple
-                      :limit="3"
-                      :on-exceed="handleExceed"
-                      :file-list="fileList"
-                    >
-                      <button>
-                        <i class="el-icon-picture-outline-round"></i>
-                      </button>
-                    </el-upload>
-                    <i class="el-icon-position" @click="sendComment(item)"></i>
-                    <div slot="tip" class="el-upload__tip">
-                      只能上传jpg/png文件，且不超过500kb
-                    </div>
-                  </el-row>
-                </el-row>
-              </el-col>
-            </el-row>
-          </el-row>
 
-          <el-row class="comment-box" v-for="c in item.comments" :key="c.id">
-            <el-divider></el-divider><br />
-            <el-row :gutter="70">
-              <el-col :span="1">
-                <el-avatar :size="50" icon="el-icon-user-solid"></el-avatar>
-              </el-col>
-              <el-col :span="22">
-                <el-row class="comment-publisher">{{ c.publisher }}</el-row>
-                <el-row class="comment-time">
-                  <i class="el-icon-time"></i>
-                  {{ dateStr(c.time) }}
-                </el-row>
-                <el-row>{{ c.contents }}</el-row>
-                <el-row
-                  class="comment-image"
-                  v-for="cimg in c.image"
-                  :key="cimg"
-                >
-                  <img :src="cimg" alt="feed-image" />
-                </el-row>
-              </el-col>
-            </el-row>
-            <el-row class="comment-action">
-              <el-col :span="3" :offset="5">
-                <el-row type="flex" justify="center">
-                  <img
-                    v-if="c.isLike === false"
-                    @click="commentLike(c)"
-                    src="@/assets/Happy.svg"
-                    alt="happy icon"
-                  />
-                  <img
-                    v-else
-                    @click="commentLike(c)"
-                    src="@/assets/Happy_fill.svg"
-                    alt="happy icon"
-                  />
-                </el-row>
-                <el-row class="comment-like-count" type="flex" justify="center">
-                  {{ c.likes }}
-                </el-row>
-              </el-col>
-              <el-col :span="3" :offset="1">
-                <el-row type="flex" justify="center">
-                  <img
-                    v-if="c.isDislike === false"
-                    @click="commentDislike(c)"
-                    src="@/assets/Sad.svg"
-                    alt="sad icon"
-                  />
-                  <img
-                    v-else
-                    @click="commentDislike(c)"
-                    src="@/assets/Sad_fill.svg"
-                    alt="sad icon"
-                  />
-                </el-row>
-                <el-row
-                  class="comment-like-count"
-                  type="flex"
-                  justify="center"
-                  >{{ c.dislikes }}</el-row
-                >
-              </el-col>
-              <el-col :span="3" :offset="1">
-                <el-row type="flex" justify="center">
-                  <img src="@/assets/Report.svg" alt="report icon" />
-                </el-row>
-              </el-col>
-            </el-row>
-          </el-row>
-        </div>
-      </el-row>
+      <FeedBox :initialFeed="feeds" :initialUser="user" :isShowFollow="isShowFollow"></FeedBox>
     </div>
     <Footer></Footer>
   </div>
@@ -202,16 +23,19 @@
 <script>
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
+import FeedBox from "@/components/FeedBox.vue";
 
 export default {
   name: "FeedMainpage",
   components: {
     Header,
     Footer,
+    FeedBox,
   },
   data() {
     return {
       user: "栀子花开",
+      activeName: "all",
       isShowFollow: false,
       allColor: "#79A3B1",
       followColor: "#456268",
@@ -219,7 +43,7 @@ export default {
         {
           id: "F0001",
           publisher: "娱乐八卦姐",
-          time: 1551014005919,
+          time: 1642014005919,
           title: "布魯斯威利罹失語症宣布息影　「壓箱作」導演：他是偉大的人",
           fullContent:
             "67歲美國影星布魯斯威利（Bruce Willis）在今年3月閃電宣布引退，家人證實他罹患失語症，將漸漸失去說話和閱讀的能力。今年來他接片數量雖不少，但戲份大多不如以往，壓箱作品之一的《終極夜路》（Gasoline Alley），也將於近期在台灣上映。\n\n以洛杉磯街頭為背景的《終極夜路》，由布魯斯威利和戴文沙瓦（Devon Sawa）主演。故事描述一名有前科的刺青師，被警方認定為一宗連續殺人案的嫌疑犯，為了證明自己的清白，他必須設法查出真相。導演愛德華德雷克（Edward Drake）已經是第四次與布魯斯威利合作，對於這位昔日動作天王的表現，他依舊是讚譽有佳：「布魯斯是我有幸認識和合作過的最善良的人之一。」為了向布魯斯威利過去的事蹟致意，他表示劇組很認真的在製作這部電影，「我對這個人的評價不能再高了，他是個偉大的人。」\n\n除了布魯斯威利之外，愛德華德雷克這次還邀請曾演出《絕命終結站》的性格男星戴文沙瓦演出，對於這次和他合作的心得，愛德華德雷克表示：「戴文是我合作過最好的演員之一。他是非凡的。你可以從他的眼神中看出他的角色正在做決定，當他在推測他的選擇可能帶來的後果。」他又說：「當我遇到戴文之後，我才意識到我們有機會製作一部非常特別的作品。」《終極夜路》將於6月2日上映。\n\n转载于：ETtoday新聞雲",
@@ -232,7 +56,7 @@ export default {
           likeCount: 204,
           commentCount: 2,
           userComment: "",
-          isFollow: true,
+          isFollow: false,
           isLike: true,
           comments: [
             {
@@ -259,6 +83,82 @@ export default {
             },
           ],
         },
+        {
+          id: "F0002",
+          publisher: "周董啦啦啦",
+          time: 1651714005919,
+          title: "快訊／昆凌生了！　周杰倫罕見「曝光三女兒正臉超Q照」：辛苦了",
+          fullContent:
+            "周杰倫和昆凌終於迎接三寶誕生！稍早昆凌在IG發文，正式官宣兩人的三女兒來到，「Just when you think you know Love, something little comes along to remind you just HOW BIG IT REALLY IS.」（當你以為你已經了解什麼是愛，有些小事情就會來提醒你，愛有多麽巨大。）\n\n而周杰倫更是罕見直接PO出女兒的正臉照，「母女兩位都辛苦了，@hannah_quinlivan，Thank God for this beautiful gift! （感謝神送來這麼美麗的禮物）」以往大女兒和二兒子幾乎沒有曝光過正面清晰長相，周董這回卻罕見讓小女兒露臉，可見得他心情有多麽愉悅。不過根據照片，小朋友看起來應已出生一陣子。\n\n先前周董好友劉畊宏在直播中，不小心透露周董女兒在上個月21日出生，雖然隨後他表示是誤會一場，但還是讓不少網友發現些許疑點，認為周董女兒很有可能真的已經出生，如今周董和昆凌選擇親自公布喜訊，瞬間也湧進不少粉絲祝福。對此，目前周董所屬杰威爾暫無回應。",
+          showContent: "",
+          isExpand: false,
+          image: [
+            require("@/assets/feedpic4.jpg"),
+            require("@/assets/feedpic5.jpg"),
+          ],
+          likeCount: 204,
+          commentCount: 5,
+          userComment: "",
+          isFollow: true,
+          isLike: false,
+          comments: [
+            {
+              id: "C3001",
+              publisher: "看什么看",
+              time: "1651814005919",
+              contents: "太可爱了吧",
+              image: [],
+              likes: 80,
+              dislikes: 0,
+              isLike: true,
+              isDislike: false,
+            },
+            {
+              id: "C3002",
+              publisher: "没看过帅哥？",
+              time: "1651955905919",
+              contents: "要99鸭！！！！",
+              image: [],
+              likes: 45,
+              dislikes: 0,
+              isLike: false,
+              isDislike: false,
+            },
+            {
+              id: "C3003",
+              publisher: "还是没看过美女？",
+              time: "1651966905919",
+              contents: "好可爱！！",
+              image: [],
+              likes: 40,
+              dislikes: 0,
+              isLike: false,
+              isDislike: false,
+            },
+            {
+              id: "C3004",
+              publisher: "再看也不是你的",
+              time: "1652055905919",
+              contents: "周董yyds",
+              image: [],
+              likes: 61,
+              dislikes: 0,
+              isLike: false,
+              isDislike: false,
+            },
+            {
+              id: "C3005",
+              publisher: "你可以走了",
+              time: "1652072905919",
+              contents: "芜湖",
+              image: [],
+              likes: 20,
+              dislikes: 2,
+              isLike: false,
+              isDislike: false,
+            },
+          ],
+        },
       ],
     };
   },
@@ -272,87 +172,6 @@ export default {
       this.isShowFollow = true;
       this.followColor = "#79A3B1";
       this.allColor = "#456268";
-    },
-    follow(item) {
-      item.isFollow = true;
-    },
-    unfollow(item) {
-      item.isFollow = false;
-    },
-    like(item) {
-      item.isLike = !item.isLike;
-      if (item.isLike === true) item.likeCount++;
-      else item.likeCount--;
-    },
-    commentLike(comment) {
-      comment.isLike = !comment.isLike;
-      if (comment.isLike === true) comment.likes++;
-      else comment.likes--;
-    },
-    commentDislike(comment) {
-      comment.isDislike = !comment.isDislike;
-      if (comment.isDislike === true) comment.dislikes++;
-      else comment.dislikes--;
-    },
-    sendComment(item) {
-      if (!item.userComment) {
-        this.$notify({
-          showClose: true,
-          type: "warning",
-          message: "评论不能为空",
-        });
-      } else {
-        let a = {};
-        a.publisher = this.user;
-        a.contents = item.userComment;
-        a.time = new Date().getTime();
-        // a.image = [];
-        a.likes = 0;
-        a.dislikes = 0;
-        a.isLike = false;
-        a.isDislike = false;
-        item.comments.push(a);
-        item.commentCount++;
-        item.userComment = "";
-      }
-    },
-    dateStr(date) {
-      var time = new Date().getTime();
-      time = parseInt((time - date) / 1000);
-      var s;
-      if (time < 60 * 10) {
-        return "刚刚";
-      } else if (time < 60 * 60) {
-        s = Math.floor(time / 60);
-        return s + "分钟前";
-      } else if (time < 60 * 60 * 24) {
-        s = Math.floor(time / 60 / 60);
-        return s + "小时前";
-      } else if (time < 60 * 60 * 24 * 5) {
-        s = Math.floor(time / 60 / 60 / 24);
-        return s + "天前";
-      } else {
-        var date = new Date(parseInt(date));
-        let y = date.getFullYear();
-        let m = date.getMonth() < 10 ? "0" + date.getMonth() : date.getMonth();
-        let d = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
-        let h = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
-        let mn =
-          date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
-        return y + "-" + m + "-" + d + " " + h + ":" + mn;
-      }
-    },
-    calc(item) {
-      var s = "";
-      if (item.isExpand === false) {
-        s = item.fullContent.substring(0, 180) + "...";
-      } else {
-        s = item.fullContent;
-      }
-      return s.replace(/(\r\n|\n|\r)/gm, "<br/>");
-    },
-    changeExpand(item) {
-      item.isExpand = !item.isExpand;
     },
   },
 };
@@ -404,7 +223,7 @@ export default {
   border: none;
   background: none;
 }
-.comment-upload-image{
+.comment-upload-image {
   display: inline-block;
 }
 .comment-action {
@@ -507,7 +326,9 @@ export default {
 .feed-box {
   color: #456268;
   padding: 50px 60px;
+  margin: 0 0 50px;
   background-color: #fcf8ec;
+  /* border: #456268 1px solid; */
   box-shadow: 0px 0px 20px 3px rgba(0, 0, 0, 0.25);
 }
 .action span:hover {
@@ -516,7 +337,6 @@ export default {
 .action {
   margin: 0 0 30px;
   line-height: 36px;
-  text-align: center;
   vertical-align: middle;
   font-size: 24px;
   /* outline: 1px black solid; */
