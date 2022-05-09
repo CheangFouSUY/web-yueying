@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header></Header>
+    <Header :isLogin="isLogin" :userInfo="userInfo"></Header>
     <div class="main">
       <el-row class="action">
         <el-col :span="8">
@@ -13,10 +13,9 @@
         <!-- <el-col :span="8">编辑已关注话题</el-col> -->
         <!-- <el-col :span="8">发表话题</el-col> -->
       </el-row>
-
       <FeedBox :initialFeed="feeds" :initialUser="user" :isShowFollow="isShowFollow"></FeedBox>
     </div>
-    <Footer></Footer>
+    <Footer id="footer"></Footer>
   </div>
 </template>
 

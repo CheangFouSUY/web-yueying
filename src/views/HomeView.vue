@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header></Header>
+    <Header :isLogin="isLogin" :userInfo="userInfo"></Header>
     <h1>Hello World</h1>
     <Footer></Footer>
   </div>
@@ -15,6 +15,15 @@ export default {
   components: {
     Header,
     Footer,
+  },
+  data() {
+    return {
+        isLogin:'false',
+        userInfo: {
+        username:'小黄鸭',
+        useravatar:'',
+        }
+    }
   }
 }
 </script>

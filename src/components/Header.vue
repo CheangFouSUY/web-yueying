@@ -19,16 +19,34 @@
         <input type='text' v-model='search' placeholder="输入你想搜索的内容">
         <img class="navicon" src="@/assets/Search.svg" alt="search_icon">
     </div>
-    <a href="/login" id='login'>登录</a>
+    <el-button v-if="isLogin" id="login" @click="login">登录</el-button>
+    <el-button v-else id="login" @click="login">登出</el-button>
+    <!-- <span v-else id="loginname" @click="login">{{ userInfo.username }}</span> -->
 </div>
 </template>
 
 <script>
 export default {
     name:'Header',
+    props: {
+    isLogin: {
+      type: Boolean,
+      default: false,
+    },
+    userInfo: String,
+    },
     methods:{
-        search(){
-            
+        // search(){ 
+        // }
+        login() {
+            // this.$router.push('/login'),
+            this.isLogin = !this.isLogin
+        }
+    },
+    data() {
+        return {
+            isLogin: this.isLogin,
+            userInfo: this.userInfo,
         }
     }
 }
@@ -105,6 +123,20 @@ a{
 }
 #login{
     float:right;
+    margin-top: 8px;
+    margin-right: 10px;
+    color: white;
+    background-color: rgba(208, 232, 242, 0.01);
+}
+#login:active{
+    border-color: white;
+}
+#loginname{
+    float: right;
+    margin-top: 13px;
+    margin-right: 20px;
+    color: white;
+    font-size: 20px;
 }
 #Type{
     float: left;
