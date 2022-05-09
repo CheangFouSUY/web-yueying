@@ -3,20 +3,47 @@
     <Header></Header>
     <div class="main">
       <el-row class="action">
-        <el-col :span="8">
+        <el-col :span="20">
           <span :style="{ color: allColor }" @click="showAll()">所有</span>
           <el-divider direction="vertical"></el-divider>
-          <span :style="{ color: followColor }" @click="showFollow()">
-            关注
-          </span>
+          <span :style="{ color: followColor }" @click="showFollow()"
+            >关注</span
+          >
         </el-col>
         <!-- <el-col :span="8">编辑已关注话题</el-col> -->
-        <!-- <el-col :span="8">发表话题</el-col> -->
-      </el-row>
+        <el-col :span="4">
+          <el-button class="post-now" type="text" @click="formVisible = true"
+            >发表话题 <i class="el-icon-position"></i
+          ></el-button>
 
-      <FeedBox :initialFeed="feeds" :initialUser="user" :isShowFollow="isShowFollow"></FeedBox>
+          <el-dialog title="发布话题" :visible.sync="formVisible">
+            <el-form :model="form">
+              <el-form-item label="标题" :label-width="formLabelWidth">
+                <el-input v-model="form.title" autocomplete="off"></el-input>
+              </el-form-item>
+              <el-form-item label="内容" :label-width="formLabelWidth">
+                <el-input
+                  type="textarea"
+                  autosize
+                  v-model="form.fullContent"
+                  autocomplete="off"
+                ></el-input>
+              </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="formVisible = false">取 消</el-button>
+              <el-button type="primary" @click="postFeed()">发布</el-button>
+            </div>
+          </el-dialog>
+        </el-col>
+      </el-row>
+      <FeedBox
+        :initialFeed="feeds"
+        :initialUser="user"
+        :isShowFollow="isShowFollow"
+      ></FeedBox>
     </div>
-    <Footer></Footer>
+    <Footer id="footer"></Footer>
   </div>
 </template>
 
@@ -39,6 +66,12 @@ export default {
       isShowFollow: false,
       allColor: "#79A3B1",
       followColor: "#456268",
+      formVisible: false,
+      formLabelWidth: "120px",
+      form: {
+        title: "",
+        fullContent: "",
+      },
       feeds: [
         {
           id: "F0001",
@@ -173,164 +206,45 @@ export default {
       this.followColor = "#79A3B1";
       this.allColor = "#456268";
     },
+    postFeed() {
+      let a = {};
+      a.publisher = this.user;
+      a.time = new Date().getTime();
+      a.title = this.form.title;
+      a.fullContent = this.form.fullContent;
+      a.showContent = "";
+      a.isExpand = true;
+      a.image = [];
+      a.likeCount = 0;
+      a.commentCount = 0;
+      a.userComment = "";
+      a.isFollow = true;
+      a.isLike = false;
+      a.comments = [];
+      this.feeds.unshift(a);
+      this.formVisible = false;
+      this.form.title = "";
+      this.form.fullContent = "";
+    },
   },
 };
 </script>
 
 <style scoped>
-.el-icon-picture-outline-round:hover,
-.el-icon-position:hover {
+.post-now:hover {
   cursor: pointer;
-  color: #79a3b1;
+  box-shadow: 0px 0px 10px rgba(121, 163, 177, 0.25);
 }
-.el-icon-picture-outline-round,
-.el-icon-position {
-  margin: 0 0 5px 20px;
-  font-size: 24px;
-  line-height: 30px;
-}
-.publish-write:focus-within {
-  background-color: rgba(121, 163, 177, 0.2);
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.05);
-}
-.publish-box input:focus {
-  outline: none;
-}
-.publish-box input {
-  width: 1060px;
-  margin: 5px;
-  padding: 10px;
-  border: none;
-  background: none;
-  color: #456268;
-  font-family: "Microsoft JhengHei", 微软正黑体, "Microsoft YaHei", 微软雅黑;
-}
-.publish-write {
-  margin: 5px 0;
-  border-radius: 10px;
-  background: rgba(121, 163, 177, 0.1);
-}
-.comment-like-count {
-  font-size: 12px;
-}
-.comment-action img:hover {
-  cursor: pointer;
-}
-.comment-action img {
-  height: 28px;
-}
-.comment-upload-image button {
-  border: none;
-  background: none;
-}
-.comment-upload-image {
-  display: inline-block;
-}
-.comment-action {
-  width: 300px;
-  padding-top: 10px;
-}
-.comment-time {
-  font-size: 12px;
-  color: rgb(149, 149, 149);
-}
-.comment-publisher {
-  font-size: 18px;
-  font-weight: 600;
-}
-.comment-box {
-  padding: 15px 0;
-  /* outline: 1px black solid; */
-}
-
-.like-comment-wrap {
-  padding-top: 20px;
-}
-.like-comment-wrap span {
-  display: inline-block;
-  margin-right: 20px;
-  line-height: 30px;
-  font-size: 16px;
-  vertical-align: middle;
-}
-.like-comment-wrap img {
-  height: 36px;
-  vertical-align: middle;
-}
-.like-comment-wrap img:hover,
-.bookmark:hover {
-  cursor: pointer;
-}
-.comment-wrap {
-  /* width: 1200px; */
-  margin: 30px auto;
-  /* padding: 30px 30px 10px; */
-}
-
-.feed-unfollow:hover,
-.feed-follow:hover {
-  cursor: pointer;
-}
-.feed-unfollow {
-  width: 130px;
-  margin-right: 20px;
-  font-size: 18px;
-  line-height: 32px;
-  font-weight: 600;
-  border-radius: 15px;
-  background: none;
-  color: #456268;
-  border: #456268 1px solid;
-}
-.feed-follow {
-  width: 130px;
-  margin-right: 20px;
-  font-size: 18px;
-  font-weight: 600;
-  line-height: 32px;
-  border: 1px #456268 solid;
-  color: #fcf8ec;
-  background-color: #456268;
-  border-radius: 15px;
-}
-.feed-image img {
-  width: 800px;
-  margin: 10px;
-}
-.expand-button:hover {
-  cursor: pointer;
-  color: #8ebfce;
-}
-.expand-button {
-  background: none;
-  border: none;
-  font-size: 16px;
-  color: #79a3b1;
-}
-.feed-content {
-  font-size: 18px;
-}
-.feed-title {
-  margin: 20px 0;
-  font-size: 28px;
-  font-weight: 600;
-}
-.feed-time {
-  color: grey;
-}
-.feed-publisher {
+.post-now {
+  padding: 5px 20px;
   font-size: 22px;
-  font-weight: 600;
-  /* outline: 1px black solid; */
-}
-.feed-box {
+  /* font-weight: 600; */
   color: #456268;
-  padding: 50px 60px;
-  margin: 0 0 50px;
-  background-color: #fcf8ec;
-  /* border: #456268 1px solid; */
-  box-shadow: 0px 0px 20px 3px rgba(0, 0, 0, 0.25);
+  border: none;
+  border-radius: 10px;
+  background-color: rgba(121, 163, 177, 0.6);
 }
+
 .action span:hover {
   cursor: pointer;
 }
@@ -349,11 +263,6 @@ export default {
 .main {
   width: 1200px;
   margin: 30px auto;
-}
-.el-row,
-.el-col {
-  /* color: #456268; */
-  /* outline: 1px red solid; */
 }
 button {
   font-family: "Microsoft JhengHei", 微软正黑体, "Microsoft YaHei", 微软雅黑;

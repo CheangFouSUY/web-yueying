@@ -275,7 +275,7 @@ export default {
         a.dislikes = 0;
         a.isLike = false;
         a.isDislike = false;
-        item.comments.push(a);
+        item.comments.unshift(a);
         item.commentCount++;
         item.userComment = "";
       }
