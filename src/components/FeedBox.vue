@@ -108,17 +108,17 @@
                     list-type="picture"
                     :before-remove="beforeRemove"
                     multiple
+                    :auto-upload="false"  
                     :limit="3"
-                    :on-exceed="handleExceed"
-                  >
+                    :on-exceed="handleExceed">
                     <button>
                       <i class="el-icon-picture-outline-round"></i>
                     </button>
                   </el-upload>
                   <i class="el-icon-position" @click="sendComment(item)"></i>
-                  <div slot="tip" class="el-upload__tip">
+                  <!-- <div slot="tip" class="el-upload__tip">
                     只能上传jpg/png文件，且不超过500kb
-                  </div>
+                  </div> -->
                 </el-row>
               </el-row>
             </el-col>
@@ -185,7 +185,7 @@
             </el-col>
             <el-col :span="3" :offset="1">
               <el-row type="flex" justify="center">
-                <img src="@/assets/Report.svg" alt="report icon" />
+                <img @click="report" src="@/assets/Report.svg" alt="report icon" />
               </el-row>
             </el-col>
           </el-row>
@@ -321,6 +321,9 @@ export default {
     changeExpand(item) {
       item.isExpand = !item.isExpand;
     },
+    report() {
+      this.$router.push('/report')
+    }
   },
 };
 </script>

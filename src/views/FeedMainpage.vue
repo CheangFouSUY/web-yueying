@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header></Header>
+    <Header :isLogin="isLogin" :userInfo="userInfo"></Header>
     <div class="main">
       <el-row class="action">
         <el-col :span="20">

@@ -80,6 +80,11 @@ const routes = [
     name: 'report',
     component: () => import('../views/Report.vue')
    },
+   {
+    path: '/profile',
+    name: 'profile',
+    component: () => import('../views/Profile.vue')
+   },
 ]
 
 const router = new VueRouter({
