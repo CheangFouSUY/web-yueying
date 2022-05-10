@@ -1,9 +1,11 @@
 <template>
   <div>
     <Header :isLogin="isLogin" :userInfo="userInfo"></Header>
-    <el-row>
-      <el-col :span="24"><div class="mainSwiper"></div></el-col>
-    </el-row>
+    <el-carousel :interval="5000" height="540px">
+      <el-carousel-item v-for="item in carouselImg" :key="item">
+        <img class="poster" :src="item" alt="" />
+      </el-carousel-item>
+    </el-carousel>
     <el-row>
       <el-col :span="16" :offset="1"><div class="BooknDrama">
         <el-row>
@@ -30,6 +32,36 @@
         </el-row>
         <el-row>
         </el-row>
+
+        <!-- :) -->
+        
+        <!-- <el-col class="hot-list-wrap">
+        <el-row class="hot-list-title">热 榜</el-row>
+        <el-tabs v-model="activeName" type="border-card" stretch="true">
+          <el-tab-pane label="图书" name="book">
+            <li
+              class="hot-list"
+              v-for="item in bookHotList"
+              :key="item.n"
+              :style="{ color: listColor[item.n - 1] }"
+            >
+              <span class="hot-list-number">{{ item.n }}</span>
+              <span class="hot-list-name">{{ item.title }}</span>
+            </li>
+          </el-tab-pane>
+          <el-tab-pane label="影视" name="drama">
+            <li
+              class="hot-list"
+              v-for="item in dramaHotList"
+              :key="item.n"
+              :style="{ color: listColor[item.n - 1] }"
+            >
+              <span class="hot-list-number">{{ item.n }}</span>
+              <span class="hot-list-name">{{ item.title }}</span>
+            </li>
+          </el-tab-pane>
+        </el-tabs>
+      </el-col> -->
         </div></el-col>
     </el-row>
     <Footer id="footer"></Footer>
