@@ -83,6 +83,7 @@
         <span class="like-count">{{ item.likeCount }}</span>
         <img src="@/assets/Comment.svg" alt="comment" />
         <span class="comment-count">{{ item.commentCount }}</span>
+                <img @click="report" src="@/assets/Report.svg" alt="report icon" />
       </el-row>
 
       <!-- 评论区 -->
@@ -226,16 +227,6 @@ export default {
 
     handleClick(tab, event) {
       console.log(tab, event);
-    },
-    showAll() {
-      this.isShowFollow = false;
-      this.allColor = "#79A3B1";
-      this.followColor = "#456268";
-    },
-    showFollow() {
-      this.isShowFollow = true;
-      this.followColor = "#79A3B1";
-      this.allColor = "#456268";
     },
     follow(item) {
       item.isFollow = true;

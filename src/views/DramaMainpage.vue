@@ -24,22 +24,22 @@
 
       <el-row class="ctg-title">热门</el-row>
       <el-row>
-        <Swiper></Swiper>
+        <Swiper :initialList="hotDrama"></Swiper>
       </el-row>
 
       <el-row class="ctg-title">最新上架</el-row>
       <el-row>
-        <Swiper></Swiper>
+        <Swiper :initialList="hotDrama"></Swiper>
       </el-row>
 
       <el-row class="ctg-title">爱情</el-row>
       <el-row>
-        <Swiper></Swiper>
+        <Swiper :initialList="hotDrama"></Swiper>
       </el-row>
 
       <el-row class="ctg-title">恐怖</el-row>
       <el-row>
-        <Swiper></Swiper>
+        <Swiper :initialList="hotDrama"></Swiper>
       </el-row>
     </div>
 
@@ -74,6 +74,78 @@ export default {
         "LGBT",
         "卡通",
         "喜剧",
+      ],
+      hotDrama: [
+        {
+          id: "D001",
+          title: "猎罪图鉴1",
+          rating: 4.8,
+          src: require("../assets/poster/LieZuiTuJian.jpg"),
+          name: "liezuitujian",
+        },
+        {
+          id: "B002",
+          title: "猎罪图鉴2",
+          rating: 4.6,
+          src: require("../assets/poster/LieZuiTuJian.jpg"),
+          name: "liezuitujian",
+        },
+        {
+          id: "B003",
+          title: "猎罪图鉴3",
+          rating: 4.6,
+          src: require("../assets/poster/LieZuiTuJian.jpg"),
+          name: "liezuitujian",
+        },
+        {
+          id: "B004",
+          title: "猎罪图鉴4",
+          rating: 4.6,
+          src: require("../assets/poster/LieZuiTuJian.jpg"),
+          namel: "liezuitujian",
+        },
+        {
+          id: "B005",
+          title: "猎罪图鉴5",
+          rating: 4.6,
+          src: require("../assets/poster/LieZuiTuJian.jpg"),
+          name: "liezuitujian",
+        },
+        {
+          id: "B006",
+          title: "猎罪图鉴6",
+          rating: 4.6,
+          src: require("../assets/poster/LieZuiTuJian.jpg"),
+          name: "liezuitujian",
+        },
+        {
+          id: "B007",
+          title: "猎罪图鉴7",
+          rating: 4.6,
+          src: require("../assets/poster/LieZuiTuJian.jpg"),
+          name: "liezuitujian",
+        },
+        {
+          id: "B008",
+          title: "猎罪图鉴8",
+          rating: 4.6,
+          src: require("../assets/poster/LieZuiTuJian.jpg"),
+          name: "liezuitujian",
+        },
+        {
+          id: "B009",
+          title: "猎罪图鉴9",
+          rating: 4.6,
+          src: require("../assets/poster/LieZuiTuJian.jpg"),
+          name: "liezuitujian",
+        },
+        {
+          id: "B0010",
+          title: "猎罪图鉴10",
+          rating: 4.6,
+          src: require("../assets/poster/LieZuiTuJian.jpg"),
+          name: "liezuitujian",
+        },
       ],
     };
   },

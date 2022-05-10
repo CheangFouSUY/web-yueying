@@ -18,22 +18,22 @@
 
       <el-row class="ctg-title">热门</el-row>
       <el-row>
-        <Swiper></Swiper>
+        <Swiper :initialList="hotBook"></Swiper>
       </el-row>
 
       <el-row class="ctg-title">最新上架</el-row>
       <el-row>
-        <Swiper></Swiper>
+        <Swiper :initialList="newBook"></Swiper>
       </el-row>
 
       <el-row class="ctg-title">爱情</el-row>
       <el-row>
-        <Swiper></Swiper>
+        <Swiper :initialList="hotBook"></Swiper>
       </el-row>
 
       <el-row class="ctg-title">恐怖</el-row>
       <el-row>
-        <Swiper></Swiper>
+        <Swiper :initialList="hotBook"></Swiper>
       </el-row>
 
     </div>
@@ -68,6 +68,150 @@ export default {
         "教育",
         "哲学",
         "文学",
+      ],
+      hotBook: [
+        {
+          id: "B001",
+          title: "盗墓笔记1",
+          rating: 4.6,
+          src: require("../assets/poster/DaoMuBiJi.jpg"),
+          name: "daomubiji",
+        },
+        {
+          id: "B002",
+          title: "盗墓笔记2",
+          rating: 4.6,
+          src: require("../assets/poster/DaoMuBiJi.jpg"),
+          name: "daomubiji",
+        },
+        {
+          id: "B003",
+          title: "盗墓笔记3",
+          rating: 4.6,
+          src: require("../assets/poster/DaoMuBiJi.jpg"),
+          name: "daomubiji",
+        },
+        {
+          id: "B004",
+          title: "盗墓笔记4",
+          rating: 4.6,
+          src: require("../assets/poster/DaoMuBiJi.jpg"),
+          namel: "daomubiji",
+        },
+        {
+          id: "B005",
+          title: "盗墓笔记5",
+          rating: 4.6,
+          src: require("../assets/poster/DaoMuBiJi.jpg"),
+          name: "daomubiji",
+        },
+        {
+          id: "B006",
+          title: "盗墓笔记6",
+          rating: 4.6,
+          src: require("../assets/poster/DaoMuBiJi.jpg"),
+          name: "daomubiji",
+        },
+        {
+          id: "B007",
+          title: "盗墓笔记7",
+          rating: 4.6,
+          src: require("../assets/poster/DaoMuBiJi.jpg"),
+          name: "daomubiji",
+        },
+        {
+          id: "B008",
+          title: "盗墓笔记8",
+          rating: 4.6,
+          src: require("../assets/poster/DaoMuBiJi.jpg"),
+          name: "daomubiji",
+        },
+        {
+          id: "B009",
+          title: "盗墓笔记9",
+          rating: 4.6,
+          src: require("../assets/poster/DaoMuBiJi.jpg"),
+          name: "daomubiji",
+        },
+        {
+          id: "B0010",
+          title: "盗墓笔记10",
+          rating: 4.6,
+          src: require("../assets/poster/DaoMuBiJi.jpg"),
+          name: "daomubiji",
+        },
+      ],
+      newBook: [
+        {
+          id: "B001",
+          title: "盗墓笔记1",
+          rating: 4.6,
+          src: require("../assets/poster/DaoMuBiJi.jpg"),
+          name: "daomubiji",
+        },
+        {
+          id: "B002",
+          title: "盗墓笔记2",
+          rating: 4.6,
+          src: require("../assets/poster/DaoMuBiJi.jpg"),
+          name: "daomubiji",
+        },
+        {
+          id: "B003",
+          title: "盗墓笔记3",
+          rating: 4.6,
+          src: require("../assets/poster/DaoMuBiJi.jpg"),
+          name: "daomubiji",
+        },
+        {
+          id: "B004",
+          title: "盗墓笔记4",
+          rating: 4.6,
+          src: require("../assets/poster/DaoMuBiJi.jpg"),
+          namel: "daomubiji",
+        },
+        {
+          id: "B005",
+          title: "盗墓笔记5",
+          rating: 4.6,
+          src: require("../assets/poster/DaoMuBiJi.jpg"),
+          name: "daomubiji",
+        },
+        {
+          id: "B006",
+          title: "盗墓笔记6",
+          rating: 4.6,
+          src: require("../assets/poster/DaoMuBiJi.jpg"),
+          name: "daomubiji",
+        },
+        {
+          id: "B007",
+          title: "盗墓笔记7",
+          rating: 4.6,
+          src: require("../assets/poster/DaoMuBiJi.jpg"),
+          name: "daomubiji",
+        },
+        {
+          id: "B008",
+          title: "盗墓笔记8",
+          rating: 4.6,
+          src: require("../assets/poster/DaoMuBiJi.jpg"),
+          name: "daomubiji",
+        },
+        {
+          id: "B009",
+          title: "盗墓笔记9",
+          rating: 4.6,
+          src: require("../assets/poster/DaoMuBiJi.jpg"),
+          name: "daomubiji",
+        },
+        {
+          id: "B0010",
+          title: "盗墓笔记10",
+          rating: 4.6,
+          src: require("../assets/poster/DaoMuBiJi.jpg"),
+          name: "daomubiji",
+        },
       ],
     };
   },

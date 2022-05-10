@@ -19,7 +19,12 @@
           <el-dialog title="发布话题" :visible.sync="formVisible">
             <el-form :model="form">
               <el-form-item label="标题" :label-width="formLabelWidth">
-                <el-input v-model="form.title" autocomplete="off"></el-input>
+                <el-input
+                  v-model="form.title"
+                  autocomplete="off"
+                  maxlength="25"
+                  show-word-limit
+                ></el-input>
               </el-form-item>
               <el-form-item label="内容" :label-width="formLabelWidth">
                 <el-input
@@ -27,6 +32,8 @@
                   autosize
                   v-model="form.fullContent"
                   autocomplete="off"
+                  minlength="25"
+                  show-word-limit
                 ></el-input>
               </el-form-item>
             </el-form>
@@ -207,24 +214,38 @@ export default {
       this.allColor = "#456268";
     },
     postFeed() {
-      let a = {};
-      a.publisher = this.user;
-      a.time = new Date().getTime();
-      a.title = this.form.title;
-      a.fullContent = this.form.fullContent;
-      a.showContent = "";
-      a.isExpand = true;
-      a.image = [];
-      a.likeCount = 0;
-      a.commentCount = 0;
-      a.userComment = "";
-      a.isFollow = true;
-      a.isLike = false;
-      a.comments = [];
-      this.feeds.unshift(a);
-      this.formVisible = false;
-      this.form.title = "";
-      this.form.fullContent = "";
+      if (!this.form.title) {
+        this.$notify({
+          showClose: true,
+          type: "warning",
+          message: "标题不能为空",
+        });
+      } else if (this.form.fullContent.length < 25) {
+        this.$notify({
+          showClose: true,
+          type: "warning",
+          message: "话题内容不能少于25字",
+        });
+      } else {
+        let a = {};
+        a.publisher = this.user;
+        a.time = new Date().getTime();
+        a.title = this.form.title;
+        a.fullContent = this.form.fullContent;
+        a.showContent = "";
+        a.isExpand = true;
+        a.image = [];
+        a.likeCount = 0;
+        a.commentCount = 0;
+        a.userComment = "";
+        a.isFollow = true;
+        a.isLike = false;
+        a.comments = [];
+        this.feeds.unshift(a);
+        this.formVisible = false;
+        this.form.title = "";
+        this.form.fullContent = "";
+      }
     },
   },
 };
