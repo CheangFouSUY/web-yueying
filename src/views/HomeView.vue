@@ -1,42 +1,36 @@
 <template>
   <div>
     <Header :isLogin="isLogin" :userInfo="userInfo"></Header>
-    <el-carousel :interval="5000" height="540px">
-      <el-carousel-item v-for="item in carouselImg" :key="item">
-        <img class="poster" :src="item" alt="" />
-      </el-carousel-item>
-    </el-carousel>
     <el-row>
-      <el-col :span="18">
-        <Swiper :initialList="hotBook"></Swiper>
-      </el-col>
-      <el-col class="hot-list-wrap" :span="6">
-        <el-row class="hot-list-title">热 榜</el-row>
-        <el-tabs v-model="activeName" type="border-card" stretch="true">
-          <el-tab-pane label="图书" name="book">
-            <li
-              class="hot-list"
-              v-for="item in bookHotList"
-              :key="item.n"
-              :style="{ color: listColor[item.n - 1] }"
-            >
-              <span class="hot-list-number">{{ item.n }}</span>
-              <span class="hot-list-name">{{ item.title }}</span>
-            </li>
-          </el-tab-pane>
-          <el-tab-pane label="影视" name="drama">
-            <li
-              class="hot-list"
-              v-for="item in dramaHotList"
-              :key="item.n"
-              :style="{ color: listColor[item.n - 1] }"
-            >
-              <span class="hot-list-number">{{ item.n }}</span>
-              <span class="hot-list-name">{{ item.title }}</span>
-            </li>
-          </el-tab-pane>
-        </el-tabs>
-      </el-col>
+      <el-col :span="24"><div class="mainSwiper"></div></el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="16" :offset="1"><div class="BooknDrama">
+        <el-row>
+          <el-col :span="24" :offset="1"><div class="Book">
+            <img src="@/assets/Book.svg" alt="book icon" /><span>图书</span>
+          </div></el-col>
+          <el-col :span="23" :offset="0"><Swiper id="Swiper"></Swiper></el-col>
+        </el-row>
+        <el-divider></el-divider>
+        <el-row>
+            <el-col :span="4" :offset="1"><div class="Drama">
+           <img src="@/assets/Video.svg" alt="video icon" /><span>影视</span>
+          </div></el-col>
+          <el-col :span="23" :offset="0"><Swiper id="Swiper"></Swiper></el-col>
+        </el-row>
+        </div></el-col>
+      <el-col :span="6" :offset="1"><div class="Leaderboard bg-blue">
+        <el-row>
+          <el-col :span="24"><div class="lbTitle">热榜</div></el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12"><div class="lbType1">图书</div></el-col>
+          <el-col :span="12"><div class="lbType2">影视</div></el-col>
+        </el-row>
+        <el-row>
+        </el-row>
+        </div></el-col>
     </el-row>
     <Footer id="footer"></Footer>
   </div>
@@ -240,5 +234,58 @@ export default {
 #footer {
   position: relative;
   height: 88px;
+}
+.mainSwiper{
+  background-color: grey; 
+  height: 450px;
+  margin-bottom: 30px;
+}
+.BooknDrama{
+  /* height: 450px; */
+  /* padding-top: 10px; */
+  margin-bottom: 20px;
+  background-color: #FCF8EC;
+}
+.Book, .Drama{
+  /* border: solid 1px black; */
+  margin-bottom: 10px;
+  background-color: #FCF8EC;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+
+}
+.Leaderboard{
+  height: 450px;
+  margin-bottom: 20px;
+}
+.lbTitle{
+  background-color: #79A3B1;
+  text-align: center;
+  font-size: 36px;
+}
+.lbType1, .lbType2{
+  background-color: #79A3B1;
+  text-align: center;
+  font-size: 24px;
+}
+.lbType1{
+  /* border-right: 1px solid white; */
+}
+.lbType2{
+  /* border-left: 1px solid white; */
+}
+.bg-red{
+  background-color: red;
+}
+.bg-blue{
+  background-color: blue;
+}
+#footer{
+  position: relative;
+  height: 88px;
+}
+#Swiper{
+  margin-top: 0px;
 }
 </style>
