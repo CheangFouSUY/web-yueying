@@ -6,68 +6,59 @@
         <img class="poster" :src="item" alt="" />
       </el-carousel-item>
     </el-carousel>
-    <el-row>
-      <el-col :span="16" :offset="1"><div class="BooknDrama">
-        <el-row>
-          <el-col :span="24" :offset="1"><div class="Book">
-            <img src="@/assets/Book.svg" alt="book icon" /><span>图书</span>
-          </div></el-col>
-          <el-col :span="23" :offset="0"><Swiper id="Swiper"></Swiper></el-col>
-        </el-row>
-        <el-divider></el-divider>
-        <el-row>
-            <el-col :span="4" :offset="1"><div class="Drama">
-           <img src="@/assets/Video.svg" alt="video icon" /><span>影视</span>
-          </div></el-col>
-          <el-col :span="23" :offset="0"><Swiper id="Swiper"></Swiper></el-col>
-        </el-row>
-        </div></el-col>
-      <el-col :span="6" :offset="1"><div class="Leaderboard">
-        <!-- <el-row>
-          <el-col :span="24"><div class="lbTitle">热榜</div></el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12"><div class="lbType1">图书</div></el-col>
-          <el-col :span="12"><div class="lbType2">影视</div></el-col>
-        </el-row>
-        <el-row>
-        </el-row> -->
 
-        <!-- :) -->
-        
+    <el-row class="main">
+      <el-col :span="17" :offset="1">
+        <el-row>
+            <div class="Book">
+              <img src="@/assets/Book.svg" alt="book icon" /><span>图书</span>
+            </div>
+            <Swiper :initialList="hotBook"></Swiper>
+        </el-row>
+        <!-- <el-divider></el-divider> -->
+        <el-row>
+            <div class="Book">
+              <img src="@/assets/Video.svg" alt="video icon" /><span>影视</span>
+            </div>
+            <Swiper :initialList="hotDrama"></Swiper>
+        </el-row>
+      </el-col>
+
+      <el-col :span="6">
         <el-col class="hot-list-wrap">
-        <el-row class="hot-list-title">热 榜</el-row>
-        <el-tabs v-model="activeName" type="border-card" stretch="true">
-          <el-tab-pane label="图书" name="book">
-            <li
-              class="hot-list"
-              v-for="item in bookHotList"
-              :key="item.n"
-              :style="{ color: listColor[item.n - 1] }"
-            >
-              <img id="hot" v-if="item.n === 1" src="@/assets/Hot.jpg" alt="hot icon" />
-                <span v-else>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-              <span class="hot-list-number">{{ item.n }}</span>
-              <span class="hot-list-name">{{ item.title }}</span>
-            </li>
-          </el-tab-pane>
-          <el-tab-pane label="影视" name="drama">
-            <li
-              class="hot-list"
-              v-for="item in dramaHotList"
-              :key="item.n"
-              :style="{ color: listColor[item.n - 1] }"
-            >
+          <el-row class="hot-list-title">热 榜</el-row>
+          <el-tabs v-model="activeName" type="border-card" stretch="true">
+            <el-tab-pane label="图书" name="book">
+              <li
+                class="hot-list"
+                v-for="item in bookHotList"
+                :key="item.n"
+                :style="{ color: listColor[item.n - 1] }"
+              >
                 <img id="hot" v-if="item.n === 1" src="@/assets/Hot.jpg" alt="hot icon" />
                 <span v-else>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-              <span class="hot-list-number">{{ item.n }}</span>
-              <span class="hot-list-name">{{ item.title }}</span>
-            </li>
-          </el-tab-pane>
-        </el-tabs>
+                <span class="hot-list-number">{{ item.n }}</span>
+                <span class="hot-list-name">{{ item.title }}</span>
+              </li>
+            </el-tab-pane>
+            <el-tab-pane label="影视" name="drama">
+              <li
+                class="hot-list"
+                v-for="item in dramaHotList"
+                :key="item.n"
+                :style="{ color: listColor[item.n - 1] }"
+              >
+                <img id="hot" v-if="item.n === 1" src="@/assets/Hot.jpg" alt="hot icon" />
+                <span v-else>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                <span class="hot-list-number">{{ item.n }}</span>
+                <span class="hot-list-name">{{ item.title }}</span>
+              </li>
+            </el-tab-pane>
+          </el-tabs>
+        </el-col>
       </el-col>
-        </div></el-col>
     </el-row>
+
     <Footer id="footer"></Footer>
   </div>
 </template>
@@ -75,7 +66,7 @@
 <script>
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
-import Swiper from "@/components/MainpageSwiper.vue";
+import Swiper from "@/components/HomeSwiper.vue";
 
 export default {
   name: "HomeView",
@@ -207,6 +198,78 @@ export default {
           name: "daomubiji",
         },
       ],
+      hotDrama: [
+        {
+          id: "D001",
+          title: "猎罪图鉴1",
+          rating: 4.8,
+          src: require("../assets/poster/LieZuiTuJian.jpg"),
+          name: "liezuitujian",
+        },
+        {
+          id: "B002",
+          title: "猎罪图鉴2",
+          rating: 4.6,
+          src: require("../assets/poster/LieZuiTuJian.jpg"),
+          name: "liezuitujian",
+        },
+        {
+          id: "B003",
+          title: "猎罪图鉴3",
+          rating: 4.6,
+          src: require("../assets/poster/LieZuiTuJian.jpg"),
+          name: "liezuitujian",
+        },
+        {
+          id: "B004",
+          title: "猎罪图鉴4",
+          rating: 4.6,
+          src: require("../assets/poster/LieZuiTuJian.jpg"),
+          namel: "liezuitujian",
+        },
+        {
+          id: "B005",
+          title: "猎罪图鉴5",
+          rating: 4.6,
+          src: require("../assets/poster/LieZuiTuJian.jpg"),
+          name: "liezuitujian",
+        },
+        {
+          id: "B006",
+          title: "猎罪图鉴6",
+          rating: 4.6,
+          src: require("../assets/poster/LieZuiTuJian.jpg"),
+          name: "liezuitujian",
+        },
+        {
+          id: "B007",
+          title: "猎罪图鉴7",
+          rating: 4.6,
+          src: require("../assets/poster/LieZuiTuJian.jpg"),
+          name: "liezuitujian",
+        },
+        {
+          id: "B008",
+          title: "猎罪图鉴8",
+          rating: 4.6,
+          src: require("../assets/poster/LieZuiTuJian.jpg"),
+          name: "liezuitujian",
+        },
+        {
+          id: "B009",
+          title: "猎罪图鉴9",
+          rating: 4.6,
+          src: require("../assets/poster/LieZuiTuJian.jpg"),
+          name: "liezuitujian",
+        },
+        {
+          id: "B0010",
+          title: "猎罪图鉴10",
+          rating: 4.6,
+          src: require("../assets/poster/LieZuiTuJian.jpg"),
+          name: "liezuitujian",
+        },
+      ],
     };
   },
   methods: {},
@@ -256,7 +319,7 @@ export default {
   background-color: #456268;
 }
 .hot-list-wrap {
-  padding: 20px;
+  padding: 100px 50px;
 }
 
 .el-carousel {
@@ -268,56 +331,45 @@ export default {
 }
 .el-col,
 .el-row {
-  outline: 1px red solid;
+  /* outline: 1px red solid; */
 }
 #footer {
   position: relative;
   height: 88px;
 }
-.mainSwiper{
-  background-color: grey; 
-  height: 450px;
-  margin-bottom: 30px;
+.Book img,.Drama img {
+  width: 60px;
+  vertical-align: middle;
 }
-.BooknDrama{
-  /* height: 450px; */
-  /* padding-top: 10px; */
-  margin-bottom: 20px;
-  background-color: #FCF8EC;
-}
-.Book, .Drama{
-  /* border: solid 1px black; */
-  margin-bottom: 10px;
-  background-color: #FCF8EC;
-  font-size: 24px;
+.Book,
+.Drama {
+  margin: 40px 40px -10px;
+  font-size: 28px;
+  color: #456268;
   display: flex;
   align-items: center;
-
 }
-.Leaderboard{
-  height: 450px;
-  margin-bottom: 20px;
-}
-.lbTitle{
-  background-color: #79A3B1;
+.lbTitle {
+  background-color: #79a3b1;
   text-align: center;
   font-size: 36px;
 }
-.lbType1, .lbType2{
-  background-color: #79A3B1;
+.lbType1,
+.lbType2 {
+  background-color: #79a3b1;
   text-align: center;
   font-size: 24px;
 }
-.lbType1{
+.lbType1 {
   /* border-right: 1px solid white; */
 }
-.lbType2{
+.lbType2 {
   /* border-left: 1px solid white; */
 }
-.bg-red{
+.bg-red {
   background-color: red;
 }
-.bg-blue{
+.bg-blue {
   background-color: blue;
 }
 .hot-list img{
@@ -325,11 +377,11 @@ export default {
   width: 25px;
   /* border: solid 1px black; */
 }
-#footer{
+.main{
+  margin-bottom: 30px;
+}
+#footer {
   position: relative;
   height: 88px;
-}
-#Swiper{
-  margin-top: 0px;
 }
 </style>
