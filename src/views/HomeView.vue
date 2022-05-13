@@ -22,8 +22,8 @@
           <el-col :span="23" :offset="0"><Swiper id="Swiper"></Swiper></el-col>
         </el-row>
         </div></el-col>
-      <el-col :span="6" :offset="1"><div class="Leaderboard bg-blue">
-        <el-row>
+      <el-col :span="6" :offset="1"><div class="Leaderboard">
+        <!-- <el-row>
           <el-col :span="24"><div class="lbTitle">热榜</div></el-col>
         </el-row>
         <el-row>
@@ -31,11 +31,11 @@
           <el-col :span="12"><div class="lbType2">影视</div></el-col>
         </el-row>
         <el-row>
-        </el-row>
+        </el-row> -->
 
         <!-- :) -->
         
-        <!-- <el-col class="hot-list-wrap">
+        <el-col class="hot-list-wrap">
         <el-row class="hot-list-title">热 榜</el-row>
         <el-tabs v-model="activeName" type="border-card" stretch="true">
           <el-tab-pane label="图书" name="book">
@@ -45,6 +45,8 @@
               :key="item.n"
               :style="{ color: listColor[item.n - 1] }"
             >
+              <img id="hot" v-if="item.n === 1" src="@/assets/Hot.jpg" alt="hot icon" />
+                <span v-else>&nbsp;&nbsp;&nbsp;&nbsp;</span>
               <span class="hot-list-number">{{ item.n }}</span>
               <span class="hot-list-name">{{ item.title }}</span>
             </li>
@@ -56,12 +58,14 @@
               :key="item.n"
               :style="{ color: listColor[item.n - 1] }"
             >
+                <img id="hot" v-if="item.n === 1" src="@/assets/Hot.jpg" alt="hot icon" />
+                <span v-else>&nbsp;&nbsp;&nbsp;&nbsp;</span>
               <span class="hot-list-number">{{ item.n }}</span>
               <span class="hot-list-name">{{ item.title }}</span>
             </li>
           </el-tab-pane>
         </el-tabs>
-      </el-col> -->
+      </el-col>
         </div></el-col>
     </el-row>
     <Footer id="footer"></Footer>
@@ -217,9 +221,10 @@ export default {
 }
 .hot-list-number {
   display: inline-block;
-  width: 80px;
-  text-align: center;
+  width: 65px;
+  /* text-align: center; */
   /* outline: 1px slateblue solid; */
+  padding-left: 15px;
 }
 .hot-list {
   font-size: 22px;
@@ -227,6 +232,8 @@ export default {
   list-style-type: none;
   color: #456268;
   /* outline: 1px fuchsia solid; */
+  display: flex;
+  align-items: center;
 }
 
 ::v-deep .el-tabs__item:hover {
@@ -249,7 +256,7 @@ export default {
   background-color: #456268;
 }
 .hot-list-wrap {
-  padding: 50px;
+  padding: 20px;
 }
 
 .el-carousel {
@@ -312,6 +319,11 @@ export default {
 }
 .bg-blue{
   background-color: blue;
+}
+.hot-list img{
+  height: 25px;
+  width: 25px;
+  /* border: solid 1px black; */
 }
 #footer{
   position: relative;
