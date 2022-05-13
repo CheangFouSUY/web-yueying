@@ -85,6 +85,11 @@ const routes = [
     name: 'profile',
     component: () => import('../views/Profile.vue')
    },
+   {
+    path: '/search',
+    name: 'search',
+    component: () => import('../views/Search.vue')
+   },
 ]
 
 const router = new VueRouter({

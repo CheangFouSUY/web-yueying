@@ -16,8 +16,8 @@
                     <option value="feeds">话题</option>
                     <option value="groups">小组</option>
                 </select>
-        <input type='text' v-model='search' placeholder="输入你想搜索的内容">
-        <img class="navicon" src="@/assets/Search.svg" alt="search_icon">
+        <input type='text' v-model='searchInfo' placeholder="输入你想搜索的内容">
+        <img class="navicon" @click="search" src="@/assets/Search.svg" alt="search_icon">
     </div>
     <el-button v-if="isLogin" id="login" @click="login">登录</el-button>
     <el-button v-else id="login" @click="login">登出</el-button>
@@ -36,8 +36,9 @@ export default {
     userInfo: String,
     },
     methods:{
-        // search(){ 
-        // }
+        search() { 
+            this.$router.push('/search/' + this.searchInfo)
+        },
         login() {
             // this.$router.push('/login'),
             this.isLogin = !this.isLogin
@@ -47,6 +48,7 @@ export default {
         return {
             isLogin: this.isLogin,
             userInfo: this.userInfo,
+            searchInfo:'',
         }
     }
 }

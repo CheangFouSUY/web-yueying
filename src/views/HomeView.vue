@@ -319,7 +319,7 @@ export default {
   background-color: #456268;
 }
 .hot-list-wrap {
-  padding: 100px 50px;
+  padding: 100px 20px;
 }
 
 .el-carousel {
