@@ -42,7 +42,7 @@
     </span>
     </el-dialog>
     <!-- <span v-if="!isLogin" id="userInfo">{{userInfo.username}}</span> -->
-    <span v-if="!isLogin" id="userInfo">MIKIWONG</span>
+    <span v-if="!isLogin" id="userInfo">MIKIWONGaaaaaaa</span>
     <el-avatar v-if="!isLogin" id="userAvatar" src="https://www.pngall.com/wp-content/uploads/5/Pokemon-Pikachu-PNG-Image.png"></el-avatar>
     <!-- <span v-else id="loginname" @click="login">{{ userInfo.username }}</span> -->
 </div>
@@ -164,10 +164,13 @@ a{
 #userInfo{
     /* border: 1px solid black; */
     float:right;
+    width: 150px;
     margin-top: 15px;
-    margin-right: 10px;
+    margin-right: 5px;
     font-size: 18px;
     color: white;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 #userAvatar{
     float: right;
