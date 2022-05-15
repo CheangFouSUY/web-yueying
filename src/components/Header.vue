@@ -20,7 +20,30 @@
         <img class="navicon" @click="search" src="@/assets/Search.svg" alt="search_icon">
     </div>
     <el-button v-if="isLogin" id="login" @click="login">登录</el-button>
-    <el-button v-else id="login" @click="login">登出</el-button>
+    <!-- <el-select v-else v-model="value"
+    class="loginOption"
+    popper-class="loginOption2">
+    <el-option
+      v-for="item in options"
+      :key="item.value"
+      :label="item.label"
+      :value="item.value">
+    </el-option>
+  </el-select> -->
+    <el-button slot="reference" v-if="!isLogin" id="login" @click="logout">登出</el-button>
+    <el-dialog
+    title="提示"
+    :visible.sync="dialogVisible"
+    width="30%">
+    <span>你确定要登出吗？</span>
+    <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="realLogout">确定</el-button>
+    </span>
+    </el-dialog>
+    <!-- <span v-if="!isLogin" id="userInfo">{{userInfo.username}}</span> -->
+    <span v-if="!isLogin" id="userInfo">MIKIWONG</span>
+    <el-avatar v-if="!isLogin" id="userAvatar" src="https://www.pngall.com/wp-content/uploads/5/Pokemon-Pikachu-PNG-Image.png"></el-avatar>
     <!-- <span v-else id="loginname" @click="login">{{ userInfo.username }}</span> -->
 </div>
 </template>
@@ -34,6 +57,7 @@ export default {
       default: false,
     },
     userInfo: String,
+    dialogVisible: false,
     },
     methods:{
         search() { 
@@ -42,13 +66,27 @@ export default {
         login() {
             // this.$router.push('/login'),
             this.isLogin = !this.isLogin
+        },
+        logout() {
+            this.dialogVisible = true;
+        },
+        realLogout() {
+            this.dialogVisible = false;
+            this.isLogin = !this.isLogin;
+            this.$message.success("登出成功");
         }
     },
     data() {
         return {
             isLogin: this.isLogin,
             userInfo: this.userInfo,
+            value: this.userInfo.username,
             searchInfo:'',
+            options: [
+                {
+
+                },
+            ]
         }
     }
 }
@@ -123,6 +161,19 @@ a{
 .navicon:hover{
     cursor: pointer;
 }
+#userInfo{
+    /* border: 1px solid black; */
+    float:right;
+    margin-top: 15px;
+    margin-right: 10px;
+    font-size: 18px;
+    color: white;
+}
+#userAvatar{
+    float: right;
+    margin-top: 7px;
+    margin-right: 5px;
+}
 #login{
     float:right;
     margin-top: 8px;
@@ -158,5 +209,17 @@ a{
 }
 #Type option{
     background-color: #79A3B1;
+}
+</style>
+
+<style>
+.loginOption{
+    float: right;
+    margin-top: 8px;
+    margin-right: 10px;
+    background-color: rgba(208, 232, 242, 0.01);
+}
+.loginOption2{
+    background-color: rgba(208, 232, 242, 0.01);
 }
 </style>

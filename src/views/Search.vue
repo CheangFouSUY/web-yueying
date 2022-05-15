@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Header></Header>
+        <Header :isLogin="isLogin" :userInfo="userInfo"></Header>
         <div class="main">
         <el-row class="Top" align="middle" type="flex">
             <img class="searchicon" src="@/assets/Search2.svg" alt="search_icon"><span>搜索""</span>
@@ -69,6 +69,11 @@ export default {
   },
   data() {
       return {
+        isLogin: "false",
+        userInfo: {
+        username: "小黄鸭",
+        useravatar: "",
+      },
         type:'0',
         hotBook: [
         {
