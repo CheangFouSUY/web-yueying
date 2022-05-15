@@ -52,7 +52,7 @@ export default {
 <style scoped>
 .login #logo{
     width: 350px;
-    margin: 80px auto 40px;
+    margin: 0px auto 40px;
 }
 .login #logoBook{
     display: inline-block;
@@ -91,8 +91,8 @@ export default {
 .login button{
     display: block;
     margin-top: 20px;
-    height: 55px;
-    width: 400px;
+    height: 50px;
+    width: 100px;
     border: none;
     margin-left: auto;
     margin-right: auto;
@@ -157,5 +157,12 @@ input::placeholder{
 }
 .info{
     text-align: center;
+    margin: auto;
+    width: 480px;
+    margin-top: 80px;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    border-radius: 10px;
+    box-shadow: 0px 3px 20px rgba(0, 0, 0, 0.25);
 }
 </style>

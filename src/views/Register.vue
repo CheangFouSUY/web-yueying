@@ -6,23 +6,23 @@
                 <img id="logoBook" src="@/assets/LogoBlue.svg">
                 <h1>阅·影</h1>
             </div>
-            <div>
+            <div class="Row">
                 <span>昵称</span>
                 <input type="text">
             </div>
-            <div>
+            <div class="Row">
                 <span>邮箱</span>
                 <input type="email">
             </div>
-            <div>
+            <div class="Row">
                 <span>密码</span>
                 <input type="password">
             </div>
-            <div>
+            <div class="Row">
                 <span>重复密码</span>
                 <input type="password">
             </div>
-            <div>
+            <div class="Row">
                 <span>密保问题</span>
                 <select id="sQuestion" name="sQuestion">
                     <option style="display: none"></option>
@@ -33,7 +33,7 @@
                     <option value="love">您的初恋是？</option>
                 </select>
             </div>
-            <div>
+            <div class="Row">
                 <span>密保答案</span>
                 <input type="text">
             </div>
@@ -66,9 +66,15 @@ export default {
 </script>
 
 <style scoped>
+.Row{
+    /* border: solid 1px; */
+    padding-left: 30px;
+}
 #logo{
     width: 350px;
     margin: auto;
+    height: 180px;
+    /* border: solid 1px; */
 }
 #logoBook{
     display: inline-block;
@@ -84,7 +90,6 @@ h1{
     font-weight: 100;
     text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
-
 input:focus, select:focus{
     background-color: rgba(121, 163, 177, 0.6);
     outline: none;
@@ -96,7 +101,7 @@ input:hover{
 input, #sQuestion{
     display: inline-block;
     margin: 7px auto;
-    height: 40px;
+    height: 50px;
     width: 350px;
     padding-left: 20px;
     border: none;
@@ -136,27 +141,29 @@ input, #sQuestion{
 }
 
 #submit{
-    height: 40px;
-    width: 350px;
-    margin: 25px auto;
+    /* height: 40px; */
+    /* width: 350px; */
+    height: 50px;
+    width: 100px;
+    margin-top: 20px;
+    margin-left: 140px;
+    margin-bottom: 20px;
     background-color: #79A3B1;
     border: none;
     color: white;
     font-size: 20px;
     border-radius: 10px;
-    letter-spacing: 4em;
-    text-indent: 4em;
-    text-align: center;
+    /* letter-spacing: 4em; */
+    /* text-indent: 4em; */
+    /* text-align: center; */
 }
 #submit:hover{
     background-color: rgba(121, 163, 177, 0.6);
 }
-
 button{
     font-family: "Microsoft JhengHei", 微软正黑体, "Microsoft YaHei", 微软雅黑;
     cursor: pointer;
 }
-
 #registerBox span{
     width: 80px;
     display: inline-block;
@@ -166,12 +173,13 @@ button{
     text-align: right;
     /* outline: 1px black solid; */
 }
-
 #registerBox{
-    width: 600px;
-    margin: 0 auto;
-    text-align: center;
+    width: 580px;
+    margin: 20px auto;
+    border-radius: 10px;
+    /* text-align: center; */
     font-size: 20px;
     /* outline: 1px black solid; */
+    box-shadow: 0px 3px 20px rgba(0, 0, 0, 0.25);
 }
 </style>

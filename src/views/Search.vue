@@ -21,14 +21,15 @@
                 <Swiper :initialList="hotBook"></Swiper>
             </el-row>
         </el-row>
-        <el-row class="Feed bg-red" v-if="type === '3' || type ==='0'">
+        <el-row class="Feed" v-if="type === '3' || type ==='0'">
             <el-row class="Text" align="middle" type="flex">
             <i class="el-icon-position"></i><span>话题</span>
             </el-row>
             <el-row justify="center" type="flex">
                 <div class="container">
                 <div class="col" v-for="column in columns" :key="column">
-                 <div class="item-container" v-for="item in column" :key="item.id">{{item.publisher}}</div>
+                 <div class="item-container" v-for="item in column" :key="item.id"><span id="feedTitle">{{item.publisher}}</span>
+                 <br/><span id="feedCon">{{item.fullContent}}</span></div>
                 </div></div>
                 <!-- <el-col :span="7" v-for="item in items" :key="item.id"><div class="bg-blue">{{ item.content }}</div></el-col> -->
                 <!-- <el-col :span="7" ><div class="bg-yellow">{{ item.content  }}</div></el-col>
@@ -336,10 +337,12 @@ export default {
         {
           id: "F0003",
           publisher: "娱乐八卦妹",
+          fullContent:'KPOP IS WORLD TREND !!!!'
         },
         {
           id: "F0004",
           publisher: "娱乐八卦弟",
+          fullContent:'WHAT? IS THIS REALL?????? INDIA WON THOMAS CUPPPP!'
         },
       ],
       items: [
@@ -438,6 +441,22 @@ export default {
       return columns
     }
   },
+  methods: {
+    contentCalc(item) {
+      var s = "";
+      s = item.fullContent.substring(0, 180) + "...";
+      return s.replace(/(\r\n|\n|\r)/gm, "<br/>");
+    },
+  },
+  filters: {
+    truncate: function (text, length, suffix) {
+                if (text.length > length) {
+                    return text.substring(0, length) + suffix;
+                } else {
+                    return text;
+                }
+            },
+  }
 }
 </script>
 
@@ -484,12 +503,18 @@ export default {
   flex-direction: row;
 }
 .Feed .item-container {
-  border: 1px solid;
+  /* border: 1px solid; */
   padding: 5px;
-  margin: 5px;
+  margin: 10px;
+  margin-bottom: 0px;
   width: 400px;
-  height: 200px;
-  text-align: center;
+  height: 145px;
+  /* text-align: center; */
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .Group .item-container {
   /* border: 1px solid; */
@@ -500,5 +525,19 @@ export default {
   display: flex;
   align-items: center;
   font-size: 20px;
+}
+#feedCon{
+  font-size: 20px;
+}
+#feedTitle{
+  font-size: 30px;
+  font-weight: bold;
+  text-decoration: underline;
+}
+#feedCon:hover, #feedTitle:hover{
+  cursor: pointer;
+}
+#feedCon:hover{
+  color: #79A3B1;
 }
 </style>

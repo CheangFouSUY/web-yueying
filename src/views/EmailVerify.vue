@@ -1,6 +1,7 @@
 <template>
   <div>
     <Header></Header>
+    <div id="Border">
     <div id="logo">
       <img id="logoBook" src="@/assets/LogoBlue.svg">
       <h1>阅·影</h1>
@@ -25,6 +26,7 @@
       </div>
       <button id="submit" @click="Submit">验证</button>
     </div>
+  </div>
   </div>
 </template>
 
@@ -57,8 +59,8 @@ export default {
 /* logo和标题 */
 #logo{
     width: 350px;
-    margin: 80px auto 40px;
-  /* outline: 1px black solid; */
+    margin: 0px auto 40px;
+    /* outline: 1px black solid; */
 }
 #logoBook{
     display: inline-block;
@@ -88,12 +90,13 @@ export default {
 
 /* 输入框 */
 .inputBox{
-    height: 50px;
+    height: 55px;
     width: 400px;
     margin: 0px auto 40px;
     border-radius: 10px;
     background-color: rgba(121, 163, 177, 0.4);
   /* outline: 1px black solid; */
+    text-align: left;
 }
 .icon{
   display: block;
@@ -121,6 +124,7 @@ input{
     background: none;
     color: #456268;
     font-size: 20px;
+    /* border: solid 1px; */
 }
 #sendCode{
   height: 50px;
@@ -130,7 +134,6 @@ input{
   border: none;
   background: none;
 }
-
 /* 跳转链接 */
 .changeLoginWay button{
     display: inline-block;
@@ -157,23 +160,23 @@ input{
 }
 
 #submit{
-    height: 40px;
-    width: 400px;
+    /* height: 40px; */
+    /* width: 400px; */
+    height: 50px;
+    width: 100px;
     margin: 25px auto;
     background-color: #79A3B1;
     border: none;
     color: white;
     font-size: 20px;
     border-radius: 10px;
-    letter-spacing: 4em;
-    text-indent: 4em;
-    text-align: center;
+    /* letter-spacing: 4em; */
+    /* text-indent: 4em; */
+    /* text-align: center; */
 }
 #submit:hover{
     background-color: rgba(121, 163, 177, 0.6);
 }
-
-
 button{
   font-family: "Microsoft JhengHei", 微软正黑体, "Microsoft YaHei", 微软雅黑;
   cursor: pointer;
@@ -184,5 +187,14 @@ button{
     text-align: center;
     font-size: 20px;
     /* outline: 1px black solid; */
+}
+#Border{
+    width: 700px; 
+    margin: auto;
+    margin-top: 60px;
+    box-shadow: 0px 3px 20px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    padding-top: 20px;
+    /* border: solid 1px; */
 }
 </style>
