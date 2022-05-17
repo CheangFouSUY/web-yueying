@@ -64,8 +64,8 @@ export default {
             this.$router.push('/search/' + this.searchInfo)
         },
         login() {
-            // this.$router.push('/login'),
-            this.isLogin = !this.isLogin
+            this.$router.push('/login');
+            // this.isLogin = !this.isLogin
         },
         logout() {
             this.dialogVisible = true;
