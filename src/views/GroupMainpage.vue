@@ -265,8 +265,9 @@ export default {
 .leaderboard{
   background-color: #FCF8EC;
   height: 610px;
-  width: 1376px;
+  /* width: 1376px; */
   margin-left: 80px;
+  margin-right: 80px;
   padding-top: 20px;
   /* width: 1536px; */
 }
@@ -275,8 +276,9 @@ export default {
   margin-top: 20px;
   margin-bottom: 20px;
   height: 350px;
-  width: 1376px;
+  /* width: 1376px; */
   margin-left: 80px;
+  margin-right: 80px;
   text-align: center;
 }
 .showgroups_title{
