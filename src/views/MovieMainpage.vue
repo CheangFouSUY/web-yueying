@@ -24,22 +24,22 @@
 
       <el-row class="ctg-title">热门</el-row>
       <el-row>
-        <Swiper :initialList="hotDrama"></Swiper>
+        <Swiper :initialList="hotMovie" :listType="'movie'" v-if="hotMovie.length"></Swiper>
       </el-row>
 
       <el-row class="ctg-title">最新上架</el-row>
       <el-row>
-        <Swiper :initialList="hotDrama"></Swiper>
+        <Swiper :initialList="newMovie" :listType="'movie'" v-if="newMovie.length"></Swiper>
       </el-row>
 
       <el-row class="ctg-title">爱情</el-row>
       <el-row>
-        <Swiper :initialList="hotDrama"></Swiper>
+        <Swiper :initialList="romance.Movie" :listType="'movie'" v-if="romanceMovie.length"></Swiper>
       </el-row>
 
       <el-row class="ctg-title">恐怖</el-row>
       <el-row>
-        <Swiper :initialList="hotDrama"></Swiper>
+        <Swiper :initialList="horrorMovie" :listType="'movie'" v-if="horrorMovie.length"></Swiper>
       </el-row>
     </div>
 
@@ -59,6 +59,55 @@ export default {
     Footer,
     Swiper,
   },
+  mounted() {
+    this.getMovie();
+  },
+  methods: {
+    getMovie() {
+      this.$axios
+        .get("/api/v1/movie/list?orderBy=r")
+        .then((res) => {
+          var result = res.data.results;
+          this.hotMovie = result;
+          this.hotMovie.forEach(function (value, index, array) {
+            array[index].rating = array[index].rating.toFixed(1);
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      this.$axios
+        .get("http://127.0.0.1:8000/api/v1/movie/list")
+        .then((res) => {
+          var result = res.data.results;
+          this.newMovie = result;
+          this.newMovie.forEach(function (value, index, array) {
+            array[index].rating = array[index].rating.toFixed(1);
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      this.$axios
+        .get("http://127.0.0.1:8000/api/v1/movie/list?category=1")
+        .then((res) => {
+          var result = res.data.results;
+          this.romanceMovie = result;
+          this.romanceMovie.forEach(function (value, index, array) {
+            array[index].rating = array[index].rating.toFixed(1);
+          });
+        });
+      this.$axios
+        .get("http://127.0.0.1:8000/api/v1/movie/list?category=2")
+        .then((res) => {
+          var result = res.data.results;
+          this.horrorMovie = result;
+          this.horrorMovie.forEach(function (value, index, array) {
+            array[index].rating = array[index].rating.toFixed(1);
+          });
+        });
+    },
+  },
   data() {
     return {
       place: ["中国", "美国", "英国", "韩国", "日本", "泰国", "马来西亚"],
@@ -75,78 +124,10 @@ export default {
         "卡通",
         "喜剧",
       ],
-      hotDrama: [
-        {
-          id: "D001",
-          title: "猎罪图鉴1",
-          rating: 4.8,
-          src: require("../assets/poster/LieZuiTuJian.jpg"),
-          name: "liezuitujian",
-        },
-        {
-          id: "B002",
-          title: "猎罪图鉴2",
-          rating: 4.6,
-          src: require("../assets/poster/LieZuiTuJian.jpg"),
-          name: "liezuitujian",
-        },
-        {
-          id: "B003",
-          title: "猎罪图鉴3",
-          rating: 4.6,
-          src: require("../assets/poster/LieZuiTuJian.jpg"),
-          name: "liezuitujian",
-        },
-        {
-          id: "B004",
-          title: "猎罪图鉴4",
-          rating: 4.6,
-          src: require("../assets/poster/LieZuiTuJian.jpg"),
-          namel: "liezuitujian",
-        },
-        {
-          id: "B005",
-          title: "猎罪图鉴5",
-          rating: 4.6,
-          src: require("../assets/poster/LieZuiTuJian.jpg"),
-          name: "liezuitujian",
-        },
-        {
-          id: "B006",
-          title: "猎罪图鉴6",
-          rating: 4.6,
-          src: require("../assets/poster/LieZuiTuJian.jpg"),
-          name: "liezuitujian",
-        },
-        {
-          id: "B007",
-          title: "猎罪图鉴7",
-          rating: 4.6,
-          src: require("../assets/poster/LieZuiTuJian.jpg"),
-          name: "liezuitujian",
-        },
-        {
-          id: "B008",
-          title: "猎罪图鉴8",
-          rating: 4.6,
-          src: require("../assets/poster/LieZuiTuJian.jpg"),
-          name: "liezuitujian",
-        },
-        {
-          id: "B009",
-          title: "猎罪图鉴9",
-          rating: 4.6,
-          src: require("../assets/poster/LieZuiTuJian.jpg"),
-          name: "liezuitujian",
-        },
-        {
-          id: "B0010",
-          title: "猎罪图鉴10",
-          rating: 4.6,
-          src: require("../assets/poster/LieZuiTuJian.jpg"),
-          name: "liezuitujian",
-        },
-      ],
+      hotMovie: [],
+      newMovie: [],
+      romanceMovie: [],
+      horrorMovie: [],
     };
   },
 };

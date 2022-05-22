@@ -49,6 +49,7 @@ export default {
   name: "MainpageSwiper",
   props: {
     initialList: Array,
+    listType: String,
     width: {
       default: "16.67%",
     },
@@ -56,6 +57,7 @@ export default {
   data() {
     return {
       showList: this.initialList,
+      type: this.listType,
       currentOffset: 0,
       boxWidth: "",
       fatherWith: 0,
@@ -83,16 +85,16 @@ export default {
       this.currentOffset += this.fatherWith / 6;
     },
     goDetails(id) {
-      this.$router.push({ path: `/book/${id}` });
+      if(this.listType == "book")
+        this.$router.push({ path: `/book/${id}` });
+      else if(this.listType == "movie")
+        this.$router.push({ path: `/movie/${id}` });
     },
   },
 };
 </script>
 
 <style scoped>
-.el-row {
-  outline: 1px red solid;
-}
 #swiper-box {
   display: flex;
   transition: all 0.5s;
@@ -132,7 +134,6 @@ export default {
 .image-box {
   height: 270px;
   overflow: hidden;
-  outline: 1px red solid;
 }
 .poster {
   width: 100%;

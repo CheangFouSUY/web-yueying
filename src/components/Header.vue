@@ -5,14 +5,14 @@
         阅·影
     </a>
     <a href="/book" class="navLink">图书</a>
-    <a href="/drama" class="navLink">影视</a>
+    <a href="/movie" class="navLink">影视</a>
     <a href="/feed" class="navLink">话题</a>
     <a href="/group" class="navLink">小组</a>
     <div class='searchBox'>
                 <select id="Type" name="Type">
                     <option value="all">全部</option>
                     <option value="books">图书</option>
-                    <option value="dramas">影视</option>
+                    <option value="movies">影视</option>
                     <option value="feeds">话题</option>
                     <option value="groups">小组</option>
                 </select>

@@ -37,9 +37,9 @@ const routes = [
     component: () => import('../views/BookMainpage.vue')
   },
   {
-    path: '/drama',
-    name: 'drama mainpage',
-    component: () => import('../views/DramaMainpage.vue')
+    path: '/movie',
+    name: 'movie mainpage',
+    component: () => import('../views/MovieMainpage.vue')
   },
   {
     path: '/feed',
@@ -52,14 +52,14 @@ const routes = [
     component: () => import('../views/GroupMainpage.vue')
   },
   {
-    path: '/daomubiji',
-    name: 'daomubiji',
+    path: '/bookdetail',
+    name: 'book detail',
     component: () => import('../views/BookInnerpage.vue')
   },
   {
-    path: '/liezuitujian',
-    name: 'liezuitujian',
-    component: () => import('../views/LieZuiTuJian.vue')
+    path: '/moviedetail',
+    name: 'movie detail',
+    component: () => import('../views/MovieInnerpage.vue')
   },
   {
   path: '/feedback',
@@ -98,7 +98,12 @@ const routes = [
     path: '/book/:id',
     name: 'book datail',
     component: () => import('../views/BookInnerpage.vue'),
-  }
+  },
+  {
+    path: '/movie/:id',
+    name: 'movie datail',
+    component: () => import('../views/MovieInnerpage.vue'),
+  },
 ]
 
 const router = new VueRouter({

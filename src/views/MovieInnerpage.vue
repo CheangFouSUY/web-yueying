@@ -4,7 +4,7 @@
     <div class="book-wrap">
       <el-row :gutter="30">
         <el-col :span="6">
-          <el-image :src="src"></el-image>
+          <el-image class="poster" :src="src"></el-image>
         </el-col>
         <el-col :span="14">
           <el-row id="book-title">{{ title }}</el-row>
@@ -16,7 +16,7 @@
           <el-row class="book-detail">
             <div class="book-detail-prop">主演</div>
             <div class="symbol">：</div>
-            {{ allActor }}
+            {{ actor }}
           </el-row>
           <el-row class="book-detail">
             <div class="book-detail-prop">类型</div>
@@ -57,7 +57,7 @@
           <el-col :span="17">
             <div class="book-detail-prop">简介</div>
             <div class="symbol">：</div>
-            {{ summary }}
+            {{ description }}
           </el-col>
         </el-row>
       </el-row>
@@ -145,15 +145,18 @@ export default {
     Footer,
     Rate,
   },
+  created() {
+    this.getDetail();
+  },
   data() {
     return {
       user: "陌上花开",
       title: "猎罪图鉴",
       director: "邢键钧",
-      actor: ["檀健次", "金世佳", "张柏嘉", "秦海璐", "房子斌"],
+      actor: "檀健次、金世佳、张柏嘉、秦海璐、房子斌",
       year: "2022",
       category: "悬疑",
-      summary:
+      description:
         "沈翊（檀健次饰）初加入北江分局刑侦支队担任模拟画像师，便被领导安排与刑警队长杜城（金世佳饰）搭档办案。杜城起初的几番挑衅奠定两人宿怨的关系前史，随着后续剧情发展，两人的密切配合又将人物关系的对峙感推向了高潮。紧凑的剧情，闪现的画像，扑朔迷离的案件线索，宛如诉说着一个个被掩盖的真相和不为人知的故事。",
       src: require("@/assets/poster/LieZuiTuJian.jpg"),
       rating: 4.8,
@@ -203,9 +206,39 @@ export default {
             "7. 0-7.2/10要破案就好好破案 不要强行升华 梁毅案的偷拍视频 任晓玄案的画廊交易 褚英子案的后续都没交代 想蹭时事热点但过于流于表面 不是你让暖男男主说几句女性力量就可以掩盖的😰 女性角色塑造水平忽高忽低 反刻板印象了又没完全反 男性角色咋的都是大冤种是吧😓不过檀健次的确有驾驭这种稍显悬浮的艺术天才的能力 相比之下金世佳一脸赶紧拍完我要收工的表情 糙汉人设不是让你没有共情力对小孩也冷脸的意思😅",
         },
       ],
+      categoryList: [
+        "爱情",
+        "恐怖",
+        "悬疑",
+        "冒险",
+        "动作",
+        "科幻",
+        "综艺",
+        "动漫",
+        "LGBT",
+        "卡通",
+        "喜剧",
+      ],
     };
   },
   methods: {
+    getDetail() {
+      this.$axios.get("/api/v1/movie/" + this.$route.params.id).then((res) => {
+        var r = res.data;
+        this.title = r.title;
+        this.director = r.director;
+        this.actor = r.actor;
+        this.category = this.categoryList[r.category];
+        this.year = r.year.substring(0, 4);
+        this.description = r.description;
+        this.src = r.thumbnail;
+        this.rating = r.rating.toFixed(1);
+        this.likeCount = r.likes;
+        // this.dislikeCount = r.dislikes;
+        // this.commentCount = r.comments;
+        console.log(r.message);
+      });
+    },
     like() {
       this.isLike = !this.isLike;
       if (this.isLike === true) this.likeCount++;
@@ -228,17 +261,6 @@ export default {
           position: "top-left",
         });
       }
-    },
-  },
-  computed: {
-    allActor() {
-      var s = "";
-      for (var i = 0; i < this.actor.length; i++) {
-        s += this.actor[i];
-        s += "、";
-      }
-      s = s.substr(0, s.length-1);
-      return s;
     },
   },
 };
@@ -381,6 +403,11 @@ export default {
 .book-wrap {
   background-color: #fcf8ec;
   box-shadow: 0px 0px 20px 3px rgba(0, 0, 0, 0.25);
+}
+.poster {
+  width: 280px;
+  height: 350px;
+  overflow: hidden;
 }
 .el-row,
 .el-col {
