@@ -11,7 +11,7 @@
       <el-row class="ctg-list">
         <el-col :span="2" class="ctg-list-type">类型</el-col>
         <el-col :span="18">
-          <li v-for="item in category" :key="item">{{ item }}</li>
+          <li v-for="item in categoryList" :key="item">{{ item }}</li>
         </el-col>
       </el-row>
       <el-divider></el-divider>
@@ -35,7 +35,6 @@
       <el-row>
         <Swiper :initialList="hotBook"></Swiper>
       </el-row>
-
     </div>
 
     <Footer id="footer"></Footer>
@@ -54,9 +53,30 @@ export default {
     Footer,
     Swiper,
   },
+  created() {
+    this.getHotBook();
+  },
+  methods: {
+    getHotBook() {
+      this.$axios
+        .get("http://127.0.0.1:8000/api/v1/book/list")
+        .then((res) => {
+          var result = res.data.results;
+          console.log(result);
+          // this.hotBook = result;
+          console.log(this.hotBook);
+          console.log(this.newBook);
+          
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+  },
   data() {
     return {
-      category: [
+      categoryList: [
+        "其他",
         "爱情",
         "恐怖",
         "悬疑",
@@ -69,78 +89,79 @@ export default {
         "哲学",
         "文学",
       ],
-      hotBook: [
-        {
-          id: "B001",
-          title: "盗墓笔记1",
-          rating: 4.6,
-          src: require("../assets/poster/DaoMuBiJi.jpg"),
-          name: "daomubiji",
-        },
-        {
-          id: "B002",
-          title: "盗墓笔记2",
-          rating: 4.6,
-          src: require("../assets/poster/DaoMuBiJi.jpg"),
-          name: "daomubiji",
-        },
-        {
-          id: "B003",
-          title: "盗墓笔记3",
-          rating: 4.6,
-          src: require("../assets/poster/DaoMuBiJi.jpg"),
-          name: "daomubiji",
-        },
-        {
-          id: "B004",
-          title: "盗墓笔记4",
-          rating: 4.6,
-          src: require("../assets/poster/DaoMuBiJi.jpg"),
-          namel: "daomubiji",
-        },
-        {
-          id: "B005",
-          title: "盗墓笔记5",
-          rating: 4.6,
-          src: require("../assets/poster/DaoMuBiJi.jpg"),
-          name: "daomubiji",
-        },
-        {
-          id: "B006",
-          title: "盗墓笔记6",
-          rating: 4.6,
-          src: require("../assets/poster/DaoMuBiJi.jpg"),
-          name: "daomubiji",
-        },
-        {
-          id: "B007",
-          title: "盗墓笔记7",
-          rating: 4.6,
-          src: require("../assets/poster/DaoMuBiJi.jpg"),
-          name: "daomubiji",
-        },
-        {
-          id: "B008",
-          title: "盗墓笔记8",
-          rating: 4.6,
-          src: require("../assets/poster/DaoMuBiJi.jpg"),
-          name: "daomubiji",
-        },
-        {
-          id: "B009",
-          title: "盗墓笔记9",
-          rating: 4.6,
-          src: require("../assets/poster/DaoMuBiJi.jpg"),
-          name: "daomubiji",
-        },
-        {
-          id: "B0010",
-          title: "盗墓笔记10",
-          rating: 4.6,
-          src: require("../assets/poster/DaoMuBiJi.jpg"),
-          name: "daomubiji",
-        },
-      ],
+      hotBook: [],
+      // hotBook: [
+      //   {
+      //     id: "B001",
+      //     title: "盗墓笔记1",
+      //     rating: 4.6,
+      //     src: require("../assets/poster/DaoMuBiJi.jpg"),
+      //     name: "daomubiji",
+      //   },
+      //   {
+      //     id: "B002",
+      //     title: "盗墓笔记2",
+      //     rating: 4.6,
+      //     src: require("../assets/poster/DaoMuBiJi.jpg"),
+      //     name: "daomubiji",
+      //   },
+      //   {
+      //     id: "B003",
+      //     title: "盗墓笔记3",
+      //     rating: 4.6,
+      //     src: require("../assets/poster/DaoMuBiJi.jpg"),
+      //     name: "daomubiji",
+      //   },
+      //   {
+      //     id: "B004",
+      //     title: "盗墓笔记4",
+      //     rating: 4.6,
+      //     src: require("../assets/poster/DaoMuBiJi.jpg"),
+      //     namel: "daomubiji",
+      //   },
+      //   {
+      //     id: "B005",
+      //     title: "盗墓笔记5",
+      //     rating: 4.6,
+      //     src: require("../assets/poster/DaoMuBiJi.jpg"),
+      //     name: "daomubiji",
+      //   },
+      //   {
+      //     id: "B006",
+      //     title: "盗墓笔记6",
+      //     rating: 4.6,
+      //     src: require("../assets/poster/DaoMuBiJi.jpg"),
+      //     name: "daomubiji",
+      //   },
+      //   {
+      //     id: "B007",
+      //     title: "盗墓笔记7",
+      //     rating: 4.6,
+      //     src: require("../assets/poster/DaoMuBiJi.jpg"),
+      //     name: "daomubiji",
+      //   },
+      //   {
+      //     id: "B008",
+      //     title: "盗墓笔记8",
+      //     rating: 4.6,
+      //     src: require("../assets/poster/DaoMuBiJi.jpg"),
+      //     name: "daomubiji",
+      //   },
+      //   {
+      //     id: "B009",
+      //     title: "盗墓笔记9",
+      //     rating: 4.6,
+      //     src: require("../assets/poster/DaoMuBiJi.jpg"),
+      //     name: "daomubiji",
+      //   },
+      //   {
+      //     id: "B0010",
+      //     title: "盗墓笔记10",
+      //     rating: 4.6,
+      //     src: require("../assets/poster/DaoMuBiJi.jpg"),
+      //     name: "daomubiji",
+      //   },
+      // ],
       newBook: [
         {
           id: "B001",

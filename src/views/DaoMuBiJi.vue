@@ -4,7 +4,7 @@
     <div class="book-wrap">
       <el-row :gutter="30">
         <el-col :span="6">
-          <el-image :src="src"></el-image>
+          <el-image class="poster" :src="src"></el-image>
         </el-col>
         <el-col :span="14">
           <el-row id="book-title">{{ title }}</el-row>
@@ -57,7 +57,7 @@
           <el-col :span="17">
             <div class="book-detail-prop">简介</div>
             <div class="symbol">：</div>
-            {{ summary }}
+            {{ description }}
           </el-col>
         </el-row>
       </el-row>
@@ -124,7 +124,12 @@
           </el-col>
           <el-col :span="3" :offset="1">
             <el-row type="flex" justify="center">
-              <img id="report" @click="report" src="@/assets/Report.svg" alt="report icon" />
+              <img
+                id="report"
+                @click="report"
+                src="@/assets/Report.svg"
+                alt="report icon"
+              />
             </el-row>
           </el-col>
         </el-row>
@@ -145,20 +150,23 @@ export default {
     Footer,
     Rate,
   },
+  created() {
+    this.getDetail();
+  },
   data() {
     return {
       user: "陌上花开",
-      title: "盗墓笔记",
-      author: "南派三叔",
-      category: "科幻",
-      year: "2007",
-      publish: "上海文化出版社",
-      summary:
-        "故事起源於1952年，主角吴邪的祖父吴老狗在长沙的血屍墓里发现战国帛书，而引发後来吴邪从帛书解谜途中的一段段冒险。五十年後，吴邪一个看似单纯的吴家富二代，大学毕业後便经营著古董店，日子过一天是一天，殊不知其身世冒险之离奇，因为发现先人笔记中一个秘密就此展开。抱著好奇和一颗想见世面的心，他硬是跟上他三叔及一群盗墓高手的鲁王宫之旅，欲解开帛书之谜。在这个过程中他遇见了闷油瓶和胖子。在途中，很多他一辈子都没见过的东西，或是连想都没想过的东西，一个接著一个出现。遭遇的每件事，越来越离奇。就在他发现自己的生活满是谜题，并欲寻求解答时，唯一的线索──「三叔」却消失了。不甘放弃的吴邪，决定追根究柢，也决定今後不凡但却不为人知的冒险旅程。",
-      src: require("@/assets/poster/DaoMuBiJi.jpg"),
-      rating: 4.6,
-      likeCount: 42,
-      commentCount: 3,
+      title: "",
+      isbn: "",
+      author: "",
+      category: "",
+      year: "",
+      publish: "",
+      description: "",
+      src: "",
+      rating: "",
+      likeCount: "",
+      commentCount: "",
       isLike: false,
       isBookmark: false,
       comments: [
@@ -187,9 +195,43 @@ export default {
             "还记得那时候，三叔因为看鬼吹灯，更新太慢，而自己动手，丰衣足食。结果，唉，实在不想说三叔都拖成了啥。那时候看书的男生很多，不想现在，基本是女的了。还记得那个时候每章下面的吐槽。出场较多的应该是红旗牌轿车，还有小哥堪比周杰伦的出场费啊等等。那个时候小哥对我来说就像神一样，每次无论多可怕的场景，只要他出现，就一点都不怕了，所以在秦岭神树那里，真的看的战战兢兢又期待，会不会有易容的小哥突然的出现。当然，现在的小哥也依然是我的男神。永远都会是。吴邪性格的变化，也让我们感觉像真的陪着他们走过了这么多年，这么多路。三叔真的坑，到现在，很多自己都圆不了。但我真的很感恩他当初没有按原计划把小哥写成女的。其实我是很排斥二次元和三次元破壁的。太久了，他们在心中已经生了根，他们属于三叔，但同样属于一路陪他们走来的人。他们在我的心中，早有他们的形象，不是任何人能代替扮演的，像真实存在一般，是鲜活存在的。我不是针对任何演员，但我不看任何电视电影，也很讨厌有人真人化。很多人走了，又有一些人走进，我不知道他们是不是因为喜欢他们偶像演的剧才进的，还是迟到了的发现与喜爱。也许将来我会不再看三叔的书。但对于书中的人物，对于瓶邪，对于铁三角，我永远都在。",
         },
       ],
+      categoryList: [
+        "其他",
+        "爱情",
+        "恐怖",
+        "悬疑",
+        "科幻",
+        "艺术",
+        "体育",
+        "烹饪",
+        "漫画",
+        "教育",
+        "哲学",
+        "文学",
+      ],
     };
   },
   methods: {
+    getDetail() {
+      this.$axios
+        .get("http://127.0.0.1:8000/api/v1/book/dfc78b5a-32f8-418c-b315-784ee8d5ee32")
+        .then((res) => {
+          var r = res.data;
+          this.title = r.title;
+          this.isbn = r.isbn;
+          this.author = r.author;
+          this.category = this.categoryList[r.category];
+          this.year = r.year;
+          this.publish = r.publisher;
+          this.description = r.description;
+          this.src = r.thumbnail;
+          this.rating = (r.rating).toFixed(1);
+          this.likeCount = r.likes;
+          // this.dislikeCount = r.dislikes;
+          // this.commentCount = r.comments;
+          console.log(r.message);
+        });
+    },
     like() {
       this.isLike = !this.isLike;
       if (this.isLike === true) this.likeCount++;
@@ -215,7 +257,7 @@ export default {
     },
     report() {
       this.$router.push("/report");
-    }
+    },
   },
 };
 </script>
@@ -348,6 +390,11 @@ export default {
   line-height: 28px;
   font-size: 18px;
 }
+.poster{
+  width: 280px;
+  height: 350px;
+  overflow: hidden;
+}
 .book-wrap,
 .comment-wrap {
   width: 1200px;
@@ -362,7 +409,7 @@ export default {
 .el-col {
   color: #456268;
 }
-#report:hover{
+#report:hover {
   cursor: pointer;
 }
 #footer {
