@@ -8,30 +8,30 @@
             </div>
             <div class="Row">
                 <span>昵称</span>
-                <input type="text" v-model="form.username" placeholder="输入你的用户名">
+                <input type="text" v-model="form.username" placeholder="Eg. 黄乐乐">
             </div>
             <div class="Row">
                 <span>邮箱</span>
-                <input type="email" v-model="form.email" placeholder="输入你的邮箱">
+                <input type="email" v-model="form.email" placeholder="example@gmail.com">
             </div>
             <div class="Row">
                 <span>密码</span>
-                <input type="password" v-model="form.password" placeholder="输入你的密码">
+                <input type="password" v-model="form.password" placeholder="密码需包括字符、非字符和数字">
             </div>
             <div class="Row">
                 <span>重复密码</span>
-                <input type="password" v-model="form.password2" placeholder="请重复输入你的密码">
+                <input type="password" v-model="form.password2" placeholder="请重新填写密码">
             </div>
             <div class="Row">
                 <span>密保问题</span>
                 <select id="sQuestion" name="sQuestion" v-model="form.securityQ">
-                    <!-- <option value="" style="display: none"></option> -->
-                    <option value="">请选择一个密保问题</option>
-                    <option value="1">您最喜欢的颜色是？</option>
-                    <option value="2">您最讨厌的食物？</option>
-                    <option value="3">您的最要好闺蜜/兄弟是？</option>
-                    <option value="4">您的爱好是？</option>
-                    <option value="5">您的初恋是？</option>
+                    <option value=0 style="display: none"></option>
+                    <!-- <option value="">请选择一个密保问题</option> -->
+                    <option value=1>您最喜欢的颜色是？</option>
+                    <option value=2>您最讨厌的食物？</option>
+                    <option value=3>您的最要好闺蜜/兄弟是？</option>
+                    <option value=4>您的爱好是？</option>
+                    <option value=5>您的初恋是？</option>
                 </select>
             </div>
             <div class="Row">
@@ -62,7 +62,7 @@ export default {
                 email:'',
                 password:'',
                 password2:'',
-                securityQ:'',
+                securityQ:0,
                 securityQans:'',
             }
 
@@ -73,13 +73,18 @@ export default {
             this.$router.push('/login');
         },
         async Submit(){
+            // if(this.form.username === '' || this.form.email === '' || this.form.password === '' || this.form.password2 === '' || 
+            // this.form.securityQ === '' || this.form.securityQans === '') {
+            //     this.$message.warning("请填写所有空格");
+            //     return;
+            // }
             const formData = new FormData();
-            formData.append("username", this.form.username);
             formData.append("email",this.form.email);
+            formData.append("username", this.form.username);
             formData.append("password", this.form.password);
             formData.append("password2",this.form.password2);
-            formData.append("securityQ",this.form.securityQ);
-            formData.append("securityQans",this.form.securityQans);
+            formData.append("securityQuestion",this.form.securityQ);
+            formData.append("securityAnswer",this.form.securityQans);
 
             await this.$axios({
             method: 'post',  
@@ -89,7 +94,7 @@ export default {
         .then(res => {
             console.log(res);
             switch (res.status) {
-            case 200:
+            case 201:
                 this.$message.success("注册成功，请到邮箱进行认证");
                 this.$router.push('/login');
                 break;
@@ -98,6 +103,10 @@ export default {
         .catch(err => {
             const key = Object.keys(err.response.data)[0];
             switch(err.response.data[key][0]) {
+            case "R":
+                this.$message.warning("填写信息错误");
+                break;
+                    
             default:
                 this.$message.warning(err.response.data[key][0]);
             }

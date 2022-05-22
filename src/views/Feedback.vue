@@ -3,25 +3,25 @@
       <Header></Header>
       <div class="name">
           <span id="namespan">反馈者姓名     :</span>
-          <span id='name'>{{ feedbacker }}</span>
+          <span id='name'>{{ form.feedbacker }}</span>
       </div>
       <div class="content">
           <div>
           <span>反馈标题     :</span>
-          <input type="text" placeholder="反馈标题">
+          <input type="text" v-model="form.title" placeholder="请输入反馈标题">
           </div>
           <div>
           <span>反馈类型     :</span>
-          <select id="feedbackType" name="feedbackType">
-                    <option style="display: none"></option>
-                    <option value="bug">网页bug</option>
-                    <option value="suggestions">网页意见</option>
-                    <option value="others">其他</option>
+          <select id="feedbackType" name="feedbackType" v-model="form.category">
+                    <option value=0 style="display: none"></option>
+                    <option value=1>网页bug</option>
+                    <option value=2>网页意见</option>
+                    <option value=3>其他</option>
                 </select>
           </div>
           <div class="concontent">
           <span>反馈详情     :</span>
-          <textarea id="content" name="content" placeholder="请输入反馈详情(不少于15字符)"></textarea>
+          <textarea id="content" name="content" v-model="form.description" placeholder="请输入反馈详情(不少于15字符)"></textarea>
           </div>
           <button @click='Submit'>提交</button>
       </div>
@@ -32,29 +32,63 @@
 <script>
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
-import DaoMuBiJi from './BookInnerpage.vue'
+import user from "@/store/user";
 
 export default {
   components: { 
       Header,
       Footer,
-      DaoMuBiJi,
   },
-    methods: {
-        Submit() {
-            this.$message({
-            showClose: true,
-            message: '提交成功，感谢您的反馈！',
-            type: 'success'
-        })
-            this.$router.push("/");        
+      data() {
+        return {
+            form: {
+                feedbacker:'',
+                category:0,
+                title:'',
+                description:'',
+            }
         }
     },
-    data() {
-        return {
-            feedbacker:'小乐子',
+    created() {
+        const userInfo = user.getters.getUser(user.state());
+        this.form.feedbacker = userInfo.user.username;
+    },
+    methods: {
+        async Submit() {
+        const formData = new FormData();
+        formData.append("feedbacker", this.form.feedbacker);
+        formData.append("title", this.form.title);
+        formData.append("description", this.form.description);
+        formData.append("category", this.form.category);
+
+        var header = {}
+        if (localStorage.getItem('token'))
+            header = { 'Authorization': 'Bearer ' + localStorage.getItem('token')}
+
+        await this.$axios({
+            method: 'post',  
+            url: '/api/v1/feedback/',
+            data: formData,
+            headers: header,
+        })
+        .then(res => {
+        console.log(res);
+        switch (res.status) {
+            case 201:
+                this.$message({
+                showClose: true,
+                message: '提交成功，感谢您的反馈！',
+                type: 'success'
+                })
+                this.$router.push("/"); 
+                break;
+            }
+        }) 
+        .catch(err => {
+            this.$message.warning("反馈失败")
+         })     
         }
-    }
+    },
 
 }
 </script>

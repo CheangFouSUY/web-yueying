@@ -83,6 +83,7 @@ export default {
         realLogout() {
             this.dialogVisible = false;
             this.isLogin = false;
+            localStorage.removeItem('token');
             this.$store.dispatch('clear');
             this.$message.success("登出成功");
         }

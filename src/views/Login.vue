@@ -8,7 +8,7 @@
         </div>
         <div class='inputBox'>
         <img class="icon" src="@/assets/Email.svg" alt="email_icon">
-        <input type="text" v-model="form.username" placeholder="输入你的名字">
+        <input type="text" v-model="form.username" placeholder="输入你的名字或邮箱">
         </div>
         <div class='inputBox'>
         <img class="icon" src="@/assets/Password.svg" alt="password_icon">  
@@ -65,6 +65,7 @@ export default {
             switch (res.status) {
             case 200:
                 console.log(res.status);
+                localStorage.setItem('token', res.data.tokens.access);
                 this.$message.success("登录成功！");
                 this.$store.dispatch('saveUserInfo', {
                 user: {
