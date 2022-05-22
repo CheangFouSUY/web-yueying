@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header :isLogin="isLogin" :userInfo="userInfo"></Header>
+    <Header></Header>
     <el-carousel :interval="5000" height="540px">
       <el-carousel-item v-for="item in carouselImg" :key="item">
         <img class="poster" :src="item" alt="" />

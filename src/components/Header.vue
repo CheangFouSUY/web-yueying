@@ -19,7 +19,7 @@
         <input type='text' v-model='searchInfo' placeholder="输入你想搜索的内容">
         <img class="navicon" @click="search" src="@/assets/Search.svg" alt="search_icon">
     </div>
-    <el-button v-if="isLogin" id="login" @click="login">登录</el-button>
+    <el-button v-if="!isLogin" id="login" @click="login">登录</el-button>
     <!-- <el-select v-else v-model="value"
     class="loginOption"
     popper-class="loginOption2">
@@ -30,7 +30,7 @@
       :value="item.value">
     </el-option>
   </el-select> -->
-    <el-button slot="reference" v-if="!isLogin" id="login" @click="logout">登出</el-button>
+    <el-button slot="reference" v-if="isLogin" id="login" @click="logout">登出</el-button>
     <el-dialog
     title="提示"
     :visible.sync="dialogVisible"
@@ -41,23 +41,34 @@
         <el-button type="primary" @click="realLogout">确定</el-button>
     </span>
     </el-dialog>
-    <!-- <span v-if="!isLogin" id="userInfo">{{userInfo.username}}</span> -->
-    <span v-if="!isLogin" id="userInfo">MIKIWONGaaaaaaa</span>
-    <el-avatar v-if="!isLogin" id="userAvatar" src="https://www.pngall.com/wp-content/uploads/5/Pokemon-Pikachu-PNG-Image.png"></el-avatar>
-    <!-- <span v-else id="loginname" @click="login">{{ userInfo.username }}</span> -->
+    <span v-if="isLogin" id="userInfo">{{userName}}</span>
+    <!-- <span v-if="!isLogin" id="userInfo">MIKIWONGaaaaaaa</span> -->
+    <el-avatar v-if="isLogin" id="userAvatar" src="https://www.pngall.com/wp-content/uploads/5/Pokemon-Pikachu-PNG-Image.png"></el-avatar>
+    <!-- <span v-else id="loginname" @click="login">{{ userName }}</span> -->
 </div>
 </template>
 
 <script>
+ import user from "@/store/user";
+
 export default {
     name:'Header',
-    props: {
-    isLogin: {
-      type: Boolean,
-      default: false,
+    data() {
+        return {
+            dialogVisible: false,
+            isLogin: false,
+            userName:'',
+            profileP:'',
+            searchInfo:''
+        };
     },
-    userInfo: String,
-    dialogVisible: false,
+    created() {
+        const userInfo = user.getters.getUser(user.state());
+        if (userInfo) {
+            this.isLogin = true;
+            this.userName = userInfo.user.username;
+            this.profileP = userInfo.user.profilePic;
+        }
     },
     methods:{
         search() { 
@@ -65,30 +76,17 @@ export default {
         },
         login() {
             this.$router.push('/login');
-            // this.isLogin = !this.isLogin
         },
         logout() {
             this.dialogVisible = true;
         },
         realLogout() {
             this.dialogVisible = false;
-            this.isLogin = !this.isLogin;
+            this.isLogin = false;
+            this.$store.dispatch('clear');
             this.$message.success("登出成功");
         }
     },
-    data() {
-        return {
-            isLogin: this.isLogin,
-            userInfo: this.userInfo,
-            value: this.userInfo.username,
-            searchInfo:'',
-            options: [
-                {
-
-                },
-            ]
-        }
-    }
 }
 </script>
 
@@ -128,13 +126,15 @@ a{
     text-decoration: none;
 }
 .searchBox{
+    position: absolute;
     display: inline-block;
     border-radius: 10px;
     background-color: rgba(208, 232, 242, 0.1);
     height: 40px;
     width: 400px;
     margin-top: 8px;
-    margin-left: 300px; 
+    margin-left: 180px; 
+    /* border: 1px black solid; */
 }
 .searchBox input{
     font-family: "Microsoft JhengHei", 微软正黑体, "Microsoft YaHei", 微软雅黑;
@@ -164,7 +164,7 @@ a{
 #userInfo{
     /* border: 1px solid black; */
     float:right;
-    width: 150px;
+    max-width: 150px;
     margin-top: 15px;
     margin-right: 5px;
     font-size: 18px;
