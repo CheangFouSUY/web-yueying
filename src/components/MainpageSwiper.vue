@@ -13,11 +13,15 @@
               :key="item.id"
               :style="{ minWidth: width }"
             >
-              <div class="image-box" @click="gotodetails(item)">
-                <img :src="item.src" alt="" />
+              <div class="image-box">
+                <el-image
+                  class="poster"
+                  :src="item.thumbnail"
+                  @click="goDetails(item.id)"
+                ></el-image>
               </div>
               <div class="title-wrap">
-                <span class="book-title" @click="gotodetails(item)">
+                <span class="book-title" @click="goDetails(item.id)">
                   {{ item.title }}
                 </span>
                 <span class="rating">{{ item.rating }}</span>
@@ -78,15 +82,17 @@ export default {
       if (this.currentOffset >= 0) return;
       this.currentOffset += this.fatherWith / 6;
     },
-    gotodetails(item) {
-      // console.log(this.books)
-      this.$router.push({ name: item.name });
+    goDetails(id) {
+      this.$router.push({ path: `/book/${id}` });
     },
   },
 };
 </script>
 
 <style scoped>
+.el-row {
+  outline: 1px red solid;
+}
 #swiper-box {
   display: flex;
   transition: all 0.5s;
@@ -123,14 +129,16 @@ export default {
   font-size: 20px;
   background-color: #fcf8ec;
 }
-img {
-  width: 100%;
-}
 .image-box {
   height: 270px;
   overflow: hidden;
+  outline: 1px red solid;
 }
-.item-box img:hover {
+.poster {
+  width: 100%;
+  height: 270px;
+}
+.poster:hover {
   cursor: pointer;
 }
 .item-box a {

@@ -213,24 +213,22 @@ export default {
   },
   methods: {
     getDetail() {
-      this.$axios
-        .get("http://127.0.0.1:8000/api/v1/book/dfc78b5a-32f8-418c-b315-784ee8d5ee32")
-        .then((res) => {
-          var r = res.data;
-          this.title = r.title;
-          this.isbn = r.isbn;
-          this.author = r.author;
-          this.category = this.categoryList[r.category];
-          this.year = r.year;
-          this.publish = r.publisher;
-          this.description = r.description;
-          this.src = r.thumbnail;
-          this.rating = (r.rating).toFixed(1);
-          this.likeCount = r.likes;
-          // this.dislikeCount = r.dislikes;
-          // this.commentCount = r.comments;
-          console.log(r.message);
-        });
+      this.$axios.get("/api/v1/book/" + this.$route.params.id).then((res) => {
+        var r = res.data;
+        this.title = r.title;
+        this.isbn = r.isbn;
+        this.author = r.author;
+        this.category = this.categoryList[r.category];
+        this.year = r.year;
+        this.publish = r.publisher;
+        this.description = r.description;
+        this.src = r.thumbnail;
+        this.rating = r.rating.toFixed(1);
+        this.likeCount = r.likes;
+        // this.dislikeCount = r.dislikes;
+        // this.commentCount = r.comments;
+        console.log(r.message);
+      });
     },
     like() {
       this.isLike = !this.isLike;
@@ -390,7 +388,7 @@ export default {
   line-height: 28px;
   font-size: 18px;
 }
-.poster{
+.poster {
   width: 280px;
   height: 350px;
   overflow: hidden;

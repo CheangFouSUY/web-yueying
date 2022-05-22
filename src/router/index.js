@@ -54,7 +54,7 @@ const routes = [
   {
     path: '/daomubiji',
     name: 'daomubiji',
-    component: () => import('../views/DaoMuBiJi.vue')
+    component: () => import('../views/BookInnerpage.vue')
   },
   {
     path: '/liezuitujian',
@@ -94,6 +94,11 @@ const routes = [
     name: 'search',
     component: () => import('../views/Search.vue')
    },
+   {
+    path: '/book/:id',
+    name: 'book datail',
+    component: () => import('../views/BookInnerpage.vue'),
+  }
 ]
 
 const router = new VueRouter({

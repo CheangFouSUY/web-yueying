@@ -32,7 +32,7 @@
 <script>
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
-import DaoMuBiJi from './DaoMuBiJi.vue'
+import DaoMuBiJi from './BookInnerpage.vue'
 
 export default {
   components: { 
