@@ -3,7 +3,11 @@ import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import user from "@/store/user";
 
-Vue.use(VueRouter)
+const routerReplace = VueRouter.prototype.push
+VueRouter.prototype.replace = function replace(location) {
+  return routerReplace.call(this, location).catch(err => err)
+}
+Vue.use(VueRouter);
 
 const routes = [
   {
@@ -52,50 +56,7 @@ const routes = [
     component: () => import('../views/GroupMainpage.vue')
   },
   {
-    path: '/bookdetail',
-    name: 'book detail',
-    component: () => import('../views/BookInnerpage.vue')
-  },
-  {
-    path: '/moviedetail',
-    name: 'movie detail',
-    component: () => import('../views/MovieInnerpage.vue')
-  },
-  {
-  path: '/feedback',
-  name: 'feedback',
-  component: () => import('../views/Feedback.vue')
-  },
-  {
-  path: '/creategroup',
-  name: 'create group',
-  component: () => import('../views/CreateGroup.vue')
-  },
-  {
-    path: '/group/inner',
-    name: 'group inner page',
-    component: () => import('../views/GroupInnerpage.vue')
-    },
-  {
-    path: '/report',
-    name: 'report',
-    component: () => import('../views/Report.vue')
-   },
-   {
-    path: '/profile',
-    name: 'profile',
-    component: () => import('../views/Profile.vue'),
-    meta: {
-      requireAuth: true
-    }
-   },
-   {
-    path: '/search',
-    name: 'search',
-    component: () => import('../views/Search.vue')
-   },
-   {
-    path: '/book/:id',
+    path: '/book/detail/:id',
     name: 'book datail',
     component: () => import('../views/BookInnerpage.vue'),
   },
@@ -103,6 +64,49 @@ const routes = [
     path: '/movie/:id',
     name: 'movie datail',
     component: () => import('../views/MovieInnerpage.vue'),
+  },
+  {
+    path: '/book/filter=category:id',
+    name: 'book filter',
+    component: () => import('../views/BookFilterpage.vue'),
+  },
+  // {
+  //   path: '/movie/:id',
+  //   name: 'movie datail',
+  //   component: () => import('../views/MovieInnerpage.vue'),
+  // },
+  {
+    path: '/feedback',
+    name: 'feedback',
+    component: () => import('../views/Feedback.vue')
+  },
+  {
+    path: '/creategroup',
+    name: 'create group',
+    component: () => import('../views/CreateGroup.vue')
+  },
+  {
+    path: '/group/inner',
+    name: 'group inner page',
+    component: () => import('../views/GroupInnerpage.vue')
+  },
+  {
+    path: '/report',
+    name: 'report',
+    component: () => import('../views/Report.vue')
+  },
+  {
+    path: '/profile',
+    name: 'profile',
+    component: () => import('../views/Profile.vue'),
+    meta: {
+      requireAuth: true
+    }
+  },
+  {
+    path: '/search',
+    name: 'search',
+    component: () => import('../views/Search.vue')
   },
 ]
 

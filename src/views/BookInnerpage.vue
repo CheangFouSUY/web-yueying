@@ -75,7 +75,7 @@
       </el-row>
     </div>
     <div class="comment-wrap">
-      <el-row class="comment-title">书评</el-row>
+      <el-row class="comment-header">书评</el-row>
       <el-divider></el-divider>
       <el-row class="publish-box">
         <el-row :gutter="70">
@@ -101,8 +101,13 @@
             <el-avatar :size="50" icon="el-icon-user-solid"></el-avatar>
           </el-col>
           <el-col :span="22">
-            <el-row class="comment-publisher">{{ item.publisher }}</el-row>
-            <el-row>{{ item.contents }}</el-row>
+            <el-row class="comment-publisher">{{ item.publisherName }}</el-row>
+            <el-row class="comment-time">
+              <i class="el-icon-time"></i>
+              {{ dateStr(item.time) }}
+            </el-row>
+            <el-row class="comment-title">{{ item.title }}</el-row>
+            <el-row>{{ item.description }}</el-row>
           </el-col>
         </el-row>
         <el-row class="comment-action">
@@ -150,9 +155,6 @@ export default {
     Footer,
     Rate,
   },
-  created() {
-    this.getDetail();
-  },
   data() {
     return {
       user: "陌上花开",
@@ -173,26 +175,45 @@ export default {
       comments: [
         {
           id: "C0001",
-          publisher: "我直呼牛比",
+          title: "大推！",
+          createdBy: "b3e86355-9f73-4272-b2d2-badd776acccb",
+          publisherName: "我直呼牛比",
+          feed: null,
+          book: "dfc78b5a-32f8-418c-b315-784ee8d5ee32",
+          movie: null,
+          updatedAt: "2022-05-22T12:22:00.813064Z",
+          createdAt: "2022-05-22T12:22:00.813064Z",
           likes: 12,
           dislikes: 0,
-          contents:
+          description:
             "《盗墓笔记》其实一点都不可怕，因为它并不是一个关于鬼怪和僵尸的小说。它讲述的，是一群人，在一个跨越千年的阴谋中，彼此牵绊了的一生。迷雾掩盖了真相，却让身在迷雾中的人，在分分合合中参悟了世间人情冷暖。三叔说，比鬼神更可怕的是人心。但我说，比金石更不朽的亦是人心。到头来，该散的人们各自散了。该留在心里的，也一个没有少。",
         },
         {
           id: "C0002",
-          publisher: "一只高冷喵",
+          title: "真的很好看",
+          publisherName: "一只高冷喵",
+          feed: null,
+          book: "dfc78b5a-32f8-418c-b315-784ee8d5ee32",
+          movie: null,
+          updatedAt: "2022-05-21T12:32:00.813064Z",
+          createdAt: "2022-05-21T12:32:00.813064Z",
           likes: 1,
           dislikes: 2,
-          contents:
+          description:
             "其实原来我以为自己是看不进去盗墓探险类的小说的。就像几年前流行天下霸唱的《鬼吹灯》，当时我也试着看了，但是完全没有进入状态，奇幻的景象可以想象，但是没有关键人物揪着你的心，让你继有读下去的欲望。而这次看《盗墓笔记》则不同，我一开始完全是冲着吴邪和张起灵这对暧昧的CP去的，没想到这一通看下来，除了对书中人物一通YY以外，我还对每一次华华丽丽的大冒险，都像亲身经历过一样，记忆犹新，回味无穷。",
         },
         {
           id: "C0003",
-          publisher: "橘子东南飞",
+          title: "铁三角yyds",
+          publisherName: "橘子东南飞",
+          feed: null,
+          book: "dfc78b5a-32f8-418c-b315-784ee8d5ee32",
+          movie: null,
+          updatedAt: "2022-05-19T10:57:18.048199Z",
+          createdAt: "2022-05-19T10:57:18.048199Z",
           likes: 4,
           dislikes: 3,
-          contents:
+          description:
             "还记得那时候，三叔因为看鬼吹灯，更新太慢，而自己动手，丰衣足食。结果，唉，实在不想说三叔都拖成了啥。那时候看书的男生很多，不想现在，基本是女的了。还记得那个时候每章下面的吐槽。出场较多的应该是红旗牌轿车，还有小哥堪比周杰伦的出场费啊等等。那个时候小哥对我来说就像神一样，每次无论多可怕的场景，只要他出现，就一点都不怕了，所以在秦岭神树那里，真的看的战战兢兢又期待，会不会有易容的小哥突然的出现。当然，现在的小哥也依然是我的男神。永远都会是。吴邪性格的变化，也让我们感觉像真的陪着他们走过了这么多年，这么多路。三叔真的坑，到现在，很多自己都圆不了。但我真的很感恩他当初没有按原计划把小哥写成女的。其实我是很排斥二次元和三次元破壁的。太久了，他们在心中已经生了根，他们属于三叔，但同样属于一路陪他们走来的人。他们在我的心中，早有他们的形象，不是任何人能代替扮演的，像真实存在一般，是鲜活存在的。我不是针对任何演员，但我不看任何电视电影，也很讨厌有人真人化。很多人走了，又有一些人走进，我不知道他们是不是因为喜欢他们偶像演的剧才进的，还是迟到了的发现与喜爱。也许将来我会不再看三叔的书。但对于书中的人物，对于瓶邪，对于铁三角，我永远都在。",
         },
       ],
@@ -212,29 +233,40 @@ export default {
       ],
     };
   },
+  mounted() {
+    this.getAll();
+    for (let i = 0; i < this.comments.length; i++) {
+      this.comments[i].time = new Date(this.comments[i].createdAt).getTime();
+      // console.log(new Date(this.comments[i].createdAt).getTime());
+    }
+  },
   methods: {
-    getDetail() {
-      this.$axios.get("/api/v1/book/" + this.$route.params.id).then((res) => {
-        var r = res.data;
-        this.title = r.title;
-        this.isbn = r.isbn;
-        this.author = r.author;
-        this.category = this.categoryList[r.category];
-        this.year = r.year;
-        this.publish = r.publisher;
-        this.description = r.description;
-        this.src = r.thumbnail;
-        this.rating = r.rating.toFixed(1);
-        this.likeCount = r.likes;
-        // this.dislikeCount = r.dislikes;
-        // this.commentCount = r.comments;
-        console.log(r.message);
-      });
-    },
     like() {
-      this.isLike = !this.isLike;
-      if (this.isLike === true) this.likeCount++;
-      else this.likeCount--;
+      // var header = {};
+      // if (localStorage.getItem("token"))
+      //   header = { Authorization: "Bearer " + localStorage.getItem("token") };
+      // this.$axios({
+      //   method: "put",
+      //   url: "/api/v1/book/react/" + this.$route.params.id,
+      //   data: {
+      //     response: "L",
+      //     bookId: this.$route.params.id,
+      //   },
+      //   headers: header,
+      // })
+      //   .then((res) => {
+      //     console.log(res);
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //   });
+
+      
+      // this.isLike = !this.isLike;
+      // if (this.isLike === true) {
+      //   this.likeCount++;
+      // }
+      // else this.likeCount--;
     },
     bookmark() {
       this.isBookmark = !this.isBookmark;
@@ -252,6 +284,73 @@ export default {
           type: "success",
           position: "top-left",
         });
+      }
+    },
+    getAll() {
+      this.$axios
+        .all([this.getBookDetail(), this.getComment()])
+        .then(
+          this.$axios.spread((detailRes, commentRes) => {
+            var r = detailRes.data;
+            this.title = r.title;
+            this.isbn = r.isbn;
+            this.author = r.author;
+            this.category = this.categoryList[r.category];
+            this.year = r.year;
+            this.publish = r.publisher;
+            this.description = r.description;
+            this.src = r.thumbnail;
+            this.rating = r.rating.toFixed(1);
+            this.likeCount = r.likes;
+            this.commentCount = commentRes.data.count;
+            this.comments = commentRes.data.results;
+            console.log(r.message);
+          })
+        )
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    getBookDetail() {
+      return this.$axios({
+        method: "get",
+        url: "/api/v1/book/" + this.$route.params.id,
+      });
+    },
+    getComment() {
+      return this.$axios({
+        method: "get",
+        url: "/api/v1/review/list?book=" + this.$route.params.id,
+      });
+    },
+    dateStr(date) {
+      var time = new Date().getTime();
+      time = parseInt((time - date) / 1000);
+      var s;
+      if (time < 60 * 10) {
+        return "刚刚";
+      } else if (time < 60 * 60) {
+        s = Math.floor(time / 60);
+        return s + "分钟前";
+      } else if (time < 60 * 60 * 24) {
+        s = Math.floor(time / 60 / 60);
+        return s + "小时前";
+      } else if (time < 60 * 60 * 24 * 5) {
+        s = Math.floor(time / 60 / 60 / 24);
+        return s + "天前";
+      } else {
+        console.log(date);
+        var date = new Date(parseInt(date));
+        let y = date.getFullYear();
+        let m =
+          date.getMonth() < 10
+            ? "0" + (date.getMonth() + 1)
+            : date.getMonth() + 1;
+        let d = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+        let h = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+        let mn =
+          date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+        return y + "-" + m + "-" + d + " " + h + ":" + mn;
       }
     },
     report() {
@@ -304,11 +403,22 @@ export default {
   width: 300px;
   padding-top: 10px;
 }
+.comment-title {
+  margin: 10px 0;
+  font-size: 18px;
+  font-weight: 600;
+  text-decoration: underline;
+}
+.comment-time {
+  font-size: 12px;
+  color: grey;
+}
 .comment-publisher {
+  margin: 5px 0 0;
   font-size: 18px;
   font-weight: 600;
 }
-.comment-title {
+.comment-header {
   font-size: 24px;
   font-weight: 600;
 }
@@ -391,7 +501,7 @@ export default {
 }
 .poster {
   width: 280px;
-  height: 350px;
+  height: 370px;
   overflow: hidden;
 }
 .book-wrap,

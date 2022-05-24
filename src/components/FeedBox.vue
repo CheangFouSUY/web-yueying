@@ -273,7 +273,9 @@ export default {
     },
     dateStr(date) {
       var time = new Date().getTime();
+      console.log(time);
       time = parseInt((time - date) / 1000);
+      console.log(time);
       var s;
       if (time < 60 * 10) {
         return "刚刚";
