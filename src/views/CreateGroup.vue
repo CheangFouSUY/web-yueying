@@ -6,11 +6,12 @@
         <div class="profilePic">
         <el-upload
         class="avatar-uploader"
-        action="https://jsonplaceholder.typicode.com/posts/"
+        action="http://127.0.0.1:8000/api/v1/group/create"
+        name='img'
         :show-file-list="false"
         :on-success="handleAvatarSuccess"
         :before-upload="beforeAvatarUpload">
-        <img v-if="imageUrl" :src="imageUrl" class="avatar">
+        <img v-if="form.imageUrl" :src="form.imageUrl" class="avatar">
         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
       </el-upload>
         </div>
@@ -19,19 +20,19 @@
         <div class="inputBox">
           <div>
             <span>小组名</span>
-            <input type="text" v-model="groupCreate.name" placeholder="输入小组名">
+            <input type="text" v-model="form.gName" placeholder="输入小组名">
           </div>
           <div>
              <span>小组类型</span>
-              <el-radio-group id="radiogroup" fill="#D0E8F2" v-model="groupCreate.type">
-                <el-radio-button id="radiogroupbutton" label="图书"></el-radio-button>
-                <el-radio-button id="radiogroupbutton" label="影视"></el-radio-button>
-                <el-radio-button id="radiogroupbutton" label="其他"></el-radio-button>
+              <el-radio-group id="radiogroup" fill="#D0E8F2" v-model="form.type">
+                <el-radio-button id="radiogroupbutton" label="b">图书</el-radio-button>
+                <el-radio-button id="radiogroupbutton" label="m">影视</el-radio-button>
+                <el-radio-button id="radiogroupbutton" label="o">其他</el-radio-button>
               </el-radio-group>
           </div>
           <div>
              <span>小组简介</span>
-            <textarea id="gDesc" v-model="groupCreate.desc" placeholder="输入小组简介(最多50字符)"></textarea>
+            <textarea id="gDesc" v-model="form.desc" placeholder="输入小组简介(最多50字符)"></textarea>
           </div>
         </div>
         <el-button @click="createGroup">创建</el-button>
@@ -53,18 +54,17 @@ export default {
   },
   data() {
     return {
-      imageUrl: '',
-      input: '',
-      groupCreate: {
-        name:'',
-        type:'图书',
+      form: {
+        imageUrl:'',
+        gName:'',
+        type:'b',
         desc:'',
       },
     };
   },
   methods: {
       handleAvatarSuccess(res, file) {
-        this.imageUrl = URL.createObjectURL(file.raw);
+        this.form.imageUrl = URL.createObjectURL(file.raw);
       },
       beforeAvatarUpload(file) {
         const isTypeTrue = 
@@ -82,12 +82,42 @@ export default {
         return (isTypeTrue && isLt2M);
       },
       createGroup() {
-        this.$message({
-            showClose: true,
-            message: '创建成功！',
-            type: 'success'
+        const formData = new FormData();
+        // var imageFile = document.querySelector('#file');
+        formData.append("groupName", this.form.gName);
+        formData.append("description", this.form.desc);
+        formData.append("category", this.form.type);
+        formData.append("img", this.form.imageUrl);
+
+        var header = {}
+        if (localStorage.getItem('token'))
+            header = { 'Authorization': 'Bearer ' + localStorage.getItem('token')}
+
+        // var header2 = {
+        //       'Content-Type': 'multipart/form-data'
+        //     }
+        this.$axios({
+            method: 'post',  
+            url: '/api/v1/group/create',
+            data: formData,
+            headers:  header,
         })
-          this.$router.push("/group/inner");
+        .then(res => {
+            console.log(res);
+            switch (res.status) {
+              case 201:
+                var id = res.data.id;
+                this.$message({
+                showClose: true,
+                message: '创建成功！',
+                type: 'success'
+                })
+              this.$router.push({ path: `/group/${id}` });
+              }
+        })
+        .catch(err => {
+            console.log(err);
+         })
       }
     },
 }

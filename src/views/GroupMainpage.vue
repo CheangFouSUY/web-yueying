@@ -8,10 +8,11 @@
     <el-row>
       <el-col :span="7"><div class="grid-content bg-blue"><div class="title"><p id="title">图书</p><div id="line"></div></div>
       <el-table class="table"
-      :data="leaderboardData"
+      :data="leaderboardDataB"
       style="width: 90%"
       :header-cell-style="{background : '#D0E8F2', color : '#456268' }"
       :cell-style="{background : '#D0E8F2' }"
+      :row-style="{height: '0px'}"
       @row-click="rowClick"
       :cell-class-name="cellCSS">
       <el-table-column
@@ -21,12 +22,12 @@
         align="center">
       </el-table-column>
       <el-table-column
-        prop="name"
+        prop="groupName"
         label="小组名字"
         width="200">
       </el-table-column>
       <el-table-column
-        prop="count"
+        prop="members"
         label="成员数量"
         align="center">
       </el-table-column>
@@ -34,7 +35,7 @@
     </div></el-col>
       <el-col :span="7"><div class="grid-content bg-blue"><div class="title"><p id="title">影视</p><div id="line"></div></div>
       <el-table class="table"
-      :data="leaderboardData"
+      :data="leaderboardDataM"
       style="width: 90%"
       :header-cell-style="{background : '#D0E8F2', color : '#456268' }"
       :cell-style="{background : '#D0E8F2' }"
@@ -47,12 +48,12 @@
         align="center">
       </el-table-column>
       <el-table-column 
-        prop="name"
+        prop="groupName"
         label="小组名字"
         width="200">
       </el-table-column>
       <el-table-column
-        prop="count"
+        prop="members"
         label="成员数量"
         align="center">
       </el-table-column>
@@ -60,7 +61,7 @@
       </div></el-col>
       <el-col :span="7"><div class="grid-content bg-blue"><div class="title"><p id="title">其他</p><div id="line"></div></div>
       <el-table class="table"
-      :data="leaderboardData"
+      :data="leaderboardDataO"
       style="width: 90%"
       :header-cell-style="{background : '#D0E8F2', color : '#456268' }"
       :cell-style="{background : '#D0E8F2' }"
@@ -73,12 +74,12 @@
         align="center">
       </el-table-column>
       <el-table-column 
-        prop="name"
+        prop="groupName"
         label="小组名字"
         width="200">
       </el-table-column>
       <el-table-column
-        prop="count"
+        prop="members"
         label="成员数量"
         align="center">
       </el-table-column>
@@ -168,10 +169,10 @@ export default {
     Header,
     Footer,
   },
+  mounted() {
+    this.getGroup();
+  },
   methods: {
-    Create(){
-      this.$router.push('/creategroup')
-    },
     cellCSS({row, rowIndex}){
       if (rowIndex === 0) {
         return 'cellCSS1';
@@ -190,40 +191,50 @@ export default {
     createGroup() {
       this.$router.push('/creategroup')
     },
+    getGroup() {
+      this.$axios
+      .get("/api/v1/group/list?category=b")
+      .then((res) => {
+        var result = res.data.results;
+        this.leaderboardDataB = result;
+        this.leaderboardDataB.forEach(function (value, index, array) {
+          array[index].rating = array[index].rating.toFixed(1);
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+      this.$axios
+      .get("/api/v1/group/list?category=m")
+      .then((res) => {
+        var result = res.data.results;
+        this.leaderboardDataM = result;
+        this.leaderboardDataM.forEach(function (value, index, array) {
+          array[index].rating = array[index].rating.toFixed(1);
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+      this.$axios
+      .get("/api/v1/group/list?category=o")
+      .then((res) => {
+        var result = res.data.results;
+        this.leaderboardDataO = result;
+        this.leaderboardDataO.forEach(function (value, index, array) {
+          array[index].rating = array[index].rating.toFixed(1);
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    }
   },
   data() {
         return {
-          leaderboardData: [{
-            name: '只爱书不爱你',
-            count: '99'
-          }, {
-            name: '我只“书”于你',
-            count: '88'
-          }, {
-            name: 'Tomgirl',
-            count: '77'
-          }, {
-            name: 'Tomas',
-            count: '66'
-          }, {
-            name: 'Tomy',
-            count: '99'
-          }, {
-            name: 'Tomeh',
-            count: '88'
-          }, {
-            name: 'Tomos',
-            count: '77'
-          }, {
-            name: 'Tomson',
-            count: '66'
-          }, {
-            name: 'Tomwhee',
-            count: '77'
-          }, {
-            name: 'Tommom',
-            count: '66'
-          }],
+          leaderboardDataB: [],
+          leaderboardDataM: [],
+          leaderboardDataO: [],
         groupData: [{
           id:1,
           gAvatar:<el-avatar icon="el-icon-user-solid"></el-avatar>,
@@ -342,6 +353,7 @@ export default {
 .table{
   margin-left: 20px;
   margin-top: 10px;
+  max-height: 526px;
 }
 .table2{
   margin-left: 18px;
@@ -389,3 +401,4 @@ export default {
   font-weight: bold;
 }
 </style>
+

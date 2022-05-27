@@ -101,7 +101,7 @@ export default {
                 this.$message.warning(err.response.data[key][0]);
             }
          })
-}
+    }
   }
 }
 </script>

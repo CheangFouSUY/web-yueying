@@ -64,7 +64,10 @@ const routes = [
   {
   path: '/feedback',
   name: 'feedback',
-  component: () => import('../views/Feedback.vue')
+  component: () => import('../views/Feedback.vue'),
+  meta: {
+    requireAuth: true
+  }
   },
   {
   path: '/creategroup',
@@ -72,7 +75,7 @@ const routes = [
   component: () => import('../views/CreateGroup.vue')
   },
   {
-    path: '/group/inner',
+    path: '/group/:id',
     name: 'group inner page',
     component: () => import('../views/GroupInnerpage.vue')
     },
@@ -124,7 +127,7 @@ router.beforeEach((to, from, next) => {
   // 若用户未登录且访问的页面需要登录，则跳转至登录页面
   if (!userInfo && to.meta.requireAuth) {
     next({
-      name: 'Login',
+      name: 'login',
     })
   }
 
