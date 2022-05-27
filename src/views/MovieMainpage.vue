@@ -24,22 +24,38 @@
 
       <el-row class="ctg-title">热门</el-row>
       <el-row>
-        <Swiper :initialList="hotMovie" :listType="'movie'" v-if="hotMovie.length"></Swiper>
+        <Swiper
+          :initialList="hotMovie"
+          :listType="'movie'"
+          v-if="hotMovie.length"
+        ></Swiper>
       </el-row>
 
       <el-row class="ctg-title">最新上架</el-row>
       <el-row>
-        <Swiper :initialList="newMovie" :listType="'movie'" v-if="newMovie.length"></Swiper>
+        <Swiper
+          :initialList="newMovie"
+          :listType="'movie'"
+          v-if="newMovie.length"
+        ></Swiper>
       </el-row>
 
       <el-row class="ctg-title">爱情</el-row>
       <el-row>
-        <Swiper :initialList="romance.Movie" :listType="'movie'" v-if="romanceMovie.length"></Swiper>
+        <Swiper
+          :initialList="romance.Movie"
+          :listType="'movie'"
+          v-if="romanceMovie.length"
+        ></Swiper>
       </el-row>
 
       <el-row class="ctg-title">恐怖</el-row>
       <el-row>
-        <Swiper :initialList="horrorMovie" :listType="'movie'" v-if="horrorMovie.length"></Swiper>
+        <Swiper
+          :initialList="horrorMovie"
+          :listType="'movie'"
+          v-if="horrorMovie.length"
+        ></Swiper>
       </el-row>
     </div>
 
@@ -116,13 +132,14 @@ export default {
         "恐怖",
         "悬疑",
         "冒险",
+        "喜剧",
         "动作",
         "科幻",
         "综艺",
         "动漫",
-        "LGBT",
         "卡通",
-        "喜剧",
+        "LGBT",
+        "其他",
       ],
       hotMovie: [],
       newMovie: [],

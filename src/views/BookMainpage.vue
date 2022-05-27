@@ -11,7 +11,7 @@
       <el-row class="ctg-list">
         <el-col :span="2" class="ctg-list-type">类型</el-col>
         <el-col :span="18">
-          <li v-for="item in categoryList" :key="item">{{ item }}</li>
+          <li v-for="item in categoryList" :key="item.id" @click="goFilter(item.id)">{{ item.des }}</li>
         </el-col>
       </el-row>
       <el-divider></el-divider>
@@ -54,69 +54,81 @@ export default {
     Swiper,
   },
   mounted() {
-    this.getBook();
+    this.getAllBook();
   },
   methods: {
-    getBook() {
+    goFilter(id) {
+      this.$router.push({ path: `/book/filter=category${id}` });
+    },
+    getAllBook() {
       this.$axios
-        .get("http://127.0.0.1:8000/api/v1/book/list?orderBy=r")
-        .then((res) => {
-          var result = res.data.results;
-          this.hotBook = result;
-          this.hotBook.forEach(function (value, index, array) {
-            array[index].rating = array[index].rating.toFixed(1);
-          });
-        })
+        .all([
+          this.getHotBook(),
+          this.getNewBook(),
+          this.getRomanceBook(),
+          this.getSuspenseBook(),
+        ])
+        .then(
+          this.$axios.spread((hotlist, newlist, romlist, suslist) => {
+            this.hotBook = hotlist.data.results;
+            this.newBook = newlist.data.results;
+            this.romanceBook = romlist.data.results;
+            this.suspenseBook = suslist.data.results;
+            this.setRating(this.hotBook);
+            this.setRating(this.newBook);
+            this.setRating(this.romanceBook);
+            this.setRating(this.suspenseBook);
+          })
+        )
         .catch((error) => {
           console.log(error);
         });
-      this.$axios
-        .get("http://127.0.0.1:8000/api/v1/book/list")
-        .then((res) => {
-          var result = res.data.results;
-          this.newBook = result;
-          this.newBook.forEach(function (value, index, array) {
-            array[index].rating = array[index].rating.toFixed(1);
-          });
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-      this.$axios
-        .get("http://127.0.0.1:8000/api/v1/book/list?category=1")
-        .then((res) => {
-          var result = res.data.results;
-          this.romanceBook = result;
-          this.romanceBook.forEach(function (value, index, array) {
-            array[index].rating = array[index].rating.toFixed(1);
-          });
-        });
-      this.$axios
-        .get("http://127.0.0.1:8000/api/v1/book/list?category=3")
-        .then((res) => {
-          var result = res.data.results;
-          this.suspenseBook = result;
-          this.suspenseBook.forEach(function (value, index, array) {
-            array[index].rating = array[index].rating.toFixed(1);
-          });
-        });
+    },
+    getHotBook() {
+      return this.$axios({
+        method: "get",
+        url: "/api/v1/book/list?orderBy=r",
+      });
+    },
+    getNewBook() {
+      return this.$axios({
+        method: "get",
+        url: "/api/v1/book/list",
+      });
+    },
+    getRomanceBook() {
+      return this.$axios({
+        method: "get",
+        url: "/api/v1/book/list?category=1",
+      });
+    },
+    getSuspenseBook() {
+      return this.$axios({
+        method: "get",
+        url: "/api/v1/book/list?category=3",
+      });
+    },
+    setRating(arr) {
+      return arr.forEach(function (value, index, array) {
+        array[index].rating = array[index].rating.toFixed(1);
+      });
     },
   },
   data() {
     return {
       categoryList: [
-        "爱情",
-        "恐怖",
-        "悬疑",
-        "科幻",
-        "艺术",
-        "体育",
-        "烹饪",
-        "漫画",
-        "教育",
-        "哲学",
-        "文学",
-        "其他",
+        {id: 1, des: '爱情'},
+        {id: 2, des: '恐怖'},
+        {id: 3, des: '悬疑'},
+        {id: 4, des: '科幻'},
+        {id: 5, des: '艺术'},
+        {id: 6, des: '体育'},
+        {id: 7, des: '烹饪'},
+        {id: 8, des: '漫画'},
+        {id: 9, des: '教育'},
+        {id: 10, des: '哲学'},
+        {id: 11, des: '文学'},
+        {id: 0, des: '其他'},
       ],
       hotBook: [],
       newBook: [],
@@ -170,7 +182,8 @@ export default {
 }
 
 .main {
-  margin: 30px 60px;
+  margin: 30px auto;
+  width: 1400px;
 }
 #footer {
   position: relative;

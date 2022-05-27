@@ -30,7 +30,7 @@
           </div>
           <i
             class="el-icon-arrow-left"
-            v-show="currentOffset < 0"
+            v-show="currentOffset < -5"
             @click="left"
           ></i>
           <i
@@ -65,10 +65,6 @@ export default {
   },
   mounted() {
     this.setCardWidth();
-    window.addEventListener("resize", () => {
-      this.currentOffset = 0;
-      this.setCardWidth();
-    });
   },
   methods: {
     setCardWidth() {
@@ -79,14 +75,16 @@ export default {
     right() {
       if (this.currentOffset <= (-this.fatherWith / 6) * 4) return;
       this.currentOffset -= this.fatherWith / 6;
+      console.log(this.currentOffset);
     },
     left() {
       if (this.currentOffset >= 0) return;
       this.currentOffset += this.fatherWith / 6;
+      console.log(this.currentOffset);
     },
     goDetails(id) {
       if(this.listType == "book")
-        this.$router.push({ path: `/book/${id}` });
+        this.$router.push({ path: `/book/detail/${id}` });
       else if(this.listType == "movie")
         this.$router.push({ path: `/movie/${id}` });
     },
