@@ -83,7 +83,10 @@ const routes = [
   {
     path: '/creategroup',
     name: 'create group',
-    component: () => import('../views/CreateGroup.vue')
+    component: () => import('../views/CreateGroup.vue'),
+        meta: {
+      requireAuth: true
+    }
   },
   {
     path: '/group/inner',
@@ -93,7 +96,10 @@ const routes = [
   {
     path: '/report',
     name: 'report',
-    component: () => import('../views/Report.vue')
+    component: () => import('../views/Report.vue'),
+    meta: {
+      requireAuth: true
+    }
   },
   {
     path: '/profile',

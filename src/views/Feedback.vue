@@ -54,7 +54,7 @@ export default {
         this.form.feedbacker = userInfo.user.username;
     },
     methods: {
-        async Submit() {
+        Submit() {
         const formData = new FormData();
         formData.append("feedbacker", this.form.feedbacker);
         formData.append("title", this.form.title);
@@ -65,7 +65,7 @@ export default {
         if (localStorage.getItem('token'))
             header = { 'Authorization': 'Bearer ' + localStorage.getItem('token')}
 
-        await this.$axios({
+        this.$axios({
             method: 'post',  
             url: '/api/v1/feedback/',
             data: formData,

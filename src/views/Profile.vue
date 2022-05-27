@@ -8,46 +8,51 @@
                 <div class="profilePic">
                 <el-upload v-if="isEdit"
                 class="avatar-uploader"
-                action="https://jsonplaceholder.typicode.com/posts/"
+                action=""
                 :show-file-list="false"
                 :on-success="handleAvatarSuccess"
                 :before-upload="beforeAvatarUpload">
-                <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                <img v-if="form.imageUrl" :src="form.imageUrl" class="avatar">
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
-                <el-image v-else :src="imageUrl"></el-image>
+                <el-image v-else :src="form.imageUrl"></el-image>
                 </div>
                 </div></el-col>
             <el-col :span="15"><div class="profile-content">
-                <el-row>
+                <!-- <el-row>
                     <el-col :span="20"><div class="profile-info"><span class="profile-text1">ID&nbsp;:</span>
-                    <span class="profile-text2">&nbsp;{{ userInfo.id }}</span></div>
+                    <span class="profile-text2">&nbsp;{{ form.id }}</span></div>
                     </el-col>
-                </el-row>
+                </el-row> -->
                 <el-row>
-                    <el-col :span="20"><div class="profile-info"><span class="profile-text1">昵称&nbsp;:</span>
-                    <span v-if="!isEdit" class="profile-text2">&nbsp;{{ userInfo.name }}</span>
-                    <el-input v-else placeholder="请输入新昵称" v-model="userInfo.name"></el-input></div>
+                    <el-col :span="20"><div class="profile-info"><span class="profile-text1">名字&nbsp;:</span>
+                    <span v-if="!form.isEdit" class="profile-text2">&nbsp;{{ form.name }}</span>
+                    <el-input v-else placeholder="请输入新昵称" v-model="form.name"></el-input></div>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="20"><div class="profile-info"><span class="profile-text1">性别&nbsp;:</span>
-                    <span class="profile-text2">&nbsp;{{ userInfo.sex }}</span></div>
+                    <span class="profile-text2">&nbsp;{{ form.sex }}</span></div>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="20"><div class="profile-info"><span class="profile-text1">生日&nbsp;:</span>
-                    <span class="profile-text2">&nbsp;{{ userInfo.dob }}</span></div>
+                    <span class="profile-text2">&nbsp;{{ form.dob }}</span></div>
                     </el-col>
                 </el-row>
                 <el-row>
                      <el-col :span="20"><div class="profile-info"><span class="profile-text1">邮箱&nbsp;:</span>
-                     <span class="profile-text2">&nbsp;{{ userInfo.email }}</span></div>
+                     <span class="profile-text2">&nbsp;{{ form.email }}</span></div>
+                    </el-col>
+                </el-row>
+                <el-row>
+                     <el-col :span="20"><div class="profile-info"><span class="profile-text1">自我介绍&nbsp;:</span>
+                     <span class="profile-text2">&nbsp;{{ form.about }}</span></div>
                     </el-col>
                 </el-row>
                 </div></el-col>
-            <el-col :span="3"><div class="profile-content"><el-button class="Edit" v-if="!isEdit" @click="isEdit = !isEdit">编辑资料</el-button>
-                    <el-button class="EditFinish" type="danger" v-else @click="isEdit = !isEdit">完成编辑</el-button>
+            <el-col :span="3"><div class="profile-content"><el-button class="Edit" v-if="!form.isEdit" @click="form.isEdit = !form.isEdit">编辑资料</el-button>
+                    <el-button class="EditFinish" type="danger" v-else @click="form.isEdit = !form.isEdit">完成编辑</el-button>
                  </div></el-col>
         </el-row>
         </div></el-col>
@@ -65,6 +70,7 @@
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
 import FeedBox from "@/components/FeedBox.vue";
+import user from "@/store/user";
 
 export default {
     name:'Profile',
@@ -75,20 +81,16 @@ export default {
     },
     data() {
         return {
-            imageUrl:[require("@/assets/ProfilePic.jpg")],
-            isEdit: false,
-            userInfo: {
-                id:'U0001',
-                name:'乐怡jiejie',
-                sex:'不详',
-                dob:'01-01-2001',
-                email:'mikiwong@gmail.com',
+            form: {
+                imageUrl:'',
+                isEdit: false,
+                id:'',
+                name:'',
+                sex:'',
+                dob:'',
+                email:'',
+                about:'',
             },
-            user: "栀子花开",
-            activeName: "all",
-            isShowFollow: false,
-            allColor: "#79A3B1",
-            followColor: "#456268",
             feeds: [
                 {
                 id: "F0001",
@@ -211,6 +213,26 @@ export default {
                 },
             ],
         }
+    },
+    created() {
+    const userInfo = user.getters.getUser(user.state());
+    this.form.id = userInfo.user.id;
+    this.$axios({
+    method: 'get',  
+    url: `/api/v1/user/${this.form.id}`,
+    })
+    .then(res => {
+        console.log(res);
+        this.form.name = res.data.username;
+        this.form.sex = res.data.gender;
+        this.form.dob = res.data.dob;
+        this.form.email = res.data.email;
+        this.form.about = res.data.about;
+        this.form.imageUrl = res.data.profile;
+    })
+    .catch(err => {
+        this.$message.warning(err)
+        })
     },
     methods: {
         handleAvatarSuccess(res, file) {
