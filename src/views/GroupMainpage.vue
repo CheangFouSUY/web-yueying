@@ -8,7 +8,7 @@
     <el-row>
       <el-col :span="7"><div class="grid-content bg-blue"><div class="title"><p id="title">图书</p><div id="line"></div></div>
       <el-table class="table"
-      :data="leaderboardData"
+      :data="leaderboardDataB.slice(0,10)"
       style="width: 90%"
       :header-cell-style="{background : '#D0E8F2', color : '#456268' }"
       :cell-style="{background : '#D0E8F2' }"
@@ -21,12 +21,12 @@
         align="center">
       </el-table-column>
       <el-table-column
-        prop="name"
+        prop="groupName"
         label="小组名字"
         width="200">
       </el-table-column>
       <el-table-column
-        prop="count"
+        prop="members"
         label="成员数量"
         align="center">
       </el-table-column>
@@ -34,7 +34,7 @@
     </div></el-col>
       <el-col :span="7"><div class="grid-content bg-blue"><div class="title"><p id="title">影视</p><div id="line"></div></div>
       <el-table class="table"
-      :data="leaderboardData"
+      :data="leaderboardDataM.slice(0,10)"
       style="width: 90%"
       :header-cell-style="{background : '#D0E8F2', color : '#456268' }"
       :cell-style="{background : '#D0E8F2' }"
@@ -47,12 +47,12 @@
         align="center">
       </el-table-column>
       <el-table-column 
-        prop="name"
+        prop="groupName"
         label="小组名字"
         width="200">
       </el-table-column>
       <el-table-column
-        prop="count"
+        prop="members"
         label="成员数量"
         align="center">
       </el-table-column>
@@ -60,7 +60,7 @@
       </div></el-col>
       <el-col :span="7"><div class="grid-content bg-blue"><div class="title"><p id="title">其他</p><div id="line"></div></div>
       <el-table class="table"
-      :data="leaderboardData"
+      :data="leaderboardDataO.slice(0,10)"
       style="width: 90%"
       :header-cell-style="{background : '#D0E8F2', color : '#456268' }"
       :cell-style="{background : '#D0E8F2' }"
@@ -73,12 +73,12 @@
         align="center">
       </el-table-column>
       <el-table-column 
-        prop="name"
+        prop="groupName"
         label="小组名字"
         width="200">
       </el-table-column>
       <el-table-column
-        prop="count"
+        prop="members"
         label="成员数量"
         align="center">
       </el-table-column>
@@ -168,9 +168,12 @@ export default {
     Header,
     Footer,
   },
+  mounted() {
+    this.getGroup();
+  },
   methods: {
-    Create(){
-      this.$router.push('/creategroup')
+    rowCSS({row, rowIndex}) {
+      return 'rowCSS1';
     },
     cellCSS({row, rowIndex}){
       if (rowIndex === 0) {
@@ -190,40 +193,41 @@ export default {
     createGroup() {
       this.$router.push('/creategroup')
     },
+    getGroup() {
+      this.$axios
+      .get("/api/v1/group/list?category=b")
+      .then((res) => {
+        var result = res.data.results;
+        this.leaderboardDataB = result;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+      this.$axios
+      .get("/api/v1/group/list?category=m")
+      .then((res) => {
+        var result = res.data.results;
+        this.leaderboardDataM = result;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+      this.$axios
+      .get("/api/v1/group/list?category=o")
+      .then((res) => {
+        var result = res.data.results;
+        this.leaderboardDataO = result;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    }
   },
   data() {
         return {
-          leaderboardData: [{
-            name: '只爱书不爱你',
-            count: '99'
-          }, {
-            name: '我只“书”于你',
-            count: '88'
-          }, {
-            name: 'Tomgirl',
-            count: '77'
-          }, {
-            name: 'Tomas',
-            count: '66'
-          }, {
-            name: 'Tomy',
-            count: '99'
-          }, {
-            name: 'Tomeh',
-            count: '88'
-          }, {
-            name: 'Tomos',
-            count: '77'
-          }, {
-            name: 'Tomson',
-            count: '66'
-          }, {
-            name: 'Tomwhee',
-            count: '77'
-          }, {
-            name: 'Tommom',
-            count: '66'
-          }],
+          leaderboardDataB: [],
+          leaderboardDataM: [],
+          leaderboardDataO: [],
         groupData: [{
           id:1,
           gAvatar:<el-avatar icon="el-icon-user-solid"></el-avatar>,
@@ -342,9 +346,19 @@ export default {
 .table{
   margin-left: 20px;
   margin-top: 10px;
+  max-height: 526px;
+  overflow: auto;
+}
+.table::-webkit-scrollbar { 
+    width: 5px;
+}
+.table::-webkit-scrollbar-thumb {
+  background: rgba(1, 1, 255, 0.3); 
+  border-radius: 20px;
 }
 .table2{
   margin-left: 18px;
+  max-height: 526px;
 }
 .showgroups .bg-lightblue {
   background-color: #E9FBFF;
@@ -362,7 +376,6 @@ export default {
   margin-left: 30px;
   margin-right: 20px;
 }
-
 </style>
 
 <style>
@@ -370,6 +383,9 @@ export default {
   color: #077C96;
   font-size: 22px;
   font-weight: bold;
+}
+.el-table--enable-row-hover .el-table__body tr:hover > td {
+    background-color: whitesmoke !important;
 }
 .el-table .cellCSS1:hover,.el-table .cellCSS2:hover,.el-table .cellCSS3:hover,.el-table .cellCSS4:hover {
   cursor: pointer;
@@ -389,3 +405,4 @@ export default {
   font-weight: bold;
 }
 </style>
+
