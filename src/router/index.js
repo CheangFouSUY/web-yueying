@@ -91,7 +91,7 @@ const routes = [
     component: () => import('../views/GroupInnerpage.vue')
   },
   {
-    path: '/report',
+    path: '/report/review/:id',
     name: 'report',
     component: () => import('../views/Report.vue')
   },

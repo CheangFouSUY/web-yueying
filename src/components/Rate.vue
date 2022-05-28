@@ -6,7 +6,7 @@
 export default {
     data(){
         return{
-            value:null,
+            value:0,
             colors:['#99A9BF', '#F7BA2A', '#FF9900']
         }
     },

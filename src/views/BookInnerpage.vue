@@ -51,7 +51,11 @@
               <img class="rating-icon" src="@/assets/Star_fill.svg" alt="" />
             </el-col>
           </el-row>
-          <Rate></Rate>
+          <el-rate
+            v-model="rateValue"
+            @change="selectRate(rateValue)"
+            :colors="rateColors"
+          ></el-rate>
         </el-col>
         <el-row :gutter="30" class="book-detail">
           <el-col :span="17">
@@ -63,12 +67,12 @@
       </el-row>
       <el-row class="like-comment-wrap">
         <img
-          v-if="isLike === false"
+          v-if="response === 'L'"
           @click="like()"
-          src="@/assets/Love.svg"
+          src="@/assets/Love_fill.svg"
           alt="love"
         />
-        <img v-else @click="like()" src="@/assets/Love_fill.svg" alt="love" />
+        <img v-else @click="like()" src="@/assets/Love.svg" alt="love" />
         <span class="like-count">{{ likeCount }}</span>
         <img src="@/assets/Comment.svg" alt="comment" />
         <span class="comment-count">{{ commentCount }}</span>
@@ -109,7 +113,6 @@
 
                   <input
                     id="imgUpload"
-                    class="upload-img"
                     type="file"
                     accept="image/png,image/gif,image/jpeg"
                     @change="getImg($event)"
@@ -160,7 +163,7 @@
             <el-row type="flex" justify="center">
               <img
                 id="report"
-                @click="report"
+                @click="report(item.id)"
                 src="@/assets/Report.svg"
                 alt="report icon"
               />
@@ -188,7 +191,7 @@ export default {
   },
   data() {
     return {
-      status: false,
+      status: false, //控制数据渲染
       user: "陌上花开",
       // userImg: "",
       id: "B11111",
@@ -204,13 +207,16 @@ export default {
       rating: "4.6",
       likeCount: "50",
       commentCount: "3",
-      isLike: false,
+      response: "L",
       isBookmark: false,
       userComment: {
         title: "",
         content: "",
-        img: [{ name: "", url: "" }],
+        img: "",
       },
+      isRate: false,
+      rateValue: -1,
+      rateColors: ["#99A9BF", "#F7BA2A", "#FF9900"],
       comments: [
         // {
         //   id: "C0001",
@@ -318,9 +324,17 @@ export default {
     },
     async like() {
       var formData = new FormData();
-      formData.append("response", "L");
+      console.log(this.response);
+      if (this.response == "L") {
+        this.response = "O";
+        this.likeCount--;
+      } else {
+        this.response = "L";
+        this.likeCount++;
+      }
+      formData.append("response", this.response);
       formData.append("bookId", this.id);
-      formData.append("rateScore", 0);
+      formData.append("rateScore", this.rateValue);
 
       var header = {};
       if (localStorage.getItem("token"))
@@ -341,20 +355,28 @@ export default {
           this.$message.warning("点赞失败");
         });
     },
-    bookmark() {
+    async bookmark() {
+      var formData = new FormData();
+      formData.append("isSaved", true);
+      formData.append("bookId", this.id);
+      formData.append("rateScore", -1);
+
       var header = {};
       if (localStorage.getItem("token"))
         header = { Authorization: "Bearer " + localStorage.getItem("token") };
 
-      var sendData = {
-        bookId: this.id,
-        isSaved: true,
-      };
-      console.log(sendData);
-      this.$axios
-        .put("/api/v1/book/react/" + this.id, sendData)
+      await this.$axios({
+        method: "put",
+        url: "/api/v1/book/react/" + this.id,
+        data: formData,
+        headers: header,
+      })
         .then((res) => {
           console.log(res);
+          switch (res.status) {
+            case 200:
+              break;
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -377,6 +399,40 @@ export default {
         });
       }
     },
+    async selectRate(value) {
+      console.log("rate:", value);
+      var formData = new FormData();
+      formData.append("bookId", this.id);
+      formData.append("rateScore", this.rateValue);
+
+      var header = {};
+      if (localStorage.getItem("token"))
+        header = { Authorization: "Bearer " + localStorage.getItem("token") };
+      console.log(header);
+
+      await this.$axios({
+        method: "put",
+        url: "/api/v1/book/react/" + this.id,
+        data: formData,
+        headers: header,
+      })
+        .then((res) => {
+          console.log(res);
+          switch (res.status) {
+            case 200:
+              this.$message({
+                showClose: true,
+                message: "已提交评分",
+                type: "success",
+              });
+              break;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          this.$message.warning("评分失败");
+        });
+    },
     async getAll() {
       await this.$axios
         .all([this.getBookDetail(), this.getComment()])
@@ -396,6 +452,11 @@ export default {
             this.likeCount = r.likes;
             this.commentCount = commentRes.data.count;
             this.comments = commentRes.data.results;
+            this.response = r.response;
+            this.isBookmark = r.isSave;
+            this.isRate = r.isRate;
+            this.rateValue = r.score;
+            console.log(r.response);
             console.log(r.message);
           })
         )
@@ -480,15 +541,15 @@ export default {
       this.userComment.img = event.target.files[0];
       console.log("get img! ", this.userComment);
     },
-    report() {
-      this.$router.push("/report");
+    report(reviewId) {
+      this.$router.push({ path: `/report/review/${reviewId}` });
     },
   },
 };
 </script>
 
 <style scoped>
-.upload-img {
+#imgUpload {
   display: none;
 }
 .el-icon-picture-outline-round:hover,
