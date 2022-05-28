@@ -11,29 +11,51 @@
       <el-row class="ctg-list">
         <el-col :span="2" class="ctg-list-type">类型</el-col>
         <el-col :span="18">
-          <li v-for="item in categoryList" :key="item.id" @click="goFilter(item.id)">{{ item.des }}</li>
+          <li
+            v-for="item in categoryList"
+            :key="item.id"
+            @click="goFilter(item.id)"
+          >
+            {{ item.des }}
+          </li>
         </el-col>
       </el-row>
       <el-divider></el-divider>
 
       <el-row class="ctg-title">热门</el-row>
       <el-row>
-        <Swiper :initialList="hotBook" :listType="'book'" v-if="hotBook.length"></Swiper>
+        <Swiper
+          :initialList="hotBook"
+          :listType="'book'"
+          v-if="hotBook.length"
+        ></Swiper>
       </el-row>
 
       <el-row class="ctg-title">最新上架</el-row>
       <el-row>
-        <Swiper :initialList="newBook" :listType="'book'" v-if="newBook.length"></Swiper>
+        <Swiper
+          :initialList="newBook"
+          :listType="'book'"
+          v-if="newBook.length"
+        ></Swiper>
       </el-row>
 
       <el-row class="ctg-title">爱情</el-row>
       <el-row>
-        <Swiper :initialList="romanceBook" :listType="'book'" v-if="romanceBook.length"></Swiper>
+        <Swiper
+          :initialList="romanceBook"
+          :listType="'book'"
+          v-if="romanceBook.length"
+        ></Swiper>
       </el-row>
 
       <el-row class="ctg-title">悬疑</el-row>
       <el-row>
-        <Swiper :initialList="suspenseBook" :listType="'book'" v-if="suspenseBook.length"></Swiper>
+        <Swiper
+          :initialList="suspenseBook"
+          :listType="'book'"
+          v-if="suspenseBook.length"
+        ></Swiper>
       </el-row>
     </div>
 
@@ -117,18 +139,19 @@ export default {
   data() {
     return {
       categoryList: [
-        {id: 1, des: '爱情'},
-        {id: 2, des: '恐怖'},
-        {id: 3, des: '悬疑'},
-        {id: 4, des: '科幻'},
-        {id: 5, des: '艺术'},
-        {id: 6, des: '体育'},
-        {id: 7, des: '烹饪'},
-        {id: 8, des: '漫画'},
-        {id: 9, des: '教育'},
-        {id: 10, des: '哲学'},
-        {id: 11, des: '文学'},
-        {id: 0, des: '其他'},
+        { id: 99, des: "全部" },
+        { id: 1, des: "爱情" },
+        { id: 2, des: "恐怖" },
+        { id: 3, des: "悬疑" },
+        { id: 4, des: "科幻" },
+        { id: 5, des: "艺术" },
+        { id: 6, des: "体育" },
+        { id: 7, des: "烹饪" },
+        { id: 8, des: "漫画" },
+        { id: 9, des: "教育" },
+        { id: 10, des: "哲学" },
+        { id: 11, des: "文学" },
+        { id: 0, des: "其他" },
       ],
       hotBook: [],
       newBook: [],

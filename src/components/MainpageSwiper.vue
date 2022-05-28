@@ -86,7 +86,7 @@ export default {
       if(this.listType == "book")
         this.$router.push({ path: `/book/detail/${id}` });
       else if(this.listType == "movie")
-        this.$router.push({ path: `/movie/${id}` });
+        this.$router.push({ path: `/movie/detail/${id}` });
     },
   },
 };

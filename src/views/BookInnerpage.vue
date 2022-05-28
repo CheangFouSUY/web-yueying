@@ -202,7 +202,6 @@
 <script>
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
-import Rate from "@/components/Rate.vue";
 import User from "@/store/user";
 
 export default {
@@ -210,7 +209,6 @@ export default {
   components: {
     Header,
     Footer,
-    Rate,
   },
   data() {
     return {
@@ -300,7 +298,6 @@ export default {
         "哲学",
         "文学",
       ],
-      formData: "",
     };
   },
   mounted() {
@@ -367,9 +364,9 @@ export default {
       formData.append("title", this.userComment.title);
       formData.append("description", this.userComment.content);
       formData.append("img", this.userComment.img);
-      formData.append("feed", "3a252690-d1bf-483e-acdc-2b953bae0a4e");
+      formData.append("feed", "");
       formData.append("book", this.id);
-      formData.append("movie", "5d7e0538-db99-4fae-960c-2feb9faf66b3");
+      formData.append("movie", "");
 
       var header = {};
       if (localStorage.getItem("token"))
