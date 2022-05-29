@@ -89,7 +89,7 @@ const routes = [
     }
   },
   {
-    path: '/group/inner',
+    path: '/group/:id',
     name: 'group inner page',
     component: () => import('../views/GroupInnerpage.vue')
   },

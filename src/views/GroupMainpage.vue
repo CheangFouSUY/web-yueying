@@ -172,9 +172,6 @@ export default {
     this.getGroup();
   },
   methods: {
-    rowCSS({row, rowIndex}) {
-      return 'rowCSS1';
-    },
     cellCSS({row, rowIndex}){
       if (rowIndex === 0) {
         return 'cellCSS1';
@@ -187,8 +184,9 @@ export default {
     cellCSS2({row, rowIndex}) {
       return 'cellCSS4';
     },
-    rowClick(row, column, event) {   
-      this.$router.push('/group/inner')
+    rowClick(row, column, event) {
+      console.log(row.id);
+      this.$router.push({path: `/group/${row.id}`})
     },
     createGroup() {
       this.$router.push('/creategroup')

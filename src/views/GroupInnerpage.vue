@@ -8,8 +8,8 @@
        <el-col :span="7" :offset="1"><div class="title"><span>{{ groupInfo.name }}</span></div></el-col>
        <el-col :span="15" :offset="1"><div class="buttonSlot">
         <el-button id="changeName" @click="change" v-if="isOwner">更改组名</el-button>
-         <el-button id="joinGroup"  @click="joinleave" v-if="isGroupMember">加入小组</el-button>
-         <el-button id="leaveGroup" @click="joinleave" v-else>离开小组</el-button>
+         <el-button id="joinGroup"  @click="join" v-if="!isGroupMember">加入小组</el-button>
+         <el-button id="leaveGroup" @click="leave" v-else>退出小组</el-button>
        </div></el-col>
      </el-row>
      <el-row>
@@ -23,7 +23,7 @@
        <el-col :span="18">
          <div class="groupInfoInfo">
            <el-row>
-             <el-col :span="12"><div class="info "><span class="infoText">创建人&nbsp;:&nbsp;</span><span class="infoText2">{{ groupInfo.owner }}</span></div>
+             <el-col :span="12"><div class="info"><span class="infoText">创建人&nbsp;:&nbsp;</span><span class="infoText2">{{ groupInfo.owner }}</span></div>
              </el-col>
              <el-col :span="12"><div class="info"><span class="infoText">类型&nbsp;:&nbsp;</span><span class="infoText2">{{ groupInfo.type }}</span></div>
              </el-col>
@@ -35,9 +35,11 @@
              </el-col>
            </el-row>
             <el-row>
-              <el-col :span="20"><div class="info2"><span class="infoText">简介&nbsp;:&nbsp;</span><span class="infoText2">{{ groupInfo.desc }}</span></div></el-col>
-              <el-button id="post" @click="post" icon="el-icon-position">发表话题</el-button>
+              <el-col :span="20"><div class="info2"><span class="infoText">简介&nbsp;:&nbsp;</span><span class="infoText3">{{ groupInfo.desc }}</span></div>
+              </el-col>
+              <!-- <el-button id="post" @click="post" icon="el-icon-position">发表话题</el-button> -->
            </el-row>
+           <el-button id="post" @click="post" icon="el-icon-position">发表话题</el-button>
          </div>
        </el-col>
      </el-row>
@@ -82,9 +84,47 @@ export default {
     Footer,
     FeedBox,
   },
+  mounted() {
+    this.getGroupInfo();
+  },
   methods: {
-    joinleave() {
-      this.isGroupMember = !this.isGroupMember;
+    join() {
+      var header = {}
+      if (localStorage.getItem('token'))
+          header = { 'Authorization': 'Bearer ' + localStorage.getItem('token')}
+
+      this.$axios({
+        method:'post',
+        url:'/api/v1/group/joinleave/' + this.$route.params.id,
+        headers: header,
+      })
+      .then((res) => {
+        console.log(res);
+        this.$message.success("成功加入小组");
+        this.isGroupMember = !this.isGroupMember;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    },
+    leave() {
+      var header = {}
+      if (localStorage.getItem('token'))
+          header = { 'Authorization': 'Bearer ' + localStorage.getItem('token')}
+
+      this.$axios({
+        method:'delete',
+        url:'/api/v1/group/joinleave/' + this.$route.params.id,
+        headers: header,
+      })
+      .then((res) => {
+        console.log(res);
+        this.$message.success("成功退出小组");
+        this.isGroupMember = !this.isGroupMember;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     },
     change() {
           this.$prompt('请输入新的小组名字（小组名少于10字符）', '更新小组名', {
@@ -129,19 +169,82 @@ export default {
     changeExpand(item) {
       item.isExpand = !item.isExpand;
     },
+   async getGroupInfo() {
+      await this.$axios
+        .all([this.getGroupDetail()])
+        .then(
+          this.$axios.spread((gDetail) => {
+            console.log(gDetail);
+            this.groupInfo.name = gDetail.data.groupName.slice(0,18) + "...";
+            this.groupInfo.owner = gDetail.data.owner;
+            this.groupInfo.time = new Date(gDetail.data.createdBy).getTime();
+            if(gDetail.data.category === 'b')
+              this.groupInfo.type = '图书';
+            else if(gDetail.data.category === 'm')
+              this.groupInfo.type = '影视';
+            else if(gDetail.data.category === 'o')
+              this.groupInfo.type = '其他';
+            this.groupInfo.peoplecount = gDetail.data.members;
+            this.groupInfo.desc = gDetail.data.description;
+            // this.groupInfo.member =
+            // this.groupInfo.admin =
+          })
+        )
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    getGroupDetail() {
+      return this.$axios({
+        method: "get",
+        url: "/api/v1/group/" + this.$route.params.id,
+      });
+    },
+    dateStr(date) {
+      var time = new Date().getTime();
+      time = parseInt((time - date) / 1000);
+      var s;
+      if (time < 60 * 10) {
+        return "刚刚";
+      } else if (time < 60 * 60) {
+        s = Math.floor(time / 60);
+        return s + "分钟前";
+      } else if (time < 60 * 60 * 24) {
+        s = Math.floor(time / 60 / 60);
+        return s + "小时前";
+      } else if (time < 60 * 60 * 24 * 5) {
+        s = Math.floor(time / 60 / 60 / 24);
+        return s + "天前";
+      } else {
+        // console.log(date);
+        var date = new Date(parseInt(date));
+        let y = date.getFullYear();
+        let m =
+          date.getMonth() < 10
+            ? "0" + (date.getMonth() + 1)
+            : date.getMonth() + 1;
+        let d = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+        let h = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+        let mn =
+          date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+        return y + "-" + m + "-" + d + " " + h + ":" + mn;
+      }
+    },
   },
   data() {
     return {
-      isGroupMember: true,
+      isGroupMember: false,
       isOwner: true,
       url:'@/assets/Book.svg',
       groupInfo: {
-        name:'皮卡一家亲',
+        name:'',
         owner:'小黄乐',
-        date:'2022-05-08',
-        type:'图书',
-        peoplecount:'55',
-        desc:'欢迎加入皮卡一家亲，希望你们都喜欢皮卡丘~皮卡皮卡~',
+        date:'',
+        time:'',
+        type:'',
+        peoplecount:'',
+        desc:'',
+        descs:'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc',
         admin: [
           { 
             id:'A0001',
@@ -358,12 +461,12 @@ export default {
   background-color: #f9fafc;
 }
 .groupInfo{
-  /* display: inline-block; */
   width: 92%;
-  height: 350px;
+  /* height: 350px; */
   margin-left: 50px;
   margin-top: 20px;
   margin-bottom: 40px;
+  padding-bottom: 15px;
   background-color: #FCF8EC;
   box-shadow: 0px 0px 20px 3px rgba(0, 0, 0, 0.25);
   /* border: solid black 1px; */
@@ -398,20 +501,36 @@ export default {
 .groupInfoInfo{
   height: 250px;
   margin-left: 30px;
+  display: relative;
 }
 .info {
   font-size: 24px;
 }
 .info2 {
   font-size: 24px;
-  height: 130px;
+  /* max-height: 130px; */
+  /* border: 1px black solid; */
+  display: flex;
 }
 .infoText{
   color: #79A3B1;
-  font-weight: bold;  
+  font-weight: bold;
+  display: inline-block;
 }
 .infoText2{
   color: #456268;
+  display: inline-block;
+  max-width: 290px;
+}
+.infoText3{
+  color: #456268;
+  display: inline-block;
+  /* border: 1px solid black; */
+  max-width: 630px;
+  word-break: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow: hidden;
 }
 .adminbar, .memberbar{
   height: 30px;
@@ -501,8 +620,8 @@ export default {
   font-size: 20px;
   float: right;
   position: absolute;
-  margin-left: 30px;
-  margin-top: 90px;
+  bottom: 0px;
+  right: 20px;
   background-color: #D0E8F2;
   color: #456268;
 }
