@@ -23,12 +23,12 @@
         <el-row>
           <button
             class="feed-follow"
-            v-if="isFollow === false"
+            v-if="!isFollow && !isMine"
             @click="follow()"
           >
             关注
           </button>
-          <button class="feed-unfollow" v-else @click="follow()">
+          <button class="feed-unfollow" v-else-if="isFollow && !isMine" @click="follow()">
             取消关注
           </button>
         </el-row>
@@ -215,9 +215,11 @@ export default {
       status: false,
       islogin: false,
       user: "陌上花开",
+      userId: "123456789",
       id: this.initialFeedId,
       createdBy: "U123456",
       publisherName: "娱乐八卦姐",
+      isMine: false,
       createdAt: 1642014005919,
       isPublic: true,
       belongTo: "",
@@ -245,6 +247,7 @@ export default {
     if ((userInfo = User.getters.getUser(User.state()))) {
       this.islogin = true;
       this.user = userInfo.user.username;
+      this.userId = userInfo.user.id;
     }
     this.getAll();
   },
@@ -471,6 +474,7 @@ export default {
             this.comments = commentRes.data.results;
             this.response = r.response;
             this.isFollow = r.isFollow;
+            this.isMine = (r.createdBy == this.userId);
             console.log(r.message);
           })
         )
