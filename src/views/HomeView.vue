@@ -31,26 +31,26 @@
             <el-tab-pane label="图书" name="book">
               <li
                 class="hot-list"
-                v-for="item in bookHotList"
-                :key="item.n"
-                :style="{ color: listColor[item.n - 1] }"
+                v-for="(item, index) in bookHotList.slice(0,10)"
+                :key="item.title"
+                :style="{ color: listColor[index+1 - 1] }"
               >
-                <img id="hot" v-if="item.n === 1" src="@/assets/Hot.jpg" alt="hot icon" />
+                <img id="hot" v-if="index+1 === 1" src="@/assets/Hot.jpg" alt="hot icon" />
                 <span v-else>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                <span class="hot-list-number">{{ item.n }}</span>
+                <span class="hot-list-number">{{ index+1 }}</span>
                 <span class="hot-list-name">{{ item.title }}</span>
               </li>
             </el-tab-pane>
             <el-tab-pane label="影视" name="drama">
               <li
                 class="hot-list"
-                v-for="item in dramaHotList"
-                :key="item.n"
-                :style="{ color: listColor[item.n - 1] }"
+                v-for="(item, index) in movieHotList.slice(0,10)"
+                :key="item.title"
+                :style="{ color: listColor[index+1 - 1] }"
               >
-                <img id="hot" v-if="item.n === 1" src="@/assets/Hot.jpg" alt="hot icon" />
+                <img id="hot" v-if="index+1 === 1" src="@/assets/Hot.jpg" alt="hot icon" />
                 <span v-else>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                <span class="hot-list-number">{{ item.n }}</span>
+                <span class="hot-list-number">{{ index+1 }}</span>
                 <span class="hot-list-name">{{ item.title }}</span>
               </li>
             </el-tab-pane>
@@ -77,11 +77,6 @@ export default {
   },
   data() {
     return {
-      isLogin: "false",
-      userInfo: {
-        username: "小黄鸭",
-        useravatar: "",
-      },
       carouselImg: [
         require("../assets/poster/poster1.jpg"),
         require("../assets/poster/poster2.jpg"),
@@ -103,28 +98,8 @@ export default {
         "#456268",
       ],
       bookHotList: [
-        { n: 1, title: "人间失格" },
-        { n: 2, title: "解忧杂货店" },
-        { n: 3, title: "追风筝的人" },
-        { n: 4, title: "活着" },
-        { n: 5, title: "白夜行" },
-        { n: 6, title: "摆渡人" },
-        { n: 7, title: "我们仨" },
-        { n: 8, title: "围城" },
-        { n: 9, title: "边城" },
-        { n: 10, title: "百年孤独" },
       ],
-      dramaHotList: [
-        { n: 1, title: "特战荣耀" },
-        { n: 2, title: "亲爱的小孩" },
-        { n: 3, title: "祝卿好" },
-        { n: 4, title: "且试天下" },
-        { n: 5, title: "与君初相识" },
-        { n: 6, title: "山河月明" },
-        { n: 7, title: "蓝焰突击" },
-        { n: 8, title: "没有工作的一年" },
-        { n: 9, title: "玉面桃花总相逢" },
-        { n: 10, title: "我叫赵甲第" },
+      movieHotList: [
       ],
       hotBook: [
         {
@@ -272,19 +247,59 @@ export default {
       ],
     };
   },
-  methods: {},
+  mounted() {
+    this.getBookMovieList();
+  },
+  methods: {
+    getBookMovieList() {
+      this.$axios
+        .all([
+          this.getHotBook(),
+          this.getHotMovie(),
+        ])
+        .then(
+        this.$axios.spread((bookList, movieList) => {
+         this.bookHotList = bookList.data.results;
+         this.movieHotList = movieList.data.results;
+        })
+      )
+    },
+    getHotBook() {
+      return this.$axios({
+        method: "get",
+        url: "/api/v1/book/list?orderBy=l",
+      });
+    },
+    getHotMovie() {
+      return this.$axios({
+        method: "get",
+        url: "/api/v1/movie/list?orderBy=l",
+      });
+    }
+  },
 };
 </script>
 
 <style scoped>
 .hot-list-name {
-  display: inline-block;
-  text-align: center;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 2; 
+  -webkit-box-orient: vertical;
+  /* text-align: center; */
+  overflow: hidden;
+  /* text-overflow: ellipsis; */
+  position: absolute;
+  margin-left: 90px;
   /* outline: 1px slateblue solid; */
+}
+.hot-list-name:hover {
+  color: blue;
+  cursor: pointer;
 }
 .hot-list-number {
   display: inline-block;
-  width: 65px;
+  width: 60px;
   /* text-align: center; */
   /* outline: 1px slateblue solid; */
   padding-left: 15px;
