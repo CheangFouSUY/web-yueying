@@ -1,24 +1,21 @@
 <template id="a">
   <div>
-    <el-row
-      class="feed-box"
-      v-for="item in feeds"
-      :key="item.id"
-      v-show="
-        (item.isFollow === true && isShowFollow === true) ||
-        isShowFollow === false
-      "
-    >
+    <el-row class="feed-box">
       <el-row :gutter="70" align="middle" type="flex">
         <!-- 发布者头像、昵称、发布时间 -->
         <el-col :span="1">
           <el-avatar :size="50" icon="el-icon-user-solid"></el-avatar>
         </el-col>
         <el-col :span="20">
-          <el-row class="feed-publisher">{{ item.publisher }}</el-row>
+          <el-row v-if="!isPublic" class="feed-publisher">
+            {{ groupName }}
+            <el-divider direction="vertical"></el-divider>
+            {{ publisherName }}
+          </el-row>
+          <el-row v-else class="feed-publisher">{{ publisherName }}</el-row>
           <el-row class="feed-time">
             <i class="el-icon-time"></i>
-            {{ dateStr(item.time) }}
+            {{ dateStr(createdAt) }}
           </el-row>
         </el-col>
 
@@ -26,70 +23,65 @@
         <el-row>
           <button
             class="feed-follow"
-            v-if="item.isFollow === false"
-            @click="follow(item)"
+            v-if="isFollow === false"
+            @click="follow()"
           >
             关注
           </button>
-          <button class="feed-unfollow" v-else @click="unfollow(item)">
+          <button class="feed-unfollow" v-else @click="follow()">
             取消关注
           </button>
         </el-row>
       </el-row>
 
       <!-- 话题标题、内容、展开功能 -->
-      <el-row class="feed-title">{{ item.title }}</el-row>
+      <el-row class="feed-title">{{ title }}</el-row>
       <el-row class="feed-content">
-        <span v-html="contentCalc(item)"></span>
+        <span v-html="contentCalc()"></span>
       </el-row>
       <el-row type="flex" justify="end">
-        <button
-          class="expand-button"
-          v-if="item.isExpand === false"
-          @click="changeExpand(item)"
-        >
-          展开<i class="el-icon-arrow-down"></i>
-        </button>
-        <button class="expand-button" v-else @click="changeExpand(item)">
-          收起<i class="el-icon-arrow-up"></i>
-        </button>
+        <div v-if="isNeedExpand">
+          <button
+            class="expand-button"
+            v-if="this.isExpand === false"
+            @click="changeExpand()"
+          >
+            展开<i class="el-icon-arrow-down"></i>
+          </button>
+          <button class="expand-button" v-else @click="changeExpand()">
+            收起<i class="el-icon-arrow-up"></i>
+          </button>
+        </div>
       </el-row>
 
       <!-- 话题照片 -->
-      <el-row
-        class="feed-image"
-        v-for="i in item.image"
-        :key="i"
-        type="flex"
-        justify="center"
-      >
-        <img :src="i" alt="feed-image" />
+      <el-row class="feed-image" type="flex" justify="center">
+        <img v-if="image" :src="image" alt="feed-image" />
       </el-row>
 
       <!-- 话题点赞、评论、举报 -->
       <el-row class="like-comment-wrap">
         <img
-          v-if="item.isLike === false"
-          @click="like(item)"
-          src="@/assets/Love.svg"
-          alt="love"
-        />
-        <img
-          v-else
-          @click="like(item)"
+          v-if="response === 'L'"
+          @click="like()"
           src="@/assets/Love_fill.svg"
           alt="love"
         />
-        <span class="like-count">{{ item.likeCount }}</span>
-        <img src="@/assets/Comment.svg" alt="comment" />
-        <span class="comment-count">{{ item.commentCount }}</span>
-                <img @click="report" src="@/assets/Report.svg" alt="report icon" />
+        <img v-else @click="like()" src="@/assets/Love.svg" alt="love" />
+        <span class="like-count">{{ likeCount }}</span>
+        <img
+          @click="changeCommentShow()"
+          src="@/assets/Comment.svg"
+          alt="comment"
+        />
+        <span class="comment-count">{{ commentCount }}</span>
+        <img @click="report" src="@/assets/Report.svg" alt="report icon" />
       </el-row>
 
       <!-- 评论区 -->
-      <div class="comment-wrap">
+      <div v-if="isShowComment" class="comment-wrap">
         <!-- 我要评论 -->
-        <el-row class="publish-box">
+        <el-row v-if="islogin" class="publish-box">
           <el-row :gutter="70">
             <el-col :span="1">
               <el-avatar :size="50" icon="el-icon-user-solid"></el-avatar>
@@ -97,51 +89,61 @@
             <el-col :span="22">
               <el-row class="comment-publisher">{{ user }}</el-row>
               <el-row class="publish-write">
-                <input
-                  v-model="item.userComment"
-                  type="text"
-                  placeholder="写下评论"
-                />
-                <el-row class="publish-action" :span="20">
-                  <el-upload
-                    class="comment-upload-image"
-                    action="#"
-                    list-type="picture"
-                    :before-remove="beforeRemove"
-                    multiple
-                    :auto-upload="false"  
-                    :limit="3"
-                    :on-exceed="handleExceed">
-                    <button>
-                      <i class="el-icon-picture-outline-round"></i>
-                    </button>
-                  </el-upload>
-                  <i class="el-icon-position" @click="sendComment(item)"></i>
-                  <!-- <div slot="tip" class="el-upload__tip">
-                    只能上传jpg/png文件，且不超过500kb
-                  </div> -->
-                </el-row>
+                <form>
+                  <input
+                    v-model="userComment.title"
+                    type="text"
+                    placeholder="评论标题："
+                  />
+                  <input
+                    v-model="userComment.content"
+                    type="text"
+                    placeholder="评论内容："
+                  />
+                  <span class="showFileName"></span>
+                  <el-row class="publish-action" :span="20">
+                    <i
+                      class="el-icon-picture-outline-round"
+                      onclick="$('input[id=imgUpload]').click();"
+                    ></i>
+                    <i
+                      id="imgIcon"
+                      class="el-icon-position"
+                      @click="submitReview($event)"
+                    ></i>
+
+                    <input
+                      id="imgUpload"
+                      type="file"
+                      accept="image/png,image/gif,image/jpeg"
+                      @change="getImg($event)"
+                    />
+                  </el-row>
+                </form>
               </el-row>
             </el-col>
           </el-row>
         </el-row>
 
         <!-- 其他评论 -->
-        <el-row class="comment-box" v-for="c in item.comments" :key="c.id">
+        <el-row class="comment-box" v-for="c in comments" :key="c.id">
           <el-divider></el-divider><br />
           <el-row :gutter="70">
             <el-col :span="1">
               <el-avatar :size="50" icon="el-icon-user-solid"></el-avatar>
             </el-col>
             <el-col :span="22">
-              <el-row class="comment-publisher">{{ c.publisher }}</el-row>
-              <el-row class="comment-time">
+              <el-row v-if="status" class="comment-publisher">{{
+                c.publisherName
+              }}</el-row>
+              <el-row v-if="status" class="comment-time">
                 <i class="el-icon-time"></i>
                 {{ dateStr(c.time) }}
               </el-row>
-              <el-row>{{ c.contents }}</el-row>
+              <el-row class="comment-title">{{ c.title }}</el-row>
+              <el-row>{{ c.description }}</el-row>
               <el-row class="comment-image" v-for="cimg in c.image" :key="cimg">
-                <img :src="cimg" alt="feed-image" />
+                <img v-if="c.img" :src="c.img" alt="comment-image" />
               </el-row>
             </el-col>
           </el-row>
@@ -149,34 +151,34 @@
             <el-col :span="3" :offset="5">
               <el-row type="flex" justify="center">
                 <img
-                  v-if="c.isLike === false"
-                  @click="commentLike(c)"
-                  src="@/assets/Happy.svg"
+                  v-if="c.response === 'L'"
+                  @click="commentResponse(c, 'O')"
+                  src="@/assets/Happy_fill.svg"
                   alt="happy icon"
                 />
                 <img
                   v-else
-                  @click="commentLike(c)"
-                  src="@/assets/Happy_fill.svg"
+                  @click="commentResponse(c, 'L')"
+                  src="@/assets/Happy.svg"
                   alt="happy icon"
                 />
               </el-row>
-              <el-row class="comment-like-count" type="flex" justify="center">
-                {{ c.likes }}
-              </el-row>
+              <el-row class="comment-like-count" type="flex" justify="center">{{
+                c.likes
+              }}</el-row>
             </el-col>
             <el-col :span="3" :offset="1">
               <el-row type="flex" justify="center">
                 <img
-                  v-if="c.isDislike === false"
-                  @click="commentDislike(c)"
-                  src="@/assets/Sad.svg"
+                  v-if="c.response === 'D'"
+                  @click="commentResponse(c, 'O')"
+                  src="@/assets/Sad_fill.svg"
                   alt="sad icon"
                 />
                 <img
                   v-else
-                  @click="commentDislike(c)"
-                  src="@/assets/Sad_fill.svg"
+                  @click="commentResponse(c, 'D')"
+                  src="@/assets/Sad.svg"
                   alt="sad icon"
                 />
               </el-row>
@@ -186,7 +188,12 @@
             </el-col>
             <el-col :span="3" :offset="1">
               <el-row type="flex" justify="center">
-                <img @click="report" src="@/assets/Report.svg" alt="report icon" />
+                <img
+                  id="report"
+                  @click="report(c.id)"
+                  src="@/assets/Report.svg"
+                  alt="report icon"
+                />
               </el-row>
             </el-col>
           </el-row>
@@ -197,85 +204,353 @@
 </template>
 
 <script>
+import User from "@/store/user";
 export default {
   name: "FeedBox",
   props: {
-    initialFeed: Array,
-    initialUser: String,
-    isShowFollow: {
-      type: Boolean,
-      default: false,
-    },
+    initialFeedId: String,
   },
   data() {
     return {
-      feeds: this.initialFeed,
-      user: this.initialUser,
+      status: false,
+      islogin: false,
+      user: "陌上花开",
+      id: this.initialFeedId,
+      createdBy: "U123456",
+      publisherName: "娱乐八卦姐",
+      createdAt: 1642014005919,
+      isPublic: true,
+      belongTo: "",
+      groupName: "八卦小组",
+      title: "布魯斯威利罹失語症宣布息影　「壓箱作」導演：他是偉大的人",
+      description:
+        "67歲美國影星布魯斯威利（Bruce Willis）在今年3月閃電宣布引退，家人證實他罹患失語症，將漸漸失去說話和閱讀的能力。今年來他接片數量雖不少，但戲份大多不如以往，壓箱作品之一的《終極夜路》（Gasoline Alley），也將於近期在台灣上映。\n\n以洛杉磯街頭為背景的《終極夜路》，由布魯斯威利和戴文沙瓦（Devon Sawa）主演。故事描述一名有前科的刺青師，被警方認定為一宗連續殺人案的嫌疑犯，為了證明自己的清白，他必須設法查出真相。導演愛德華德雷克（Edward Drake）已經是第四次與布魯斯威利合作，對於這位昔日動作天王的表現，他依舊是讚譽有佳：「布魯斯是我有幸認識和合作過的最善良的人之一。」為了向布魯斯威利過去的事蹟致意，他表示劇組很認真的在製作這部電影，「我對這個人的評價不能再高了，他是個偉大的人。」\n\n除了布魯斯威利之外，愛德華德雷克這次還邀請曾演出《絕命終結站》的性格男星戴文沙瓦演出，對於這次和他合作的心得，愛德華德雷克表示：「戴文是我合作過最好的演員之一。他是非凡的。你可以從他的眼神中看出他的角色正在做決定，當他在推測他的選擇可能帶來的後果。」他又說：「當我遇到戴文之後，我才意識到我們有機會製作一部非常特別的作品。」《終極夜路》將於6月2日上映。\n\n转载于：ETtoday新聞雲",
+      isExpand: false,
+      image: require("@/assets/feedpic1.jpg"),
+      likeCount: 204,
+      commentCount: 2,
+      isShowComment: false,
+      isFollow: false,
+      response: "O",
+      userComment: {
+        title: "",
+        content: "",
+        img: "",
+      },
+      comments: [],
     };
   },
+  mounted() {
+    var userInfo;
+    if ((userInfo = User.getters.getUser(User.state()))) {
+      this.islogin = true;
+      this.user = userInfo.user.username;
+    }
+    this.getAll();
+  },
+  computed: {
+    isNeedExpand() {
+      if(this.description.length<=180) this.isExpand=true;
+      return this.description.length > 180;
+    },
+  },
   methods: {
-    handleExceed(files, fileList) {
-      this.$message.warning(
-        `当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${
-          files.length + fileList.length
-        } 个文件`
-      );
-    },
-    beforeRemove(file) {
-      return this.$confirm(`确定移除 ${file.name}？`);
-    },
+    async follow() {
+      var formData = new FormData();
+      formData.append("isFollowed", !this.isFollow);
+      formData.append("feedId", this.id);
 
-    handleClick(tab, event) {
-      console.log(tab, event);
-    },
-    follow(item) {
-      item.isFollow = true;
-    },
-    unfollow(item) {
-      item.isFollow = false;
-    },
-    like(item) {
-      item.isLike = !item.isLike;
-      if (item.isLike === true) item.likeCount++;
-      else item.likeCount--;
-    },
-    commentLike(comment) {
-      comment.isLike = !comment.isLike;
-      if (comment.isLike === true) comment.likes++;
-      else comment.likes--;
-    },
-    commentDislike(comment) {
-      comment.isDislike = !comment.isDislike;
-      if (comment.isDislike === true) comment.dislikes++;
-      else comment.dislikes--;
-    },
-    sendComment(item) {
-      if (!item.userComment) {
-        this.$notify({
-          showClose: true,
-          type: "warning",
-          message: "评论不能为空",
+      var header = {};
+      if (localStorage.getItem("token"))
+        header = { Authorization: "Bearer " + localStorage.getItem("token") };
+      console.log(header);
+
+      await this.$axios({
+        method: "put",
+        url: "/api/v1/feed/react/" + this.id,
+        data: formData,
+        headers: header,
+      })
+        .then((res) => {
+          console.log(res);
+          this.isFollow = !this.isFollow;
+        })
+        .catch((err) => {
+          console.log(err);
+          switch (err.response.status) {
+            case 401:
+              this.$notify({
+                title: "请先加入小组！",
+                type: "warning",
+                position: "top-left",
+              });
+              break;
+            case 403:
+              this.$notify({
+                title: "请先登录！",
+                type: "warning",
+                position: "top-left",
+              });
+              break;
+          }
         });
-      } else {
-        let a = {};
-        a.publisher = this.user;
-        a.contents = item.userComment;
-        a.time = new Date().getTime();
-        // a.image = [];
-        a.likes = 0;
-        a.dislikes = 0;
-        a.isLike = false;
-        a.isDislike = false;
-        item.comments.unshift(a);
-        item.commentCount++;
-        item.userComment = "";
+    },
+    async like() {
+      var likeStatus;
+      if (this.response == "L") likeStatus = "O";
+      else likeStatus = "L";
+
+      var formData = new FormData();
+      formData.append("response", likeStatus);
+      formData.append("feedId", this.id);
+
+      var header = {};
+      if (localStorage.getItem("token"))
+        header = { Authorization: "Bearer " + localStorage.getItem("token") };
+      console.log(header);
+
+      await this.$axios({
+        method: "put",
+        url: "/api/v1/feed/react/" + this.id,
+        data: formData,
+        headers: header,
+      })
+        .then((res) => {
+          console.log(res);
+          this.response = likeStatus;
+          if (this.response == "L") this.likeCount++;
+          else this.likeCount--;
+        })
+        .catch((err) => {
+          console.log(err);
+          switch (err.response.status) {
+            case 401:
+              this.$notify({
+                title: "请先加入小组！",
+                type: "warning",
+                position: "top-left",
+              });
+              break;
+            case 403:
+              this.$notify({
+                title: "请先登录",
+                type: "warning",
+                position: "top-left",
+              });
+              break;
+          }
+        });
+    },
+    async commentResponse(item, r) {
+      var formData = new FormData();
+      formData.append("response", r);
+      formData.append("reviewId", item.id);
+
+      var header = {};
+      if (localStorage.getItem("token"))
+        header = { Authorization: "Bearer " + localStorage.getItem("token") };
+      console.log(header);
+
+      await this.$axios({
+        method: "put",
+        url: "/api/v1/review/react/" + item.id,
+        data: formData,
+        headers: header,
+      })
+        .then((res) => {
+          console.log(res);
+          if (item.response == "O") {
+            if (r == "L") item.likes++;
+            else item.dislikes++;
+          } else if (item.response == "L") {
+            if (r == "O") item.likes--;
+            else {
+              item.likes--;
+              item.dislikes++;
+            }
+          } else {
+            if (r == "O") item.dislikes--;
+            else {
+              item.likes++;
+              item.dislikes--;
+            }
+          }
+          item.response = r;
+        })
+        .catch((err) => {
+          console.log(err);
+          switch (err.response.status) {
+            case 401:
+              this.$notify({
+                title: "请先加入小组！",
+                type: "warning",
+                position: "top-left",
+              });
+              break;
+            case 403:
+              this.$notify({
+                title: "请先登录",
+                type: "warning",
+                position: "top-left",
+              });
+              break;
+          }
+        });
+    },
+    submitReview(event) {
+      event.preventDefault();
+      let formData = new FormData();
+      formData.append("title", this.userComment.title);
+      formData.append("description", this.userComment.content);
+      formData.append("img", this.userComment.img);
+      formData.append("feed", this.id);
+      formData.append("book", "");
+      formData.append("movie", "");
+
+      var header = {};
+      if (localStorage.getItem("token"))
+        header = { Authorization: "Bearer " + localStorage.getItem("token") };
+
+      this.$axios({
+        method: "post",
+        url: "/api/v1/review/",
+        data: formData,
+        headers: header,
+      })
+        .then((res) => {
+          console.log(res);
+          switch (res.status) {
+            case 201:
+              this.$notify({
+                showClose: true,
+                message: "已发布评论",
+                type: "success",
+                position: "top-left",
+              });
+              setTimeout(function () {
+                location.reload();
+              }, 1500);
+              break;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          switch (err.response.status) {
+            case 400:
+              this.$notify({
+                title: "标题和内容不能为空！",
+                type: "warning",
+                position: "top-left",
+              });
+              break;
+            case 401:
+              this.$notify({
+                title: "请先加入小组！",
+                type: "warning",
+                position: "top-left",
+              });
+              break;
+          }
+        });
+    },
+    async getAll() {
+      await this.$axios
+        .all([this.getFeedDetail(), this.getComment()])
+        .then(
+          this.$axios.spread((detailRes, commentRes) => {
+            var r = detailRes.data;
+            this.title = r.title;
+            this.description = r.description;
+            this.image = r.img;
+            this.isPublic = r.isPublic;
+            this.createdBy = r.createdBy;
+            this.belongTo = r.belongTo;
+            this.createdAt = new Date(r.createdAt).getTime();
+            this.likeCount = r.likes;
+            this.commentCount = commentRes.data.count;
+            this.comments = commentRes.data.results;
+            this.response = r.response;
+            this.isFollow = r.isFollow;
+            console.log(r.message);
+          })
+        )
+        .catch((error) => {
+          console.log(error);
+        });
+      await this.$axios
+        .get("/api/v1/user/" + this.createdBy)
+        .then((res) => {
+          this.publisherName = res.data.username;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      if (!this.isPublic) {
+        await this.$axios
+          .get("/api/v1/group/" + this.belongTo)
+          .then((res) => {
+            this.groupName = res.data.groupName;
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       }
+      // console.log("getAll() done");
+      // console.log("!!!!!", this.comments);
+
+      //获取评论的详情
+      for (let i = 0; i < this.comments.length; i++) {
+        this.comments.img = this.comments.img + "/";
+        this.comments[i].time = new Date(this.comments[i].createdAt).getTime();
+        this.$axios
+          .get("api/v1/review/" + this.comments[i].id)
+          .then((res) => {
+            this.comments[i].img = res.data.img;
+            this.comments[i].likes = res.data.likes;
+            this.comments[i].dislikes = res.data.dislikes;
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+        this.$axios
+          .get("/api/v1/user/" + this.comments[i].createdBy)
+          .then((res) => {
+            this.comments[i].publisherName = res.data.username;
+
+            for (let j = i + 1; j < this.comments.length; j++) {
+              if (this.comments[i].createdBy == this.comments[j].createdBy)
+                this.comments[j].publisherName = this.comments[i].publisherName;
+            }
+            if (i == this.comments.length - 1) this.status = true;
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    },
+    getFeedDetail() {
+      var header = {};
+      if (localStorage.getItem("token"))
+        header = { Authorization: "Bearer " + localStorage.getItem("token") };
+      return this.$axios({
+        method: "get",
+        url: "/api/v1/feed/" + this.id,
+        headers: header,
+      });
+    },
+    getComment() {
+      var header = {};
+      if (localStorage.getItem("token"))
+        header = { Authorization: "Bearer " + localStorage.getItem("token") };
+      return this.$axios({
+        method: "get",
+        url: "/api/v1/review/list?feed=" + this.id,
+        headers: header,
+      });
     },
     dateStr(date) {
       var time = new Date().getTime();
-      console.log(time);
       time = parseInt((time - date) / 1000);
-      console.log(time);
       var s;
       if (time < 60 * 10) {
         return "刚刚";
@@ -302,26 +577,42 @@ export default {
         return y + "-" + m + "-" + d + " " + h + ":" + mn;
       }
     },
-    contentCalc(item) {
+    contentCalc() {
       var s = "";
-      if (item.isExpand === false) {
-        s = item.fullContent.substring(0, 180) + "...";
+      if (this.isExpand === false) {
+        s = this.description.substring(0, 180) + "...";
       } else {
-        s = item.fullContent;
+        s = this.description;
       }
       return s.replace(/(\r\n|\n|\r)/gm, "<br/>");
     },
-    changeExpand(item) {
-      item.isExpand = !item.isExpand;
+    changeExpand() {
+      this.isExpand = !this.isExpand;
+    },
+    changeCommentShow() {
+      this.isShowComment = !this.isShowComment;
+    },
+    getImg(event) {
+      var fileName = event.target.files[0].name;
+      $(".showFileName").html(fileName);
+      this.userComment.img = event.target.files[0];
+      console.log("get img! ", this.userComment);
     },
     report() {
-      this.$router.push('/report')
-    }
+      this.$router.push("/report");
+    },
   },
 };
 </script>
 
 <style scoped>
+.showFileName {
+  margin: 0 15px;
+  line-height: 26px;
+}
+#imgUpload {
+  display: none;
+}
 .el-icon-picture-outline-round:hover,
 .el-icon-position:hover {
   cursor: pointer;
@@ -401,7 +692,7 @@ export default {
   height: 36px;
   vertical-align: middle;
 }
-.like-comment-wrap img:hover{
+.like-comment-wrap img:hover {
   cursor: pointer;
 }
 .comment-wrap {

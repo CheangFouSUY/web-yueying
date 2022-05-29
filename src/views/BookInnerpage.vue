@@ -408,11 +408,12 @@ export default {
         });
     },
     async like() {
+      var likeStatus;
+      if (this.response == "L") likeStatus = "O";
+      else likeStatus = "L";
+
       var formData = new FormData();
-      console.log(this.response);
-      if (this.response == "L") this.response = "O";
-      else this.response = "L";
-      formData.append("response", this.response);
+      formData.append("response", likeStatus);
       formData.append("bookId", this.id);
       formData.append("rateScore", this.rateValue);
 
@@ -429,6 +430,7 @@ export default {
       })
         .then((res) => {
           console.log(res);
+          this.response = likeStatus;
           if (this.response == "L") this.likeCount++;
           else this.likeCount--;
         })
