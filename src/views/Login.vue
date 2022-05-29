@@ -71,7 +71,6 @@ export default {
                 user: {
                     'username': res.data.username,
                     "confirmed": true,
-                    // 'token': res.data.tokens.access,
                     'id': res.data.id,
                     "profilePic": res.data.thumbnail,
                 }

@@ -4,7 +4,7 @@
     <el-row type="flex" justify="center">
       <el-col :span="6"><div class="grid-content bg-yellow">
         <div class="profilePic">
-        <el-upload
+        <!-- <el-upload
         class="avatar-uploader"
         action="http://127.0.0.1:8000/api/v1/group/create"
         name='img'
@@ -13,7 +13,18 @@
         :before-upload="beforeAvatarUpload">
         <img v-if="form.imageUrl" :src="form.imageUrl" class="avatar">
         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-      </el-upload>
+      </el-upload> -->
+        <img v-if="form.imageUrl" :src="form.imageUrl" onclick="$('input[id=imgUpload]').click();" class="avatar">
+        <i v-else class="el-icon-plus avatar-uploader-icon" onclick="$('input[id=imgUpload]').click();"></i>
+          <input
+          id="imgUpload"
+          ref="fileInput"
+          type="file"
+          accept="image/png,image/gif,image/jpeg"
+          @change="getImg($event);"
+          @input="pickFile"
+        />
+        <el-button v-if="form.imageUrl" type="danger" icon="el-icon-delete" circle @click="cancelImgUrl"></el-button>
         </div>
         </div></el-col>
       <el-col :span="12" ><div class="grid-content bg-yellow">
@@ -35,7 +46,7 @@
             <textarea id="gDesc" v-model="form.desc" placeholder="输入小组简介(最多50字符)"></textarea>
           </div>
         </div>
-        <el-button @click="createGroup">创建</el-button>
+        <el-button id="createGroupButton" @click="createGroup">创建</el-button>
         </div></el-col>
     </el-row>
       <Footer></Footer>
@@ -59,6 +70,7 @@ export default {
         gName:'',
         type:'b',
         desc:'',
+        imageFile:'',
       },
     };
   },
@@ -118,7 +130,36 @@ export default {
         .catch(err => {
             console.log(err);
          })
+      },
+      getImg(event) {
+      var fileName = event.target.files[0].name;
+      $(".showFileName").html(fileName);
+      this.form.imageFile = event.target.files[0];
+      console.log("Get IMG", this.form.imageFile);
+    },
+    // selectImage () {
+    //   this.$refs.fileInput.click()
+    // },
+    pickFile () {
+      let input = this.$refs.fileInput
+      let file = input.files
+      if (file && file[0]) {
+        let reader = new FileReader
+        reader.onload = e => {
+          this.form.imageUrl = e.target.result
+        }
+        reader.readAsDataURL(file[0])
+        this.$emit('input', file[0])
+        console.log(file);
       }
+    },
+    cancelImgUrl() {
+      this.form.imageUrl = '';
+      let input = this.$refs.fileInput
+      let file = input.files
+      file[0] = null;
+      console.log(file);
+    }
     },
 }
 </script>
@@ -178,13 +219,20 @@ export default {
   color: #456268;
   font-weight: bold;
 }
-.grid-content button{
+#createGroupButton{
   float: right;
   margin-right: 55px;
   font-size: 24px;
   width: 120px;
   background-color: #456268;
   color: #FCF8EC;
+}
+.profilePic button{
+  margin-left: 105px;
+  margin-top: 10px;
+}
+.el-icon-plus{
+  cursor: pointer;
 }
 #gDesc{
   display: inline-block;
@@ -206,6 +254,9 @@ export default {
 }
 #radiogroup{
   margin-left: 10px;
+}
+#imgUpload {
+  display: none;
 }
 </style>
 
@@ -240,6 +291,7 @@ export default {
   width: 256px;
   height: 256px;
   display: block;
+  cursor: pointer;
 }
 .avatar-uploader .el-upload:hover {
   border-color: #409EFF;
