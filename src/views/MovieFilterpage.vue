@@ -3,8 +3,8 @@
     <Header></Header>
     <div class="main">
       <div class="page-title">
-        <img src="@/assets/Book.svg" alt="book icon" />
-        <span>图书</span>
+        <img src="@/assets/Video.svg" alt="video icon" />
+        <span>影视</span>
       </div>
 
       <el-row class="ctg-title">分类</el-row>
@@ -16,7 +16,21 @@
             :key="item.id"
             class="normalCategory"
             :class="{ activeCategory: item.isActive }"
-            @click="changeFilter(item.id)"
+            @click="changeFilter(item.id + '&' + nowArea)"
+          >
+            {{ item.des }}
+          </li>
+        </el-col>
+      </el-row>
+      <el-row class="ctg-list">
+        <el-col :span="2" class="ctg-list-type">地区</el-col>
+        <el-col :span="18">
+          <li
+            v-for="item in placeList"
+            :key="item.id"
+            class="normalCategory"
+            :class="{ activeCategory: item.isActive }"
+            @click="changeFilter(nowCategory + '&' + item.id)"
           >
             {{ item.des }}
           </li>
@@ -51,32 +65,38 @@ import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
 
 export default {
-  name: "BookFilterpage",
+  name: "MovieFilterpage",
   components: {
     Header,
     Footer,
   },
   mounted() {
-    this.getBook();
+    this.getMovie();
   },
   watch: {
     $route: {
-      handler: "getBook",
+      handler: "getMovie",
     },
   },
   methods: {
     goDetails(id) {
-      this.$router.push({ path: `/book/detail/${id}` });
+      this.$router.push({ path: `/movie/detail/${id}` });
     },
     changeFilter(id) {
-      this.$router.replace({ name: "book filter", params: { id: id } });
+      this.$router.replace({ name: "movie filter", params: { id: id } });
     },
-    getBook() {
-      var src;
-      this.nowCategory = this.$route.params.id;
-      if (this.nowCategory == 99) src = "/api/v1/book/list";
-      else src = "/api/v1/book/list?category=" + this.$route.params.id;
-      
+    getMovie() {
+      var src = "/api/v1/movie/list";
+      var arr = this.$route.params.id.split("&");
+      this.nowCategory = arr[0];
+      this.nowArea = arr[1];
+      if (this.nowCategory != "99") {
+        src += "?category=" + this.nowCategory;
+        if (this.nowArea != "99") src += "&area=" + this.nowArea;
+      } else if (this.nowArea != "99") {
+        src += "?area=" + this.nowArea;
+      }
+
       this.renewFilterView();
       this.$axios({
         method: "get",
@@ -97,6 +117,11 @@ export default {
           this.categoryList[i].isActive = true;
         else this.categoryList[i].isActive = false;
       }
+      for (let i = 0; i < this.placeList.length; i++) {
+        if (this.placeList[i].id == this.nowArea)
+          this.placeList[i].isActive = true;
+        else this.placeList[i].isActive = false;
+      }
     },
     setRating(arr) {
       return arr.forEach(function (value, index, array) {
@@ -107,20 +132,31 @@ export default {
   data() {
     return {
       nowCategory: "",
+      nowArea: "",
+      placeList: [
+        { id: "99", des: "全部", isActive: true },
+        { id: "0", des: "中国", isActive: false },
+        { id: "1", des: "美国", isActive: false },
+        { id: "2", des: "英国", isActive: false },
+        { id: "3", des: "韩国", isActive: false },
+        { id: "4", des: "日本", isActive: false },
+        { id: "5", des: "泰国", isActive: false },
+        { id: "6", des: "马来西亚", isActive: false },
+      ],
       categoryList: [
-        { id: 99, des: "全部", isActive: true },
-        { id: 1, des: "爱情", isActive: false },
-        { id: 2, des: "恐怖", isActive: false },
-        { id: 3, des: "悬疑", isActive: false },
-        { id: 4, des: "科幻", isActive: false },
-        { id: 5, des: "艺术", isActive: false },
-        { id: 6, des: "体育", isActive: false },
-        { id: 7, des: "烹饪", isActive: false },
-        { id: 8, des: "漫画", isActive: false },
-        { id: 9, des: "教育", isActive: false },
-        { id: 10, des: "哲学", isActive: false },
-        { id: 11, des: "文学", isActive: false },
-        { id: 0, des: "其他", isActive: false },
+        { id: "99", des: "全部", isActive: true },
+        { id: "1", des: "爱情", isActive: false },
+        { id: "2", des: "恐怖", isActive: false },
+        { id: "3", des: "悬疑", isActive: false },
+        { id: "4", des: "冒险", isActive: false },
+        { id: "5", des: "喜剧", isActive: false },
+        { id: "6", des: "动作", isActive: false },
+        { id: "7", des: "科幻", isActive: false },
+        { id: "8", des: "综艺", isActive: false },
+        { id: "9", des: "动漫", isActive: false },
+        { id: "10", des: "卡通", isActive: false },
+        { id: "11", des: "LGBT", isActive: false },
+        { id: "0", des: "其他", isActive: false },
       ],
       filterResult: [],
     };

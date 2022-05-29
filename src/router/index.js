@@ -61,7 +61,7 @@ const routes = [
     component: () => import('../views/BookInnerpage.vue'),
   },
   {
-    path: '/movie/:id',
+    path: '/movie/detail/:id',
     name: 'movie datail',
     component: () => import('../views/MovieInnerpage.vue'),
   },
@@ -70,11 +70,11 @@ const routes = [
     name: 'book filter',
     component: () => import('../views/BookFilterpage.vue'),
   },
-  // {
-  //   path: '/movie/:id',
-  //   name: 'movie datail',
-  //   component: () => import('../views/MovieInnerpage.vue'),
-  // },
+  {
+    path: '/movie/filter=category:id',
+    name: 'movie filter',
+    component: () => import('../views/MovieFilterpage.vue'),
+  },
   {
     path: '/feedback',
     name: 'feedback',

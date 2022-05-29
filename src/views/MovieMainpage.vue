@@ -11,13 +11,25 @@
       <el-row class="ctg-list">
         <el-col :span="2" class="ctg-list-type">类型</el-col>
         <el-col :span="18">
-          <li v-for="item in category" :key="item">{{ item }}</li>
+          <li
+            v-for="item in categoryList"
+            :key="item.id"
+            @click="goFilter(item.id + '&99')"
+          >
+            {{ item.des }}
+          </li>
         </el-col>
       </el-row>
       <el-row class="ctg-list">
         <el-col :span="2" class="ctg-list-type">地区</el-col>
         <el-col :span="18">
-          <li v-for="item in place" :key="item">{{ item }}</li>
+          <li
+            v-for="item in areaList"
+            :key="item.id"
+            @click="goFilter('99&' + item.id)"
+          >
+            {{ item.des }}
+          </li>
         </el-col>
       </el-row>
       <el-divider></el-divider>
@@ -43,7 +55,7 @@
       <el-row class="ctg-title">爱情</el-row>
       <el-row>
         <Swiper
-          :initialList="romance.Movie"
+          :initialList="romanceMovie"
           :listType="'movie'"
           v-if="romanceMovie.length"
         ></Swiper>
@@ -76,70 +88,92 @@ export default {
     Swiper,
   },
   mounted() {
-    this.getMovie();
+    this.getAllMovie();
   },
   methods: {
-    getMovie() {
+    goFilter(id) {
+      this.$router.push({ path: `/movie/filter=category${id}` });
+    },
+    getAllMovie() {
       this.$axios
-        .get("/api/v1/movie/list?orderBy=r")
-        .then((res) => {
-          var result = res.data.results;
-          this.hotMovie = result;
-          this.hotMovie.forEach(function (value, index, array) {
-            array[index].rating = array[index].rating.toFixed(1);
-          });
-        })
+        .all([
+          this.getHotMovie(),
+          this.getNewMovie(),
+          this.getRomanceMovie(),
+          this.getHorrorMovie(),
+        ])
+        .then(
+          this.$axios.spread((hotlist, newlist, romlist, horlist) => {
+            this.hotMovie = hotlist.data.results;
+            this.newMovie = newlist.data.results;
+            this.romanceMovie = romlist.data.results;
+            this.horrorMovie = horlist.data.results;
+            this.setRating(this.hotMovie);
+            this.setRating(this.newMovie);
+            this.setRating(this.romanceMovie);
+            this.setRating(this.horrorMovie);
+          })
+        )
         .catch((error) => {
           console.log(error);
         });
-      this.$axios
-        .get("http://127.0.0.1:8000/api/v1/movie/list")
-        .then((res) => {
-          var result = res.data.results;
-          this.newMovie = result;
-          this.newMovie.forEach(function (value, index, array) {
-            array[index].rating = array[index].rating.toFixed(1);
-          });
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-      this.$axios
-        .get("http://127.0.0.1:8000/api/v1/movie/list?category=1")
-        .then((res) => {
-          var result = res.data.results;
-          this.romanceMovie = result;
-          this.romanceMovie.forEach(function (value, index, array) {
-            array[index].rating = array[index].rating.toFixed(1);
-          });
-        });
-      this.$axios
-        .get("http://127.0.0.1:8000/api/v1/movie/list?category=2")
-        .then((res) => {
-          var result = res.data.results;
-          this.horrorMovie = result;
-          this.horrorMovie.forEach(function (value, index, array) {
-            array[index].rating = array[index].rating.toFixed(1);
-          });
-        });
+    },
+    getHotMovie() {
+      return this.$axios({
+        method: "get",
+        url: "/api/v1/movie/list?orderBy=r",
+      });
+    },
+    getNewMovie() {
+      return this.$axios({
+        method: "get",
+        url: "/api/v1/movie/list",
+      });
+    },
+    getRomanceMovie() {
+      return this.$axios({
+        method: "get",
+        url: "/api/v1/movie/list?category=1",
+      });
+    },
+    getHorrorMovie() {
+      return this.$axios({
+        method: "get",
+        url: "/api/v1/movie/list?category=2",
+      });
+    },
+    setRating(arr) {
+      return arr.forEach(function (value, index, array) {
+        array[index].rating = array[index].rating.toFixed(1);
+      });
     },
   },
   data() {
     return {
-      place: ["中国", "美国", "英国", "韩国", "日本", "泰国", "马来西亚"],
-      category: [
-        "爱情",
-        "恐怖",
-        "悬疑",
-        "冒险",
-        "喜剧",
-        "动作",
-        "科幻",
-        "综艺",
-        "动漫",
-        "卡通",
-        "LGBT",
-        "其他",
+      areaList: [
+        { id: "99", des: "全部" },
+        { id: "0", des: "中国" },
+        { id: "1", des: "美国" },
+        { id: "2", des: "英国" },
+        { id: "3", des: "韩国" },
+        { id: "4", des: "日本" },
+        { id: "5", des: "泰国" },
+        { id: "6", des: "马来西亚" },
+      ],
+      categoryList: [
+        { id: "99", des: "全部" },
+        { id: "1", des: "爱情" },
+        { id: "2", des: "恐怖" },
+        { id: "3", des: "悬疑" },
+        { id: "4", des: "冒险" },
+        { id: "5", des: "喜剧" },
+        { id: "6", des: "动作" },
+        { id: "7", des: "科幻" },
+        { id: "8", des: "综艺" },
+        { id: "9", des: "动漫" },
+        { id: "10", des: "卡通" },
+        { id: "11", des: "LGBT" },
+        { id: "0", des: "其他" },
       ],
       hotMovie: [],
       newMovie: [],
@@ -159,23 +193,22 @@ export default {
   display: inline-block;
   margin: 10px 30px 10px 0;
   font-size: 20px;
-  /* outline: 1px black solid; */
 }
 .ctg-list {
   padding: 0;
   margin: 10px 70px;
   color: #456268;
 }
-.ctg-list-type {
-  padding: 10px 0;
-  font-size: 20px;
-  color: #79a3b1;
-}
 
 .ctg-title {
   color: #79a3b1;
   font-size: 26px;
   margin: 50px 70px 0;
+}
+.ctg-list-type {
+  padding: 10px 0;
+  font-size: 20px;
+  color: #79a3b1;
 }
 
 .page-title img {
@@ -194,7 +227,8 @@ export default {
 }
 
 .main {
-  margin: 30px 60px;
+  margin: 30px auto;
+  width: 1400px;
 }
 #footer {
   position: relative;

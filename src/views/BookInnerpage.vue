@@ -81,7 +81,7 @@
     <div class="comment-wrap">
       <el-row class="comment-header">书评</el-row>
       <el-divider></el-divider>
-      <el-row class="publish-box">
+      <el-row v-if="islogin" class="publish-box">
         <el-row :gutter="70">
           <el-col :span="1">
             <el-avatar :size="50" icon="el-icon-user-solid"></el-avatar>
@@ -100,6 +100,7 @@
                   type="text"
                   placeholder="书评内容："
                 />
+                <span class="showFileName"></span>
                 <el-row class="publish-action" :span="20">
                   <i
                     class="el-icon-picture-outline-round"
@@ -145,7 +146,18 @@
         <el-row class="comment-action">
           <el-col :span="3" :offset="5">
             <el-row type="flex" justify="center">
-              <img src="@/assets/Happy.svg" alt="happy icon" />
+              <img
+                v-if="item.response === 'L'"
+                @click="commentResponse(item, 'O')"
+                src="@/assets/Happy_fill.svg"
+                alt="happy icon"
+              />
+              <img
+                v-else
+                @click="commentResponse(item, 'L')"
+                src="@/assets/Happy.svg"
+                alt="happy icon"
+              />
             </el-row>
             <el-row class="comment-like-count" type="flex" justify="center">{{
               item.likes
@@ -153,7 +165,18 @@
           </el-col>
           <el-col :span="3" :offset="1">
             <el-row type="flex" justify="center">
-              <img src="@/assets/Sad.svg" alt="sad icon" />
+              <img
+                v-if="item.response === 'D'"
+                @click="commentResponse(item, 'O')"
+                src="@/assets/Sad_fill.svg"
+                alt="sad icon"
+              />
+              <img
+                v-else
+                @click="commentResponse(item, 'D')"
+                src="@/assets/Sad.svg"
+                alt="sad icon"
+              />
             </el-row>
             <el-row class="comment-like-count" type="flex" justify="center">{{
               item.dislikes
@@ -179,7 +202,6 @@
 <script>
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
-import Rate from "@/components/Rate.vue";
 import User from "@/store/user";
 
 export default {
@@ -187,11 +209,11 @@ export default {
   components: {
     Header,
     Footer,
-    Rate,
   },
   data() {
     return {
       status: false, //控制数据渲染
+      islogin: false,
       user: "陌上花开",
       // userImg: "",
       id: "B11111",
@@ -276,24 +298,75 @@ export default {
         "哲学",
         "文学",
       ],
-      formData: "",
     };
   },
   mounted() {
-    const userInfo = User.getters.getUser(User.state());
-    this.user = userInfo.user.username;
+    var userInfo;
+    if ((userInfo = User.getters.getUser(User.state()))) {
+      this.islogin = true;
+      this.user = userInfo.user.username;
+    }
     this.getAll();
   },
   methods: {
+    async commentResponse(item, r) {
+      var formData = new FormData();
+      formData.append("response", r);
+      formData.append("reviewId", item.id);
+
+      var header = {};
+      if (localStorage.getItem("token"))
+        header = { Authorization: "Bearer " + localStorage.getItem("token") };
+      console.log(header);
+
+      await this.$axios({
+        method: "put",
+        url: "/api/v1/review/react/" + item.id,
+        data: formData,
+        headers: header,
+      })
+        .then((res) => {
+          console.log(res);
+          if (item.response == "O") {
+            if (r == "L") item.likes++;
+            else item.dislikes++;
+          } else if (item.response == "L") {
+            if (r == "O") item.likes--;
+            else {
+              item.likes--;
+              item.dislikes++;
+            }
+          } else {
+            if (r == "O") item.dislikes--;
+            else {
+              item.likes++;
+              item.dislikes--;
+            }
+          }
+          item.response = r;
+        })
+        .catch((err) => {
+          console.log(err);
+          switch (err.response.status) {
+            case 403:
+              this.$notify({
+                title: "请先登录",
+                type: "warning",
+                position: "top-left",
+              });
+              break;
+          }
+        });
+    },
     submitReview(event) {
       event.preventDefault();
       let formData = new FormData();
       formData.append("title", this.userComment.title);
       formData.append("description", this.userComment.content);
       formData.append("img", this.userComment.img);
-      formData.append("feed", "3a252690-d1bf-483e-acdc-2b953bae0a4e");
+      formData.append("feed", "");
       formData.append("book", this.id);
-      formData.append("movie", "5d7e0538-db99-4fae-960c-2feb9faf66b3");
+      formData.append("movie", "");
 
       var header = {};
       if (localStorage.getItem("token"))
@@ -309,29 +382,36 @@ export default {
           console.log(res);
           switch (res.status) {
             case 201:
-              this.$message({
+              this.$notify({
                 showClose: true,
                 message: "已发布评论",
                 type: "success",
+                position: "top-left",
               });
-              location.reload();
+              setTimeout(function () {
+                location.reload();
+              }, 1500);
               break;
           }
         })
         .catch((err) => {
-          this.$message.warning("评论失败");
+          console.log(err);
+          switch (err.response.status) {
+            case 400:
+              this.$notify({
+                title: "标题和内容不能为空！",
+                type: "warning",
+                position: "top-left",
+              });
+              break;
+          }
         });
     },
     async like() {
       var formData = new FormData();
       console.log(this.response);
-      if (this.response == "L") {
-        this.response = "O";
-        this.likeCount--;
-      } else {
-        this.response = "L";
-        this.likeCount++;
-      }
+      if (this.response == "L") this.response = "O";
+      else this.response = "L";
       formData.append("response", this.response);
       formData.append("bookId", this.id);
       formData.append("rateScore", this.rateValue);
@@ -349,21 +429,32 @@ export default {
       })
         .then((res) => {
           console.log(res);
+          if (this.response == "L") this.likeCount++;
+          else this.likeCount--;
         })
         .catch((err) => {
           console.log(err);
-          this.$message.warning("点赞失败");
+          switch (err.response.status) {
+            case 403:
+              this.$notify({
+                title: "请先登录",
+                type: "warning",
+                position: "top-left",
+              });
+              break;
+          }
         });
     },
     async bookmark() {
       var formData = new FormData();
-      formData.append("isSaved", true);
+      formData.append("isSaved", !this.isBookmark);
       formData.append("bookId", this.id);
-      formData.append("rateScore", -1);
+      formData.append("rateScore", this.rateValue);
 
       var header = {};
       if (localStorage.getItem("token"))
         header = { Authorization: "Bearer " + localStorage.getItem("token") };
+      console.log(header);
 
       await this.$axios({
         method: "put",
@@ -373,31 +464,33 @@ export default {
       })
         .then((res) => {
           console.log(res);
-          switch (res.status) {
-            case 200:
-              break;
+          this.isBookmark = !this.isBookmark;
+          if (this.isBookmark) {
+            this.$notify({
+              title: "已收藏",
+              type: "success",
+              position: "top-left",
+            });
+          } else {
+            this.$notify({
+              title: "已取消收藏",
+              type: "success",
+              position: "top-left",
+            });
           }
         })
         .catch((err) => {
           console.log(err);
+          switch (err.response.status) {
+            case 403:
+              this.$notify({
+                title: "请先登录！",
+                type: "warning",
+                position: "top-left",
+              });
+              break;
+          }
         });
-
-      this.isBookmark = !this.isBookmark;
-      if (this.isBookmark) {
-        this.$notify({
-          title: "已收藏",
-          message: "该图书已收藏",
-          type: "success",
-          position: "top-left",
-        });
-      } else {
-        this.$notify({
-          title: "已取消收藏",
-          message: "该图书已被取消收藏",
-          type: "success",
-          position: "top-left",
-        });
-      }
     },
     async selectRate(value) {
       console.log("rate:", value);
@@ -420,17 +513,36 @@ export default {
           console.log(res);
           switch (res.status) {
             case 200:
-              this.$message({
-                showClose: true,
-                message: "已提交评分",
+              this.$notify({
+                title: "已更新评分",
                 type: "success",
+                position: "top-left",
+              });
+              break;
+            case 201:
+              this.$notify({
+                title: "已提交评分",
+                type: "success",
+                position: "top-left",
               });
               break;
           }
+          setTimeout(function () {
+            location.reload();
+          }, 1500);
         })
         .catch((err) => {
           console.log(err);
-          this.$message.warning("评分失败");
+          this.rateValue = 0;
+          switch (err.response.status) {
+            case 403:
+              this.$notify({
+                title: "请先登录！",
+                type: "warning",
+                position: "top-left",
+              });
+              break;
+          }
         });
     },
     async getAll() {
@@ -456,7 +568,6 @@ export default {
             this.isBookmark = r.isSave;
             this.isRate = r.isRate;
             this.rateValue = r.score;
-            console.log(r.response);
             console.log(r.message);
           })
         )
@@ -468,6 +579,7 @@ export default {
 
       //获取评论的详情
       for (let i = 0; i < this.comments.length; i++) {
+        this.comments.img = this.comments.img + "/";
         this.comments[i].time = new Date(this.comments[i].createdAt).getTime();
         this.$axios
           .get("api/v1/review/" + this.comments[i].id)
@@ -496,15 +608,25 @@ export default {
       }
     },
     getBookDetail() {
+      var header = {};
+      if (localStorage.getItem("token"))
+        header = { Authorization: "Bearer " + localStorage.getItem("token") };
+      console.log(header);
       return this.$axios({
         method: "get",
         url: "/api/v1/book/" + this.$route.params.id,
+        headers: header,
       });
     },
     getComment() {
+      var header = {};
+      if (localStorage.getItem("token"))
+        header = { Authorization: "Bearer " + localStorage.getItem("token") };
+      console.log(header);
       return this.$axios({
         method: "get",
         url: "/api/v1/review/list?book=" + this.$route.params.id,
+        headers: header,
       });
     },
     dateStr(date) {
@@ -538,6 +660,8 @@ export default {
       }
     },
     getImg(event) {
+      var fileName = event.target.files[0].name;
+      $(".showFileName").html(fileName);
       this.userComment.img = event.target.files[0];
       console.log("get img! ", this.userComment);
     },
@@ -549,6 +673,10 @@ export default {
 </script>
 
 <style scoped>
+.showFileName {
+  margin: 0 15px;
+  line-height: 26px;
+}
 #imgUpload {
   display: none;
 }
@@ -589,6 +717,7 @@ export default {
 }
 .comment-action img {
   height: 28px;
+  cursor: pointer;
 }
 .comment-action {
   width: 300px;
