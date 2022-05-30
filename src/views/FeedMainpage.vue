@@ -69,6 +69,7 @@
           :initialFeedId="item.id"
           :initialIsPin= "false"
           :initialIsFeatured="false"
+          :initialIsAdmin="false"
         ></FeedBox>
       </div>
       <div v-else>
@@ -78,6 +79,7 @@
           :initialFeedId="item.id"
           :initialIsPin= "false"
           :initialIsFeatured="false"
+          :initialIsAdmin="false"
         ></FeedBox>
       </div>
     </div>
@@ -375,7 +377,7 @@ export default {
 </script>
 <style>
 .el-dialog__header {
-  background-color: #afc8d0;
+  background-color: #ccd9de;
 }
 .el-dialog__title,
 .el-dialog__headerbtn i {

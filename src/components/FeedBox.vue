@@ -1,8 +1,59 @@
 <template id="a">
   <div>
     <el-row class="feed-box">
-      <el-row v-if="isPin" type="flex" justify="end">置顶</el-row>
-      <!-- <el-row v-if="isFeatured" type="flex" justify="end">精选</el-row> -->
+      <div v-if="isPin || isFeatured" class="feed-tag"></div>
+      <span v-if="isPin" class="feed-tag-span">置顶</span>
+      <span v-if="isFeatured && !isPin" class="feed-tag-span">精选</span>
+      <el-dropdown v-if="isAdmin || isMine" trigger="click">
+        <i class="el-icon-more"></i>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item v-if="isAdmin && !isPin" @click.native="pin()"
+            >置顶</el-dropdown-item
+          >
+          <el-dropdown-item v-else-if="isAdmin && isPin" @click.native="pin()"
+            >取消置顶</el-dropdown-item
+          >
+          <el-dropdown-item
+            v-if="isAdmin && !isFeatured"
+            @click.native="feature()"
+            >精选</el-dropdown-item
+          >
+          <el-dropdown-item
+            v-if="isAdmin && isFeatured"
+            @click.native="feature()"
+            >取消精选</el-dropdown-item
+          >
+          <el-dropdown-item
+            v-if="isMine"
+            @click.native="deleteDialogVisible = true"
+            >删除话题
+          </el-dropdown-item>
+          <el-dropdown-item
+            v-else-if="isAdmin"
+            @click.native="deleteDialogVisible = true"
+            >删除话题
+          </el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+
+      <el-dialog
+        title="删除话题"
+        :visible.sync="deleteDialogVisible"
+        width="30%"
+      >
+        <span>确认是否需要删除话题</span>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="deleteDialogVisible = false">取 消</el-button>
+          <el-button
+            type="primary"
+            @click="
+              deleteDialogVisible = false;
+              deleteFeed();
+            "
+            >确 定</el-button
+          >
+        </span>
+      </el-dialog>
       <el-row :gutter="70" align="middle" type="flex">
         <!-- 发布者头像、昵称、发布时间 -->
         <el-col :span="1">
@@ -217,11 +268,13 @@ export default {
     initialFeedId: String,
     initialIsPin: Boolean,
     initialIsFeatured: Boolean,
+    initialIsAdmin: Boolean,
   },
   data() {
     return {
       status: false,
       islogin: false,
+      deleteDialogVisible: false,
       user: "陌上花开",
       userId: "123456789",
       id: this.initialFeedId,
@@ -233,6 +286,7 @@ export default {
       belongTo: "",
       isPin: this.initialIsPin,
       isFeatured: this.initialIsFeatured,
+      isAdmin: this.initialIsAdmin,
       groupName: "八卦小组",
       title: "布魯斯威利罹失語症宣布息影　「壓箱作」導演：他是偉大的人",
       description:
@@ -268,6 +322,91 @@ export default {
     },
   },
   methods: {
+    async deleteFeed() {
+      var formData = new FormData();
+      formData.append("feedId", this.id);
+      if(this.isAdmin) formData.append("groupId", this.belongTo);
+
+      var header = {};
+      if (localStorage.getItem("token"))
+        header = { Authorization: "Bearer " + localStorage.getItem("token") };
+      console.log(header);
+
+      if (this.isMine)
+        await this.$axios({
+          method: "delete",
+          url: "/api/v1/feed/" + this.id,
+          data: formData,
+        })
+          .then((res) => {
+            console.log(res);
+            location.reload();
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      else if (this.isAdmin)
+        await this.$axios({
+          method: "delete",
+          url: "/api/v1/group/delFeed/"+ this.belongTo + "/" + this.id,
+          data: formData,
+        })
+          .then((res) => {
+            console.log(res);
+            location.reload();
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+    },
+    async feature() {
+      var formData = new FormData();
+      formData.append("feedId", this.id);
+      formData.append("groupId", this.belongTo);
+
+      var header = {};
+      if (localStorage.getItem("token"))
+        header = { Authorization: "Bearer " + localStorage.getItem("token") };
+      console.log(header);
+
+      await this.$axios({
+        method: "put",
+        url: "/api/v1/group/setFeatured/" + this.belongTo + "/" + this.id,
+        data: formData,
+        headers: header,
+      })
+        .then((res) => {
+          console.log(res);
+          this.isFeatured = !this.isFeatured;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    async pin() {
+      var formData = new FormData();
+      formData.append("feedId", this.id);
+      formData.append("groupId", this.belongTo);
+
+      var header = {};
+      if (localStorage.getItem("token"))
+        header = { Authorization: "Bearer " + localStorage.getItem("token") };
+      console.log(header);
+
+      await this.$axios({
+        method: "put",
+        url: "/api/v1/group/setPin/" + this.belongTo + "/" + this.id,
+        data: formData,
+        headers: header,
+      })
+        .then((res) => {
+          console.log(res);
+          this.isPin = !this.isPin;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     async follow() {
       var formData = new FormData();
       formData.append("isFollowed", !this.isFollow);
@@ -619,7 +758,47 @@ export default {
 };
 </script>
 
+<style>
+.el-dropdown-menu__item:not(is-disabled):hover {
+  background-color: #ebeef0 !important;
+  color: #456268 !important;
+}
+</style>
+
 <style scoped>
+.el-dropdown:hover {
+  cursor: pointer;
+}
+.el-dropdown {
+  font-size: 20px;
+  position: absolute;
+  top: 10px;
+  right: 5px;
+  transform: rotate(90deg);
+}
+.feed-tag-span {
+  color: #fcf8ec;
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  top: 4px;
+  left: 8px;
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+}
+.feed-tag {
+  width: 0;
+  height: 0;
+  border: 30px solid #456268;
+  border-right: 30px solid transparent;
+  border-bottom: 30px solid transparent;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
 .showFileName {
   margin: 0 15px;
   line-height: 26px;
