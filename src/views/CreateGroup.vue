@@ -4,17 +4,22 @@
     <el-row type="flex" justify="center">
       <el-col :span="6"><div class="grid-content bg-yellow">
         <div class="profilePic">
-        <!-- <el-upload
-        class="avatar-uploader"
-        action="http://127.0.0.1:8000/api/v1/group/create"
-        name='img'
-        :show-file-list="false"
+        <el-upload
+        :class="{disabled: uploadDisabled}"
+        list-type="picture-card"
+        action=""
+        :auto-upload="false"
+        :limit="1"
+        accept="image/jpeg,image/gif,image/png,image/jpg"
+        :on-change="handleChange"
+        :on-remove="handleRemove"
         :on-success="handleAvatarSuccess"
         :before-upload="beforeAvatarUpload">
-        <img v-if="form.imageUrl" :src="form.imageUrl" class="avatar">
-        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-      </el-upload> -->
-        <img v-if="form.imageUrl" :src="form.imageUrl" onclick="$('input[id=imgUpload]').click();" class="avatar">
+        <!-- <img v-if="form.imageUrl" :src="form.imageUrl" class="avatar"> -->
+        <!-- <i v-else class="el-icon-plus avatar-uploader-icon"></i> -->
+      </el-upload>
+
+        <!-- <img v-if="form.imageUrl" :src="form.imageUrl" onclick="$('input[id=imgUpload]').click();" class="avatar">
         <i v-else class="el-icon-plus avatar-uploader-icon" onclick="$('input[id=imgUpload]').click();"></i>
           <input
           id="imgUpload"
@@ -23,7 +28,7 @@
           accept="image/png,image/gif,image/jpeg"
           @change="getImg($event);"
           @input="pickFile"
-        />
+        /> -->
         <el-button v-if="form.imageUrl" type="danger" icon="el-icon-delete" circle @click="cancelImgUrl"></el-button>
         </div>
         </div></el-col>
@@ -65,6 +70,7 @@ export default {
   },
   data() {
     return {
+      uploadDisabled: false,
       form: {
         imageUrl:'',
         gName:'',
@@ -75,8 +81,18 @@ export default {
     };
   },
   methods: {
+      handleChange(file, fileList) {
+        this.form.imageUrl = file.raw;
+        this.uploadDisabled = fileList.length >= 1;
+        console.log(this.uploadDisabled)
+        console.log(this.form.imageUrl);
+      },
+      handleRemove(file, fileList){
+        this.uploadDisabled = fileList.length >= 1;
+      },
       handleAvatarSuccess(res, file) {
-        this.form.imageUrl = URL.createObjectURL(file.raw);
+        // this.form.imageUrl = file.raw;
+        // console.log(this.form.imageUrl)
       },
       beforeAvatarUpload(file) {
         const isTypeTrue = 
@@ -163,6 +179,15 @@ export default {
     },
 }
 </script>
+
+<style>
+.disabled .el-upload--picture-card{
+  display: none;
+}
+.el-upload-list__item {
+  transition: none !important;
+}
+</style>
 
 <style scoped>
 .content{
