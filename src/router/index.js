@@ -81,7 +81,10 @@ const routes = [
   {
     path: '/feedback',
     name: 'feedback',
-    component: () => import('../views/Feedback.vue')
+    component: () => import('../views/Feedback.vue'),
+    meta: {
+      requireAuth: true
+    }
   },
   {
     path: '/creategroup',
@@ -105,7 +108,7 @@ const routes = [
     }
   },
   {
-    path: '/profile',
+    path: '/profile/:id',
     name: 'profile',
     component: () => import('../views/Profile.vue'),
     meta: {

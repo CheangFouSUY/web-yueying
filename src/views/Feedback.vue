@@ -55,6 +55,14 @@ export default {
     },
     methods: {
         Submit() {
+        if(this.form.category === 0 || this.form.title === '' || this.form.description == '') {
+            this.$message.warning("反馈标题、类型、详情不可为空！");
+            return;
+        }
+        else if(this.form.description.length < 15) {
+            this.$message.warning("反馈详情不可少于15字符！");
+            return;
+        }
         const formData = new FormData();
         formData.append("feedbacker", this.form.feedbacker);
         formData.append("title", this.form.title);
