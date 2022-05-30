@@ -120,6 +120,12 @@ const routes = [
     name: 'search',
     component: () => import('../views/Search.vue')
   },
+  {
+    path: '/registersuccess',
+    name: 'register success',
+    component: () => import('../views/RegisterSuccess.vue'),
+    
+  }
 ]
 
 const router = new VueRouter({

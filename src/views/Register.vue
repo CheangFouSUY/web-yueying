@@ -8,7 +8,7 @@
             </div>
             <div class="Row">
                 <span>昵称</span>
-                <input type="text" v-model="form.username" placeholder="Eg. 黄乐乐">
+                <input type="text" v-model="form.username" placeholder="例 : 黄乐乐">
             </div>
             <div class="Row">
                 <span>邮箱</span>
@@ -16,11 +16,11 @@
             </div>
             <div class="Row">
                 <span>密码</span>
-                <input type="password" v-model="form.password" placeholder="密码需包括字符、非字符和数字">
+                <input type="password" v-model="form.password" placeholder="密码需包含字母、数字及符号">
             </div>
             <div class="Row">
                 <span>重复密码</span>
-                <input type="password" v-model="form.password2" placeholder="请重新填写密码">
+                <input type="password" v-model="form.password2" placeholder="请重新输入密码">
             </div>
             <div class="Row">
                 <span>密保问题</span>
@@ -36,7 +36,7 @@
             </div>
             <div class="Row">
                 <span>密保答案</span>
-                <input type="text" v-model="form.securityQans" placeholder="请输入你的密保答案">
+                <input type="text" v-model="form.securityQans" placeholder="请输入密保答案">
             </div>
             <button id="goLogin" @click='Login'>已有帐号，立即登录</button>
             <div>
@@ -73,11 +73,11 @@ export default {
             this.$router.push('/login');
         },
         async Submit(){
-            // if(this.form.username === '' || this.form.email === '' || this.form.password === '' || this.form.password2 === '' || 
-            // this.form.securityQ === '' || this.form.securityQans === '') {
-            //     this.$message.warning("请填写所有空格");
-            //     return;
-            // }
+            if(this.form.username === '' || this.form.email === '' || this.form.password === '' || this.form.password2 === '' || 
+            this.form.securityQ === 0 || this.form.securityQans === '') {
+                this.$message.warning("请填写所有空格（包括密保问题）");
+                return;
+            }
             const formData = new FormData();
             formData.append("email",this.form.email);
             formData.append("username", this.form.username);
@@ -93,22 +93,33 @@ export default {
         })
         .then(res => {
             console.log(res);
+            console.log("HELLOWORLD")
             switch (res.status) {
             case 201:
-                this.$message.success("注册成功，请到邮箱进行认证");
-                this.$router.push('/login');
+                // this.$message.success("注册成功，请到邮箱进行认证");
+                this.$router.push('/registersuccess');
                 break;
             }
         })
         .catch(err => {
-            const key = Object.keys(err.response.data)[0];
-            switch(err.response.data[key][0]) {
-            case "R":
-                this.$message.warning("填写信息错误");
+            console.log(err.response.data.code);
+            // const key = Object.keys(err.response.data)[0];
+            // switch(err.response.data[key][0]) {
+            switch(err.response.data.code) {
+            case 1001:
+                this.$message.warning("邮箱已被使用");
                 break;
-                    
+            case 1002:
+                this.$message.warning("用户名已被使用");
+                break;
+            case 1003:
+                this.$message.warning("密码与重复密码不匹配");
+                break;
+            case 1004:
+                this.$message.warning("密码需包含字母、数字及符号且字符数>=8");
+                break;     
             default:
-                this.$message.warning(err.response.data[key][0]);
+                this.$message.warning("填写信息错误");
             }
          })  
         }
@@ -117,6 +128,9 @@ export default {
 </script>
 
 <style scoped>
+::placeholder{
+    font-size: 14px;
+}
 .Row{
     /* border: solid 1px; */
     padding-left: 30px;

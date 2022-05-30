@@ -96,7 +96,7 @@
         <div class="col" v-for="column in columns" :key="column">
           <div class="item-container" v-for="item in column" :key="item.id">
               <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
-              {{item.groupName}}</div>
+              <span @click="toGroupInner(item.id)">{{item.groupName}}</span></div>
         </div></div>
     </el-row>
     <el-row v-else>
@@ -150,6 +150,9 @@ export default {
     },
     createGroup() {
       this.$router.push('/creategroup')
+    },
+    toGroupInner(groupid) {
+      this.$router.push({path: `/group/${groupid}`})
     },
     getGroup() {
       this.$axios
@@ -359,14 +362,19 @@ export default {
   margin-right: 20px;
 }
 .showgroups .item-container {
-  border: 1px solid;
+  /* border: 1px solid; */
   padding: 5px;
   margin: 5px;
   width: 400px;
   height: 50px;
   display: flex;
   align-items: center;
+  justify-content: center;
   font-size: 20px;
+}
+.showgroups .item-container span:hover {
+  color: #0BA7CA;
+  cursor: pointer;
 }
 .col {
   margin: 10px;

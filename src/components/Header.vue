@@ -104,7 +104,6 @@ export default {
     margin-left: 30px;
     margin-top: -4px;
 }
-
 #logoName{
     height: 45px;
     font-size: 36px;

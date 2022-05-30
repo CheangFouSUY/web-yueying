@@ -63,7 +63,7 @@
               <el-col :span="20"><div class="info2"><span class="infoText">简介&nbsp;:&nbsp;</span><span class="infoText3">{{ groupInfo.desc }}</span></div>
               </el-col>
            </el-row>
-           <el-button id="post" @click="formVisible = true" icon="el-icon-position" >发表话题</el-button>
+           <el-button id="post" @click="openPostFeed" icon="el-icon-position" >发表话题</el-button>
           <el-dialog title="发布话题" :visible.sync="formVisible">
             <el-form label-position="top" :model="form">
               <el-form-item label="标题" :label-width="formLabelWidth">
@@ -179,7 +179,10 @@ export default {
   },
   created() {
     const userInfo = user.getters.getUser(user.state());
-    this.userId = userInfo.user.id;
+    if(userInfo) {
+      this.userId = userInfo.user.id;
+      this.isLogin = true;
+    }
   },
   methods: {
     join() {
@@ -200,6 +203,11 @@ export default {
       })
       .catch((error) => {
         console.log(error);
+        this.$notify({
+          title: "请先登录！",
+          type: "warning",
+          position: "top-left",
+        });
       });
     },
     leave() {
@@ -336,6 +344,18 @@ export default {
       method: "get",
       url: "/api/v1/group/members/" + this.$route.params.id + '?role=3',
     });
+    },
+    openPostFeed() {
+      if(this.isLogin) {
+        this.formVisible = true;
+      }
+      else {
+        this.$notify({
+          title: "请先登录！",
+          type: "warning",
+          position: "top-left",
+        });
+      }
     },
     postFeed() {
       if (!this.form.title) {
@@ -490,7 +510,8 @@ export default {
       .catch(err => {
         console.log(err);
       })
-    }
+    },
+    
   },
   data() {
     return {
@@ -500,6 +521,7 @@ export default {
       isOwner: false,
       isOwnerTemp: false,
       isAdmin: false,
+      isLogin: false,
       banOrput:'',
       url:'@/assets/Book.svg',
       userId:'',
