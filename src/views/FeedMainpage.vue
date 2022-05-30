@@ -67,6 +67,8 @@
           v-for="item in followedFeeds"
           :key="item.id"
           :initialFeedId="item.id"
+          :initialIsPin= "false"
+          :initialIsFeatured="false"
         ></FeedBox>
       </div>
       <div v-else>
@@ -74,6 +76,8 @@
           v-for="item in feeds"
           :key="item.id"
           :initialFeedId="item.id"
+          :initialIsPin= "false"
+          :initialIsFeatured="false"
         ></FeedBox>
       </div>
     </div>

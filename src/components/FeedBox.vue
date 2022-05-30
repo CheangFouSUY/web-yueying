@@ -1,6 +1,8 @@
 <template id="a">
   <div>
     <el-row class="feed-box">
+      <el-row v-if="isPin" type="flex" justify="end">置顶</el-row>
+      <!-- <el-row v-if="isFeatured" type="flex" justify="end">精选</el-row> -->
       <el-row :gutter="70" align="middle" type="flex">
         <!-- 发布者头像、昵称、发布时间 -->
         <el-col :span="1">
@@ -28,7 +30,11 @@
           >
             关注
           </button>
-          <button class="feed-unfollow" v-else-if="isFollow && !isMine" @click="follow()">
+          <button
+            class="feed-unfollow"
+            v-else-if="isFollow && !isMine"
+            @click="follow()"
+          >
             取消关注
           </button>
         </el-row>
@@ -209,6 +215,8 @@ export default {
   name: "FeedBox",
   props: {
     initialFeedId: String,
+    initialIsPin: Boolean,
+    initialIsFeatured: Boolean,
   },
   data() {
     return {
@@ -223,6 +231,8 @@ export default {
       createdAt: 1642014005919,
       isPublic: true,
       belongTo: "",
+      isPin: this.initialIsPin,
+      isFeatured: this.initialIsFeatured,
       groupName: "八卦小组",
       title: "布魯斯威利罹失語症宣布息影　「壓箱作」導演：他是偉大的人",
       description:
@@ -253,7 +263,7 @@ export default {
   },
   computed: {
     isNeedExpand() {
-      if(this.description.length<=180) this.isExpand=true;
+      if (this.description.length <= 180) this.isExpand = true;
       return this.description.length > 180;
     },
   },
@@ -474,7 +484,7 @@ export default {
             this.comments = commentRes.data.results;
             this.response = r.response;
             this.isFollow = r.isFollow;
-            this.isMine = (r.createdBy == this.userId);
+            this.isMine = r.createdBy == this.userId;
             console.log(r.message);
           })
         )
