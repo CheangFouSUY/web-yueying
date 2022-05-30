@@ -325,18 +325,19 @@ export default {
     async deleteFeed() {
       var formData = new FormData();
       formData.append("feedId", this.id);
-      if(this.isAdmin) formData.append("groupId", this.belongTo);
+      if(!this.isPublic) formData.append("groupId", this.belongTo);
 
       var header = {};
       if (localStorage.getItem("token"))
         header = { Authorization: "Bearer " + localStorage.getItem("token") };
       console.log(header);
 
-      if (this.isMine)
+      if (this.isPublic)
         await this.$axios({
           method: "delete",
           url: "/api/v1/feed/" + this.id,
           data: formData,
+          headers: header,
         })
           .then((res) => {
             console.log(res);
@@ -345,11 +346,12 @@ export default {
           .catch((err) => {
             console.log(err);
           });
-      else if (this.isAdmin)
+      else
         await this.$axios({
           method: "delete",
           url: "/api/v1/group/delFeed/"+ this.belongTo + "/" + this.id,
           data: formData,
+          headers: header,
         })
           .then((res) => {
             console.log(res);

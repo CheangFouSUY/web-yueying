@@ -56,8 +56,8 @@
               </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-              <el-button @click="formVisible = false">取 消</el-button>
-              <el-button type="primary" @click="postFeed()">发布</el-button>
+              <el-button class="button-no" @click="formVisible = false">取 消</el-button>
+              <el-button class="button-yes" @click="postFeed()">发布</el-button>
             </div>
           </el-dialog>
         </el-col>
@@ -380,8 +380,8 @@ export default {
   background-color: #ccd9de;
 }
 .el-dialog__title,
-.el-dialog__headerbtn i {
-  color: #456268;
+.el-dialog__headerbtn i{
+  color: #456268 !important;
   font-size: 24px;
 }
 .el-form-item__label {
@@ -390,6 +390,21 @@ export default {
 }
 </style>
 <style scoped>
+.button-no:hover {
+  background-color: rgba(121, 163, 177, 0.1);
+  border-color: rgba(121, 163, 177, 0.4);
+}
+.button-yes:active, .button-yes:hover {
+  border-color: rgba(121, 163, 177, 0.4);
+}
+.button-yes {
+  color: #456268;
+  background-color: rgba(121, 163, 177, 0.4);
+  border-color: transparent;
+}
+.button-no {
+  color: #456268;
+}
 .form-button:hover {
   cursor: pointer;
 }
