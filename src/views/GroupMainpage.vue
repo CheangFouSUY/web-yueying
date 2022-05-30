@@ -91,68 +91,17 @@
       <span>已加入小组</span>
       <div id="line2"></div>
     </div>
-  <el-row id="showgroups_content">
-    <el-col :span="7"><div class="grid-content bg-lightblue">
-      <el-table class="table2"
-      :data="groupData"
-      :show-header="false"
-      :cell-style="{background : '#E9FBFF' }"
-      @row-click="rowClick"
-      :cell-class-name="cellCSS2"
-      :max-height="280"
-      style="width: 90%">
-      <el-table-column
-        align="center" 
-        prop="gAvatar"
-        width="50">
-      </el-table-column>
-      <el-table-column 
-        prop="gName"
-        width="290">
-      </el-table-column>
-    </el-table>
-      </div></el-col>
-    <el-col :span="7"><div class="grid-content bg-lightblue">
-      <el-table class="table2"
-      :data="groupData"
-      :show-header="false"
-      :cell-style="{background : '#E9FBFF' }"
-      @row-click="rowClick"
-      :cell-class-name="cellCSS2"
-      :max-height="280"
-      style="width: 90%">
-      <el-table-column
-        align="center"
-        prop="gAvatar"
-        width="50">
-      </el-table-column>
-      <el-table-column
-        prop="gName"
-        width="290">
-      </el-table-column>
-    </el-table>
-      </div></el-col>
-    <el-col :span="7"><div class="grid-content bg-lightblue">
-      <el-table class="table2"
-      :data="groupData"
-      :show-header="false"
-      :cell-style="{background : '#E9FBFF' }"
-      @row-click="rowClick"
-      :cell-class-name="cellCSS2"
-      :max-height="280"
-      style="width: 90%">
-      <el-table-column
-        align="center"
-        prop="gAvatar"
-        width="50">
-      </el-table-column>
-      <el-table-column
-        prop="gName"
-        width="290">
-      </el-table-column>
-    </el-table>
-      </div></el-col>
- </el-row>
+    <el-row v-if="groupData.length > 0" justify="center" type="flex">
+        <div class="container">
+        <div class="col" v-for="column in columns" :key="column">
+          <div class="item-container" v-for="item in column" :key="item.id">
+              <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+              {{item.groupName}}</div>
+        </div></div>
+    </el-row>
+    <el-row v-else>
+      <div class="noGroups"><span>目前无加入任何小组，马上去加入一个小组吧！</span></div>
+    </el-row>
   </div>
     <Footer id="footer"></Footer>
   </div>
@@ -170,6 +119,17 @@ export default {
   },
   mounted() {
     this.getGroup();
+  },
+  computed: {
+    columns () {
+      let columns = []
+      let cols = this.groupData.length/3;
+      let mid = 3;
+      for (let col = 0; col < cols; col++) {
+        columns.push(this.groupData.slice(col * mid, col * mid + mid))
+      }
+      return columns
+    }
   },
   methods: {
     cellCSS({row, rowIndex}){
@@ -219,6 +179,24 @@ export default {
       .catch((error) => {
         console.log(error);
       });
+
+      var header = {}
+        if (localStorage.getItem('token'))
+            header = { 'Authorization': 'Bearer ' + localStorage.getItem('token')}
+
+      this.$axios({
+        method:'get',
+        url:'/api/v1/group/joined',
+        headers: header,
+      })
+      .then((res) => {
+        console.log(res);
+        var result = res.data.results;
+        this.groupData = result;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     }
   },
   data() {
@@ -226,27 +204,28 @@ export default {
           leaderboardDataB: [],
           leaderboardDataM: [],
           leaderboardDataO: [],
-        groupData: [{
-          id:1,
-          gAvatar:<el-avatar icon="el-icon-user-solid"></el-avatar>,
-          gName:'皮卡一家亲',
-        }, {
-          id:2,
-          gAvatar:<el-avatar icon="el-icon-user-solid"></el-avatar>,
-          gName:'皮卡两家亲',
-        }, {
-          id:3,
-          gAvatar:<el-avatar icon="el-icon-user-solid"></el-avatar>,
-          gName:"WHAT?"
-        }, {
-          id:4,
-          gAvatar:<el-avatar icon="el-icon-user-solid"></el-avatar>,
-          gName:'皮卡一家亲',
-        }, {
-          id:5,
-          gAvatar:<el-avatar icon="el-icon-user-solid"></el-avatar>,
-          gName:'皮卡一家亲',
-        }],
+        // groupData: [{
+        //   id:1,
+        //   gAvatar:<el-avatar icon="el-icon-user-solid"></el-avatar>,
+        //   gName:'皮卡一家亲',
+        // }, {
+        //   id:2,
+        //   gAvatar:<el-avatar icon="el-icon-user-solid"></el-avatar>,
+        //   gName:'皮卡两家亲',
+        // }, {
+        //   id:3,
+        //   gAvatar:<el-avatar icon="el-icon-user-solid"></el-avatar>,
+        //   gName:"WHAT?"
+        // }, {
+        //   id:4,
+        //   gAvatar:<el-avatar icon="el-icon-user-solid"></el-avatar>,
+        //   gName:'皮卡一家亲',
+        // }, {
+        //   id:5,
+        //   gAvatar:<el-avatar icon="el-icon-user-solid"></el-avatar>,
+        //   gName:'皮卡一家亲',
+        // }],
+        groupData: [],
         }
       },
 }
@@ -277,7 +256,7 @@ export default {
   background-color: #FCF8EC;
   margin-top: 20px;
   margin-bottom: 20px;
-  height: 350px;
+  min-height: 120px;
   /* width: 1376px; */
   margin-left: 80px;
   margin-right: 80px;
@@ -298,6 +277,11 @@ export default {
   height: 50px;
   margin-left: 140px;
   border-radius: 0 0 10px 10px;
+}
+.noGroups span{
+  color: grey;
+  font-size: 16px;
+  /* font-weight: bold; */
 }
 #title {
   display: inline;
@@ -373,6 +357,23 @@ export default {
   border-radius: 4px;
   margin-left: 30px;
   margin-right: 20px;
+}
+.showgroups .item-container {
+  border: 1px solid;
+  padding: 5px;
+  margin: 5px;
+  width: 400px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+}
+.col {
+  margin: 10px;
+  /* border: 1px solid; */
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row;
 }
 </style>
 

@@ -62,10 +62,9 @@
             <el-row>
               <el-col :span="20"><div class="info2"><span class="infoText">简介&nbsp;:&nbsp;</span><span class="infoText3">{{ groupInfo.desc }}</span></div>
               </el-col>
-              <!-- <el-button id="post" @click="post" icon="el-icon-position">发表话题</el-button> -->
            </el-row>
            <el-button id="post" @click="formVisible = true" icon="el-icon-position" >发表话题</el-button>
-                     <el-dialog title="发布话题" :visible.sync="formVisible">
+          <el-dialog title="发布话题" :visible.sync="formVisible">
             <el-form label-position="top" :model="form">
               <el-form-item label="标题" :label-width="formLabelWidth">
                 <el-input
@@ -115,7 +114,7 @@
       </div>
       <el-row>
         <el-col :span="23"><div class="groupPost">
-        <FeedBox :initialFeed="feeds" :initialUser="user" :isShowFollow="isShowFollow"></FeedBox>
+        <!-- <FeedBox :initialFeedId="feeds" :initialIsPin="feeds.isPin" :initialIsFeatured="feeds.isFeatured"></FeedBox> -->
       </div>
         </el-col>
       </el-row>
@@ -130,16 +129,31 @@
           <i class="el-icon-star-off"></i></div></el-col>
         </el-row>
         <el-row v-for="item in groupInfo.admin" :key="item.id">
-          <el-col :span="24"><div class="adminlist"><el-avatar :size="30" icon="el-icon-user-solid"></el-avatar><span>&nbsp;{{ item.username }}</span>
+          <el-col :span="24"><div class="adminlist"><el-avatar :size="30" icon="el-icon-user-solid"></el-avatar><span @click="setRole1(item.id)" class="setRole">&nbsp;{{ item.username }}</span>
           <i class="el-icon-star-off"></i></div></el-col>
         </el-row>
         <el-row>
           <el-col :span="24"><div class="memberbar"><span>成员&nbsp;({{ groupInfo.member.length }})</span></div></el-col>
         </el-row>
         <el-row  v-for="item in groupInfo.member" :key="item.id">
-          <el-col :span="24"><div class="memberlist"><el-avatar :size="30" icon="el-icon-user-solid"></el-avatar><span>&nbsp;{{ item.username }}</span></div></el-col>
+          <el-col :span="24"><div class="memberlist"><el-avatar :size="30" icon="el-icon-user-solid"></el-avatar><span @click="setRole2(item.id)" class="setRole">&nbsp;{{ item.username }}</span></div></el-col>
         </el-row>
       </div>
+      <el-dialog title="组员设置" :visible.sync="setRoleVisible" :close-on-click-modal=false :show-close=false>
+            <el-form label-position="top" :model="groupInfo">
+              <el-form-item label="设置小组职位">
+                 <el-button type="primary" v-if="isOwner" @click="setOwner">主管理员</el-button>
+                 <el-button type="primary" @click="setAdmin">管理员</el-button>
+                 <el-button type="primary" @click="setMember">普通成员</el-button>
+              </el-form-item>
+             <el-form-item v-if="isOwnerOrAdmin" label="其他">
+                <el-button type="danger" @click="banUser">禁止用户</el-button>
+              </el-form-item>        
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="cancelSetRole">取消</el-button>
+            </div>
+          </el-dialog>
       </el-col>
       </el-row>
       <Footer id="footer"></Footer>
@@ -161,6 +175,7 @@ export default {
   },
   mounted() {
     this.getGroupInfo();
+    this.getFeed();
   },
   created() {
     const userInfo = user.getters.getUser(user.state());
@@ -179,8 +194,9 @@ export default {
       })
       .then((res) => {
         console.log(res);
+        setTimeout(function () { location.reload(true); }, 500);
         this.$message.success("成功加入小组");
-        this.isGroupMember = !this.isGroupMember;
+        // this.isGroupMember = !this.isGroupMember;
       })
       .catch((error) => {
         console.log(error);
@@ -198,8 +214,9 @@ export default {
       })
       .then((res) => {
         console.log(res);
+        setTimeout(function () { location.reload(true); }, 500);
         this.$message.success("成功退出小组");
-        this.isGroupMember = !this.isGroupMember;
+        // this.isGroupMember = !this.isGroupMember;
       })
       .catch((error) => {
         console.log(error);
@@ -239,9 +256,14 @@ export default {
         .all([this.getGroupDetail(), this.getGroupMainAdmin(), this.getGroupAdmin(), this.getGroupMember()])
         .then(
           this.$axios.spread((gDetail, gMAdmin, gAdmin, gMember) => {
+            console.log(gDetail);
             // if(gDetail.data.groupName.length > 10)
             //   this.groupInfo.name = gDetail.data.groupName.slice(0,18) + "...";
             // else
+            // console.log(gMAdmin);
+            // console.log(gAdmin);
+            // console.log(gMember);
+            this.groupInfo.groupId = gDetail.data.id;
             this.groupInfo.name = gDetail.data.groupName;
             this.groupInfo.nameTemp = gDetail.data.groupName;
             this.groupInfo.owner = gDetail.data.owner;
@@ -256,20 +278,16 @@ export default {
             this.groupInfo.desc = gDetail.data.description;
             this.groupInfo.descTemp = gDetail.data.description;
             this.groupInfo.member = gMember.data.results;
-            console.log(this.groupInfo.member);
             this.groupInfo.admin = gAdmin.data.results;
             this.groupInfo.mainadmin = gMAdmin.data.results;
             
-            if(gMAdmin.data.results[0].id === this.userId) {
-              // console.log("SUCCESS");
-              this.isOwnerOrAdmin = true;
-              this.isGroupMember = true;
-            }
             for(let i = 0; i < gAdmin.data.results.length; i++) {
               if(gAdmin.data.results[i].id === this.userId) {
                 // console.log("YES");
                 this.isOwnerOrAdmin = true;
                 this.isGroupMember = true;
+                this.isAdmin = true;
+                this.isOwnerOrAdminTemp = true;
                 break;
               }
             }
@@ -279,6 +297,15 @@ export default {
                 this.isGroupMember = true;
                 break;
               }
+            }
+
+            if(gMAdmin.data.results[0].id === this.userId) {
+              // console.log("SUCCESS");
+              this.isOwnerOrAdmin = true;
+              this.isOwnerOrAdminTemp = true;
+              this.isGroupMember = true;
+              this.isOwner = true;
+              this.isOwnerTemp = true;
             }
           })
         )
@@ -406,15 +433,78 @@ export default {
       .catch((err) => {
             console.log(err);
           });
+    },
+    getFeed() {
+      var header = {};
+      if (localStorage.getItem("token"))
+        header = { Authorization: "Bearer " + localStorage.getItem("token") };
+
+      this.$axios({
+        method: "get",
+        url: "/api/v1/feed/list",
+        headers: header,
+      }).then((res) => {
+        this.feeds = res.data.results;
+        console.log(this.feeds);
+      });
+    },
+    setRole1(abc) {
+      if(this.isOwner) {
+        this.setRoleVisible = true;
+        this.banOrput = abc;
+      }
+      else {
+        this.$message.warning("非主管理员，无法对管理员进行操作");
+      }
+    },
+    setRole2(abc) {
+      console.log(abc);
+      if(this.isGroupMember && !this.isOwnerOrAdmin) {
+        this.$message.warning("非小组管理员，无法对用户进行操作");
+      }
+      else if(this.isOwnerOrAdmin) {
+        // this.$message.success("可以对用户进行操作");
+        this.setRoleVisible = true;
+        this.banOrput = abc;
+      }
+      else {
+        this.$message.warning("非小组成员，无法对用户进行操作")
+      }
+    },
+    cancelSetRole() {
+      this.setRoleVisible= false;
+    },
+    banUser() {
+      var header = {};
+      if (localStorage.getItem("token"))
+        header = { Authorization: "Bearer " + localStorage.getItem("token") };
+
+      this.$axios({
+        method:'put',
+        url:'/api/v1/group/banMember/' + this.groupInfo.groupId + '/' + this.banOrput,
+        headers: header,
+      })
+      .then(res =>{
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      })
     }
   },
   data() {
     return {
       isGroupMember: false,
       isOwnerOrAdmin: false,
+      isOwnerOrAdminTemp: false,
+      isOwner: false,
+      isOwnerTemp: false,
+      isAdmin: false,
+      banOrput:'',
       url:'@/assets/Book.svg',
       userId:'',
       groupInfo: {
+        groupId:'',
         name:'',
         nameTemp:'',
         pic:'',
@@ -436,6 +526,9 @@ export default {
       },
       formVisible: false,
       changeVisible: false,
+      setRoleVisible: false,
+      feeds:[],
+      formLabelWidth: "120px",
       user: "栀子花开",
       activeName: "all",
       isShowFollow: false,
@@ -676,6 +769,10 @@ export default {
   padding-left: 5px;
   padding-top: 5px;
   padding-bottom: 5px;
+}
+.setRole:hover{
+  color: #D0E8F2;
+  cursor: pointer;
 }
 .feed-publisher {
   font-size: 22px;

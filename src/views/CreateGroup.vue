@@ -121,10 +121,7 @@ export default {
         var header = {}
         if (localStorage.getItem('token'))
             header = { 'Authorization': 'Bearer ' + localStorage.getItem('token')}
-
-        // var header2 = {
-        //       'Content-Type': 'multipart/form-data'
-        //     }
+            
         this.$axios({
             method: 'post',  
             url: '/api/v1/group/create',
