@@ -23,7 +23,10 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    component: () => import('../views/Login.vue')
+    component: () => import('../views/Login.vue'),
+    meta: {
+      requireNotAuth: true
+    }
   },
   {
     path: '/emailverify',
@@ -84,7 +87,7 @@ const routes = [
     path: '/creategroup',
     name: 'create group',
     component: () => import('../views/CreateGroup.vue'),
-        meta: {
+    meta: {
       requireAuth: true
     }
   },
@@ -137,6 +140,14 @@ router.beforeEach((to, from, next) => {
       name: 'login',
     })
   }
+
+  //if signed in cannot go to login page
+  if (userInfo && to.meta.requireNotAuth) {
+    next({
+        name: 'home',
+    })
+}
+
 
   next()
 })

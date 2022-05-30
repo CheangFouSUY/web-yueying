@@ -99,7 +99,7 @@ export default {
         formData.append("groupName", this.form.gName);
         formData.append("description", this.form.desc);
         formData.append("category", this.form.type);
-        formData.append("img", this.form.imageUrl);
+        formData.append("img", this.form.imageFile);
 
         var header = {}
         if (localStorage.getItem('token'))
@@ -132,10 +132,10 @@ export default {
          })
       },
       getImg(event) {
-      var fileName = event.target.files[0].name;
-      $(".showFileName").html(fileName);
-      this.form.imageFile = event.target.files[0];
-      console.log("Get IMG", this.form.imageFile);
+        var fileName = event.target.files[0].name;
+        $(".showFileName").html(fileName);
+        this.form.imageFile = event.target.files[0];
+        console.log("Get IMG", this.form.imageFile);
     },
     // selectImage () {
     //   this.$refs.fileInput.click()

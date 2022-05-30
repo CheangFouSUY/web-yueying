@@ -39,7 +39,51 @@
               </el-col>
               <!-- <el-button id="post" @click="post" icon="el-icon-position">发表话题</el-button> -->
            </el-row>
-           <el-button id="post" @click="post" icon="el-icon-position">发表话题</el-button>
+           <el-button id="post" @click="formVisible = true" icon="el-icon-position" >发表话题</el-button>
+                     <el-dialog title="发布话题" :visible.sync="formVisible">
+            <el-form label-position="top" :model="form">
+              <el-form-item label="标题" :label-width="formLabelWidth">
+                <el-input
+                  v-model="form.title"
+                  autocomplete="off"
+                  maxlength="25"
+                  show-word-limit
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="内容" :label-width="formLabelWidth">
+                <el-input
+                  type="textarea"
+                  autosize
+                  v-model="form.description"
+                  autocomplete="off"
+                  minlength="25"
+                  show-word-limit
+                ></el-input>
+                <el-upload
+                  action=""
+                  :auto-upload="false"
+                  :on-change="handleChange"
+                  :before-remove="beforeRemove"
+                  :limit="1"
+                  accept="image/jpeg,image/gif,image/png,image/jpg"
+                  :on-exceed="handleExceed"
+                >
+                  <el-button
+                    class="form-upload-img"
+                    size="small"
+                    type="primary"
+                  >
+                    <i class="el-icon-picture-outline-round"></i>
+                    上传图片
+                  </el-button>
+                </el-upload>
+              </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="formVisible = false">取 消</el-button>
+              <el-button type="primary" @click="postFeed()">发布</el-button>
+            </div>
+          </el-dialog>
          </div>
        </el-col>
      </el-row>
@@ -54,16 +98,21 @@
       <el-col :span="4">
         <div class="groupMember">
         <el-row>
-          <el-col :span="24"><div class="adminbar"><span>管理员&nbsp;({{ groupInfo.admin.length}})</span></div></el-col>
+          <el-col :span="24"><div class="adminbar"><span>管理员&nbsp;({{ groupInfo.admin.length + groupInfo.mainadmin.length}})</span></div></el-col>
+        </el-row>
+        <el-row v-for="item in groupInfo.mainadmin" :key="item.id">
+          <el-col :span="24"><div class="adminlist"><el-avatar :size="30" icon="el-icon-user-solid"></el-avatar><span>&nbsp;{{ item.username }}</span>
+          <i class="el-icon-star-off"></i></div></el-col>
         </el-row>
         <el-row v-for="item in groupInfo.admin" :key="item.id">
-          <el-col :span="24"><div class="adminlist"><el-avatar :size="30" icon="el-icon-user-solid"></el-avatar><span>&nbsp;{{ item.name }}</span></div></el-col>
+          <el-col :span="24"><div class="adminlist"><el-avatar :size="30" icon="el-icon-user-solid"></el-avatar><span>&nbsp;{{ item.username }}</span>
+          <i class="el-icon-star-off"></i></div></el-col>
         </el-row>
         <el-row>
           <el-col :span="24"><div class="memberbar"><span>成员&nbsp;({{ groupInfo.member.length }})</span></div></el-col>
         </el-row>
         <el-row  v-for="item in groupInfo.member" :key="item.id">
-          <el-col :span="24"><div class="memberlist"><el-avatar :size="30" icon="el-icon-user-solid"></el-avatar><span>&nbsp;{{ item.name }}</span></div></el-col>
+          <el-col :span="24"><div class="memberlist"><el-avatar :size="30" icon="el-icon-user-solid"></el-avatar><span>&nbsp;{{ item.username }}</span></div></el-col>
         </el-row>
       </div>
       </el-col>
@@ -171,13 +220,16 @@ export default {
     },
    async getGroupInfo() {
       await this.$axios
-        .all([this.getGroupDetail()])
+        .all([this.getGroupDetail(), this.getGroupMainAdmin(), this.getGroupAdmin(), this.getGroupMember()])
         .then(
-          this.$axios.spread((gDetail) => {
+          this.$axios.spread((gDetail, gMAdmin, gAdmin, gMember) => {
             console.log(gDetail);
-            this.groupInfo.name = gDetail.data.groupName.slice(0,18) + "...";
+            if(gDetail.data.groupName.length > 10)
+              this.groupInfo.name = gDetail.data.groupName.slice(0,18) + "...";
+            else
+              this.groupInfo.name = gDetail.data.groupName;
             this.groupInfo.owner = gDetail.data.owner;
-            this.groupInfo.time = new Date(gDetail.data.createdBy).getTime();
+            this.groupInfo.date = gDetail.data.createdAt.slice(0,10);
             if(gDetail.data.category === 'b')
               this.groupInfo.type = '图书';
             else if(gDetail.data.category === 'm')
@@ -186,8 +238,10 @@ export default {
               this.groupInfo.type = '其他';
             this.groupInfo.peoplecount = gDetail.data.members;
             this.groupInfo.desc = gDetail.data.description;
-            // this.groupInfo.member =
-            // this.groupInfo.admin =
+            this.groupInfo.member = gMember.data.results;
+            console.log(this.groupInfo.member);
+            this.groupInfo.admin = gAdmin.data.results;
+            this.groupInfo.mainadmin = gMAdmin.data.results;
           })
         )
         .catch((err) => {
@@ -200,35 +254,92 @@ export default {
         url: "/api/v1/group/" + this.$route.params.id,
       });
     },
-    dateStr(date) {
-      var time = new Date().getTime();
-      time = parseInt((time - date) / 1000);
-      var s;
-      if (time < 60 * 10) {
-        return "刚刚";
-      } else if (time < 60 * 60) {
-        s = Math.floor(time / 60);
-        return s + "分钟前";
-      } else if (time < 60 * 60 * 24) {
-        s = Math.floor(time / 60 / 60);
-        return s + "小时前";
-      } else if (time < 60 * 60 * 24 * 5) {
-        s = Math.floor(time / 60 / 60 / 24);
-        return s + "天前";
-      } else {
-        // console.log(date);
-        var date = new Date(parseInt(date));
-        let y = date.getFullYear();
-        let m =
-          date.getMonth() < 10
-            ? "0" + (date.getMonth() + 1)
-            : date.getMonth() + 1;
-        let d = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
-        let h = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
-        let mn =
-          date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
-        return y + "-" + m + "-" + d + " " + h + ":" + mn;
+    getGroupMainAdmin() {
+    return this.$axios({
+      method: "get",
+      url: "/api/v1/group/members/" + this.$route.params.id + '?role=1',
+    });
+    },
+    getGroupAdmin() {
+    return this.$axios({
+      method: "get",
+      url: "/api/v1/group/members/" + this.$route.params.id + '?role=2',
+    });
+    },
+    getGroupMember() {
+    return this.$axios({
+      method: "get",
+      url: "/api/v1/group/members/" + this.$route.params.id + '?role=3',
+    });
+    },
+    postFeed() {
+      if (!this.form.title) {
+        this.$notify({
+          showClose: true,
+          type: "warning",
+          title: "标题不能为空",
+          position: "top-left",
+        });
+        return;
+      } else if (this.form.description.length < 25) {
+        this.$notify({
+          showClose: true,
+          type: "warning",
+          title: "话题内容不能少于25字",
+          position: "top-left",
+        });
+        return;
       }
+      let formData = new FormData();
+      formData.append("title", this.form.title);
+      formData.append("description", this.form.description);
+      formData.append("img", this.form.img);
+
+      var header = {};
+      if (localStorage.getItem("token"))
+        header = { Authorization: "Bearer " + localStorage.getItem("token") };
+
+      this.$axios({
+        method: "post",
+        url: "/api/v1/feed/",
+        data: formData,
+        headers: header,
+      })
+        .then((res) => {
+          console.log(res);
+          switch (res.status) {
+            case 201:
+              this.$notify({
+                showClose: true,
+                message: "已发表话题",
+                type: "success",
+                position: "top-left",
+              });
+              setTimeout(function () {
+                location.reload();
+              }, 1500);
+              break;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          switch (err.response.status) {
+            case 400:
+              this.$notify({
+                title: "标题和内容不能为空！",
+                type: "warning",
+                position: "top-left",
+              });
+              break;
+            case 401:
+              this.$notify({
+                title: "请先加入小组！",
+                type: "warning",
+                position: "top-left",
+              });
+              break;
+          }
+        });
     },
   },
   data() {
@@ -238,74 +349,22 @@ export default {
       url:'@/assets/Book.svg',
       groupInfo: {
         name:'',
-        owner:'小黄乐',
+        owner:'',
         date:'',
         time:'',
         type:'',
         peoplecount:'',
         desc:'',
-        descs:'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc',
-        admin: [
-          { 
-            id:'A0001',
-            name:'皮卡丘',
-          },
-          {
-            id:'A0002',
-            name:'杰尼龟',
-          },
-          {
-            id:'A0003',
-            name:'鲤鱼王',
-          },
-        ],
-          member: [
-          { 
-            id:'M0001',
-            name:'小火龙',
-          },
-          {
-            id:'M0002',
-            name:'佐助',
-          },
-          {
-            id:'M0003',
-            name:'佐助2',
-          },
-          {
-            id:'M0004',
-            name:'佐助3',
-          },
-          {
-            id:'M0005',
-            name:'佐助4',
-          },
-          {
-            id:'M0006',
-            name:'佐助5',
-          },
-          {
-            id:'M0007',
-            name:'佐助6',
-          },
-          {
-            id:'M0008',
-            name:'佐助7',
-          },
-          {
-            id:'M0009',
-            name:'佐助8',
-          },
-          {
-            id:'M0010',
-            name:'佐助9',
-          },
-          {
-            id:'M0011',
-            name:'佐助10',
-          },
-        ],
+        mainadmin:[],
+        admin: [],
+        member: [],
       },
+      form: {
+        title: "",
+        description: "",
+        img: "",
+      },
+      formVisible: false,
       user: "栀子花开",
       activeName: "all",
       isShowFollow: false,
@@ -589,6 +648,22 @@ export default {
 .feed-content {
   font-size: 18px;
 }
+.el-icon-star-off{
+  margin-top: 4px;
+  margin-left: 5px;
+}
+.form-button:hover {
+  cursor: pointer;
+}
+.form-upload-img {
+  margin-top: 30px;
+  padding: 5px 15px;
+  border: none;
+  background-color: rgba(121, 163, 177, 0.25);
+  color: #456268;
+  border-radius: 5px;
+  font-size: 18px;
+}
 #changeName{
   margin-top: 5px;
   color: #456268;
@@ -631,5 +706,20 @@ export default {
 #footer{
   position: relative;
   height: 88px;
+}
+</style>
+
+<style>
+.el-dialog__header {
+  background-color: #afc8d0;
+}
+.el-dialog__title,
+.el-dialog__headerbtn i {
+  color: #456268;
+  font-size: 24px;
+}
+.el-form-item__label {
+  color: #456268;
+  font-size: 20px;
 }
 </style>
