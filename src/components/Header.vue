@@ -41,7 +41,7 @@
         <el-button type="primary" @click="realLogout">确定</el-button>
     </span>
     </el-dialog>
-    <span v-if="isLogin" id="userInfo">{{userName}}</span>
+    <span v-if="isLogin" id="userInfo" @click="viewProfile">{{userName}}</span>
     <!-- <span v-if="!isLogin" id="userInfo">MIKIWONGaaaaaaa</span> -->
     <el-avatar v-if="isLogin" id="userAvatar" src="https://www.pngall.com/wp-content/uploads/5/Pokemon-Pikachu-PNG-Image.png"></el-avatar>
     <!-- <span v-else id="loginname" @click="login">{{ userName }}</span> -->
@@ -59,7 +59,8 @@ export default {
             isLogin: false,
             userName:'',
             profileP:'',
-            searchInfo:''
+            searchInfo:'',
+            userId:'',
         };
     },
     created() {
@@ -68,6 +69,7 @@ export default {
             this.isLogin = true;
             this.userName = userInfo.user.username;
             this.profileP = userInfo.user.profilePic;
+            this.userId = userInfo.user.id;
         }
     },
     methods:{
@@ -87,6 +89,9 @@ export default {
             this.$store.dispatch('clear');
             this.$message.success("登出成功");
             location.reload();
+        },
+        viewProfile() {
+            this.$router.push({path: `/profile/${this.userId}` })
         }
     },
 }
@@ -173,6 +178,10 @@ a{
     color: white;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+#userInfo:hover{
+    cursor: pointer;
+    color: #cef3ff;
 }
 #userAvatar{
     float: right;

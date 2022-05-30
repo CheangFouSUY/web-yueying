@@ -6,6 +6,7 @@
         <div class="profilePic">
         <el-upload
         :class="{disabled: uploadDisabled}"
+        class="imgUpload"
         list-type="picture-card"
         action=""
         :auto-upload="false"
@@ -17,8 +18,8 @@
         :before-upload="beforeAvatarUpload">
         <!-- <img v-if="form.imageUrl" :src="form.imageUrl" class="avatar"> -->
         <!-- <i v-else class="el-icon-plus avatar-uploader-icon"></i> -->
+         <i class="el-icon-plus"></i>
       </el-upload>
-
         <!-- <img v-if="form.imageUrl" :src="form.imageUrl" onclick="$('input[id=imgUpload]').click();" class="avatar">
         <i v-else class="el-icon-plus avatar-uploader-icon" onclick="$('input[id=imgUpload]').click();"></i>
           <input
@@ -29,7 +30,7 @@
           @change="getImg($event);"
           @input="pickFile"
         /> -->
-        <el-button v-if="form.imageUrl" type="danger" icon="el-icon-delete" circle @click="cancelImgUrl"></el-button>
+        <!-- <el-button v-if="form.imageUrl" type="danger" icon="el-icon-delete" circle @click="cancelImgUrl"></el-button> -->
         </div>
         </div></el-col>
       <el-col :span="12" ><div class="grid-content bg-yellow">
@@ -187,6 +188,25 @@ export default {
 .el-upload-list__item {
   transition: none !important;
 }
+.el-upload--picture-card{
+  width: 256px;
+  height: 256px;
+}
+.el-upload{
+  width: 256px;
+  height: 256px;
+  line-height: 100px;
+}
+.el-upload-list--picture-card .el-upload-list__item{
+  width: 256px;
+  height: 256px;
+  line-height: 100px;
+}
+.el-upload-list--picture-card .el-upload-list__item-thumbnail{
+  width: 256px;
+  height: 256px;
+  line-height: 1000px;
+}
 </style>
 
 <style scoped>
@@ -257,6 +277,7 @@ export default {
   margin-top: 10px;
 }
 .el-icon-plus{
+  margin-top: 105px;
   cursor: pointer;
 }
 #gDesc{
@@ -280,9 +301,6 @@ export default {
 #radiogroup{
   margin-left: 10px;
 }
-#imgUpload {
-  display: none;
-}
 </style>
 
 <style>
@@ -296,7 +314,7 @@ export default {
   color:grey;
   background-color: whitesmoke;
 }
-.avatar-uploader .el-upload {
+/* .avatar-uploader .el-upload {
   border: 1px dashed #d9d9d9;
   border-radius: 6px;
   cursor: pointer;
@@ -320,6 +338,6 @@ export default {
 }
 .avatar-uploader .el-upload:hover {
   border-color: #409EFF;
-}
+} */
 </style>
 
