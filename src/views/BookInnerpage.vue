@@ -186,7 +186,7 @@
             <el-row type="flex" justify="center">
               <img
                 id="report"
-                @click="report(item.id)"
+                @click="report('r&' + item.id)"
                 src="@/assets/Report.svg"
                 alt="report icon"
               />
@@ -667,8 +667,8 @@ export default {
       this.userComment.img = event.target.files[0];
       console.log("get img! ", this.userComment);
     },
-    report(reviewId) {
-      this.$router.push({ path: `/report/review/${reviewId}` });
+    report(id) {
+      this.$router.push({ path:`/report/${id}`})
     },
   },
 };

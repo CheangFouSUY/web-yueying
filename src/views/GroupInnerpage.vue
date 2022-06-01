@@ -180,7 +180,7 @@
               </span>
               <el-divider direction="vertical"></el-divider>
               <span :style="{ color: featureColor }" @click="showFeature()">
-                精选
+                精华
               </span>
             </el-row>
             <div class="group-feed" v-if="isShowFeature && status">
@@ -190,7 +190,7 @@
                 :initialFeedId="item.id"
                 :initialIsPin="item.isPin"
                 :initialIsFeatured="item.isFeature"
-                :initialIsAdmin="isAdmin"
+                :initialIsAdmin="isOwnerOrAdmin"
               ></FeedBox>
             </div>
             <div class="group-feed" v-else-if="!isShowFeature && status">
@@ -200,7 +200,7 @@
                 :initialFeedId="item.id"
                 :initialIsPin="item.isPin"
                 :initialIsFeatured="item.isFeatured"
-                :initialIsAdmin="isAdmin"
+                :initialIsAdmin="isOwnerOrAdmin"
               ></FeedBox>
             </div>
         </el-row>
@@ -499,6 +499,7 @@ export default {
       formData.append("title", this.form.title);
       formData.append("description", this.form.description);
       formData.append("img", this.form.img);
+      formData.append("groupId", this.$route.params.id);
 
       var header = {};
       if (localStorage.getItem("token"))
@@ -506,7 +507,7 @@ export default {
 
       this.$axios({
         method: "post",
-        url: "/api/v1/feed/",
+        url: "/api/v1/group/feed/create/" + this.$route.params.id,
         data: formData,
         headers: header,
       })
