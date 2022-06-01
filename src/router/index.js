@@ -125,6 +125,11 @@ const routes = [
     name: 'register success',
     component: () => import('../views/RegisterSuccess.vue'),
     
+  },
+  {
+    path: '/resetpassword',
+    name: 'reset password',
+    component: () => import('../views/ResetPwd1n2.vue'),
   }
 ]
 

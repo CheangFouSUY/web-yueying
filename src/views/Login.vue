@@ -106,6 +106,9 @@ export default {
 </script>
 
 <style scoped>
+::placeholder{
+    font-size: 18px;
+}
 .login #logo{
     width: 350px;
     margin: 0px auto 40px;

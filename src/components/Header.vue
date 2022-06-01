@@ -61,6 +61,7 @@ export default {
             profileP:'',
             searchInfo:'',
             userId:'',
+            // userNames:'aaaaaaaaaaaaaaaaaaaaa',
         };
     },
     created() {
@@ -172,7 +173,7 @@ a{
     float:right;
     max-width: 150px;
     margin-top: 15px;
-    margin-right: 5px;
+    margin-right: 10px;
     font-size: 18px;
     color: white;
     overflow: hidden;

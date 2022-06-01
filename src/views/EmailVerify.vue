@@ -8,14 +8,14 @@
     </div>
     <h1 class="emailTitle">邮箱验证</h1>
     <div class="verifyBox">
-      <button id="sendCode" @click="SendCode">发送验证码</button>
+      <!-- <button id="sendCode" @click="SendCode">发送验证码</button> -->
       <div class="inputBox">
         <img class="icon" src="@/assets/Email.svg" alt="email_icon">  
         <input type="text" v-model="email" placeholder="输入邮箱">
       </div>
       <div class="inputBox">
-        <img class="icon" src="@/assets/Key.svg" alt="key_icon">  
-        <input type="text" v-model="verifyKey" placeholder="输入验证码">
+        <img class="icon" src="@/assets/Usericon.svg" alt="user_icon">  
+        <input type="text" v-model="username" placeholder="输入名字">
       </div>
       <div class='changeLoginWay'>
         <button @click='QuesVerify'>密保问题验证</button>
@@ -24,7 +24,7 @@
         <span class='symbol'>|</span>
         <button @click='RegisterNow'>立即注册</button>
       </div>
-      <button id="submit" @click="Submit">验证</button>
+      <button id="submit" @click="getResetLink">发送</button>
     </div>
   </div>
   </div>
@@ -38,6 +38,12 @@ export default {
   components: {
     Header
   },
+  data() {
+    return {
+      email:'',
+      username:'',
+    }
+  },
   methods:{
     QuesVerify(){
       this.$router.push('/sqverify')
@@ -48,14 +54,32 @@ export default {
     RegisterNow(){
       this.$router.push('/register')
     },
-    SendCode(){
+    getResetLink(){
+      const formData = new FormData();
+      formData.append("email", this.email);
+      formData.append("username", this.username);
 
+      this.$axios({
+            method: 'post',  
+            url: '/api/v1/auth/request/',
+            data: formData,
+      })
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err =>{
+        console.log(err);
+      })
+      
     }
   }
 }
 </script>
 
 <style scoped>
+::placeholder{
+    font-size: 18px;
+}
 /* logo和标题 */
 #logo{
     width: 350px;
@@ -102,7 +126,7 @@ export default {
   display: block;
   float: left;
   width: 40px;
-  margin: 5px 10px;
+  margin: 7px 10px;
   /* outline: 1px black solid; */
 }
 input:focus{

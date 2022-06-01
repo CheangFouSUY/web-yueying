@@ -753,8 +753,9 @@ export default {
       this.userComment.img = event.target.files[0];
       console.log("get img! ", this.userComment);
     },
-    report() {
-      this.$router.push("/report");
+    report(reviewid) {
+      // console.log(reviewid);
+      this.$router.push({ path:`/report/${reviewid}`})
     },
   },
 };

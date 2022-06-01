@@ -25,6 +25,7 @@
                   v-model="groupInfo.descTemp"
                   autocomplete="off"
                   show-word-limit
+                  resize="none"
                 ></el-input>
               </el-form-item>
             </el-form>
@@ -82,6 +83,7 @@
                   autocomplete="off"
                   minlength="25"
                   show-word-limit
+                  resize="none"
                 ></el-input>
                 <el-upload
                   action=""
@@ -227,7 +229,14 @@ export default {
         // this.isGroupMember = !this.isGroupMember;
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error.response.status);
+        switch(error.response.status) {
+          case 403:
+            this.$message.warning("请在退出小组前将主管理员职位转移");
+            break;
+          default:
+            this.$message.warning("无法退出小组");
+        }
       });
     },
     cancelChanges() {
@@ -471,6 +480,7 @@ export default {
     setRole1(abc) {
       if(this.isOwner) {
         this.setRoleVisible = true;
+        //abc is the userId that we're gonna do something like ban or set role
         this.banOrput = abc;
       }
       else {
@@ -485,6 +495,7 @@ export default {
       else if(this.isOwnerOrAdmin) {
         // this.$message.success("可以对用户进行操作");
         this.setRoleVisible = true;
+        //abc is the userId that we're gonna do something like ban or set role
         this.banOrput = abc;
       }
       else {
@@ -511,6 +522,63 @@ export default {
         console.log(err);
       })
     },
+    setOwner() {
+      var header = {};
+      if (localStorage.getItem("token"))
+        header = { Authorization: "Bearer " + localStorage.getItem("token") };
+
+      this.$axios({
+        method:'put',
+        url:'/api/v1/group/setRole/' + this.groupInfo.groupId + '/' + this.banOrput + '/1',
+        headers: header,
+      })
+      .then(res =>{
+        console.log(res);
+        this.setRoleVisible = false;
+        location.reload();
+      })
+      .catch(err =>{
+        console.log(err);
+      })
+    },
+    setAdmin() {
+      var header = {};
+      if (localStorage.getItem("token"))
+        header = { Authorization: "Bearer " + localStorage.getItem("token") };
+
+      this.$axios({
+        method:'put',
+        url:'/api/v1/group/setRole/' + this.groupInfo.groupId + '/' + this.banOrput + '/2',
+        headers: header,
+      })
+      .then(res =>{
+        console.log(res);
+        this.setRoleVisible = false;
+        location.reload();
+      })
+      .catch(err =>{
+        console.log(err);
+      })
+    },
+    setMember() {
+      var header = {};
+      if (localStorage.getItem("token"))
+        header = { Authorization: "Bearer " + localStorage.getItem("token") };
+
+      this.$axios({
+        method:'put',
+        url:'/api/v1/group/setRole/' + this.groupInfo.groupId + '/' + this.banOrput + '/3',
+        headers: header,
+      })
+      .then(res =>{
+        console.log(res);
+        this.setRoleVisible = false;
+        location.reload();
+      })
+      .catch(err =>{
+        console.log(err);
+      })
+    }
     
   },
   data() {

@@ -6,7 +6,7 @@
         <el-row>
             <el-col :span="6"><div class="profile-content">
                 <div class="profilePic">
-                <el-upload v-if="isEdit"
+                <!-- <el-upload v-if="isEdit"
                 class="avatar-uploader"
                 action=""
                 :show-file-list="false"
@@ -14,16 +14,11 @@
                 :before-upload="beforeAvatarUpload">
                 <img v-if="form.imageUrl" :src="form.imageUrl" class="avatar">
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                </el-upload>
-                <el-image v-else :src="form.imageUrl"></el-image>
+                </el-upload> -->
+                <el-image :src="form.imageUrl"></el-image>
                 </div>
                 </div></el-col>
             <el-col :span="15"><div class="profile-content">
-                <!-- <el-row>
-                    <el-col :span="20"><div class="profile-info"><span class="profile-text1">ID&nbsp;:</span>
-                    <span class="profile-text2">&nbsp;{{ form.id }}</span></div>
-                    </el-col>
-                </el-row> -->
                 <el-row>
                     <el-col :span="20"><div class="profile-info"><span class="profile-text1">名字&nbsp;:</span>
                     <span v-if="!form.isEdit" class="profile-text2">&nbsp;{{ form.name }}</span>
@@ -51,8 +46,34 @@
                     </el-col>
                 </el-row>
                 </div></el-col>
-            <el-col :span="3"><div class="profile-content"><el-button class="Edit" v-if="!form.isEdit" @click="form.isEdit = !form.isEdit">编辑资料</el-button>
-                    <el-button class="EditFinish" type="danger" v-else @click="form.isEdit = !form.isEdit">完成编辑</el-button>
+            <el-dialog title="更改小组信息" :visible.sync="changeVisible" :close-on-click-modal=false :show-close=false>
+            <el-form label-position="top" :model="form">
+              <el-form-item label="名字" :label-width="formLabelWidth">
+                <el-input
+                  v-model="form.nameTemp"
+                  autocomplete="off"
+                  maxlength="10"
+                  show-word-limit
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="自我介绍" :label-width="formLabelWidth">
+                <el-input
+                  type="textarea"
+                  autosize
+                  v-model="form.aboutTemp"
+                  autocomplete="off"
+                  show-word-limit
+                  resize="none"
+                ></el-input>
+              </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="cancelChanges">取消</el-button>
+              <el-button type="primary" @click="updateProfileInfo">完成编辑</el-button>
+            </div>
+          </el-dialog>
+            <el-col :span="3"><div class="profile-content"><el-button class="Edit" @click="changeVisible = true">编辑资料</el-button>
+                    <!-- <el-button class="EditFinish" type="danger" v-else @click="form.isEdit = !form.isEdit">完成编辑</el-button> -->
                  </div></el-col>
         </el-row>
         </div></el-col>
@@ -86,11 +107,15 @@ export default {
                 isEdit: false,
                 id:'',
                 name:'',
+                nameTemp:'',
                 sex:'',
                 dob:'',
                 email:'',
                 about:'',
+                aboutTemp:'',
             },
+            changeVisible: false,
+            formLabelWidth: "120px",
             feeds: [
                 {
                 id: "F0001",
@@ -224,10 +249,12 @@ export default {
     .then(res => {
         console.log(res);
         this.form.name = res.data.username;
+        this.form.nameTemp = res.data.username;
         this.form.sex = res.data.gender;
         this.form.dob = res.data.dob;
         this.form.email = res.data.email;
         this.form.about = res.data.about;
+        this.form.aboutTemp = res.data.about;
         this.form.imageUrl = res.data.profile;
     })
     .catch(err => {
@@ -252,6 +279,14 @@ export default {
           this.$message.error('上传头像图片大小不能超过 2MB!');
         }
         return (isTypeTrue && isLt2M);
+      },
+      cancelChanges() {
+          this.changeVisible = false;
+          this.form.nameTemp = this.form.name;
+          this.form.aboutTemp = this.form.about;
+      },
+      updateProfileInfo() {
+
       },
     }
 }

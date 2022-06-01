@@ -34,6 +34,7 @@
                   autocomplete="off"
                   minlength="25"
                   show-word-limit
+                  resize="none"
                 ></el-input>
                 <el-upload
                   action=""
