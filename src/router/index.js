@@ -100,7 +100,7 @@ const routes = [
     component: () => import('../views/GroupInnerpage.vue')
   },
   {
-    path: '/report/review/:id',
+    path: '/report/:id',
     name: 'report',
     component: () => import('../views/Report.vue'),
     meta: {

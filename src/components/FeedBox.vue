@@ -61,11 +61,21 @@
         </el-col>
         <el-col :span="20">
           <el-row v-if="!isPublic" class="feed-publisher">
-            {{ groupName }}
+            <span @click="enterGroup(belongTo)" style="cursor: pointer">{{
+              groupName
+            }}</span>
             <el-divider direction="vertical"></el-divider>
-            {{ publisherName }}
+            <span @click="enterProfile(createdBy)" style="cursor: pointer">{{
+              publisherName
+            }}</span>
           </el-row>
-          <el-row v-else class="feed-publisher">{{ publisherName }}</el-row>
+          <el-row
+            v-else
+            class="feed-publisher"
+            @click="enterProfile(createdBy)"
+            style="cursor: pointer"
+            >{{ publisherName }}</el-row
+          >
           <el-row class="feed-time">
             <i class="el-icon-time"></i>
             {{ dateStr(createdAt) }}
@@ -132,7 +142,11 @@
           alt="comment"
         />
         <span class="comment-count">{{ commentCount }}</span>
-        <img @click="report" src="@/assets/Report.svg" alt="report icon" />
+        <img
+          @click="report('f&' + id)"
+          src="@/assets/Report.svg"
+          alt="report icon"
+        />
       </el-row>
 
       <!-- 评论区 -->
@@ -190,9 +204,13 @@
               <el-avatar :size="50" icon="el-icon-user-solid"></el-avatar>
             </el-col>
             <el-col :span="22">
-              <el-row v-if="status" class="comment-publisher">{{
-                c.publisherName
-              }}</el-row>
+              <el-row v-if="status" @click="enterProfile(c.createdBy)">
+                <span
+                  @click="enterProfile(c.createdBy)"
+                  class="comment-publisher"
+                  >{{ c.publisherName }}</span
+                >
+              </el-row>
               <el-row v-if="status" class="comment-time">
                 <i class="el-icon-time"></i>
                 {{ dateStr(c.time) }}
@@ -247,7 +265,7 @@
               <el-row type="flex" justify="center">
                 <img
                   id="report"
-                  @click="report(c.id)"
+                  @click="report('r&' + c.id)"
                   src="@/assets/Report.svg"
                   alt="report icon"
                 />
@@ -325,7 +343,7 @@ export default {
     async deleteFeed() {
       var formData = new FormData();
       formData.append("feedId", this.id);
-      if(!this.isPublic) formData.append("groupId", this.belongTo);
+      if (!this.isPublic) formData.append("groupId", this.belongTo);
 
       var header = {};
       if (localStorage.getItem("token"))
@@ -349,7 +367,7 @@ export default {
       else
         await this.$axios({
           method: "delete",
-          url: "/api/v1/group/delFeed/"+ this.belongTo + "/" + this.id,
+          url: "/api/v1/group/delFeed/" + this.belongTo + "/" + this.id,
           data: formData,
           headers: header,
         })
@@ -581,9 +599,26 @@ export default {
                 type: "success",
                 position: "top-left",
               });
+
               setTimeout(function () {
                 location.reload();
               }, 1500);
+              // var a = {};
+              // a.feed = this.id;
+              // a.title = this.userComment.title;
+              // a.description = this.userComment.content;
+              // a.img = this.userComment.img;
+              // a.time = new Date().getTime();
+              // a.createdBy = this.userId;
+              // a.likes = 0;
+              // a.dislikes = 0;
+              // a.response = "O";
+              // a.publisherName = this.user;
+              // console.log(a.img);
+              // this.comments.unshift(a);
+              // this.userComment.title = "";
+              // this.userComment.content = "";
+              // this.userComment.img = "";
               break;
           }
         })
@@ -626,7 +661,8 @@ export default {
             this.response = r.response;
             this.isFollow = r.isFollow;
             this.isMine = r.createdBy == this.userId;
-            console.log(r.message);
+            // console.log(this.comments[0]);
+            // console.log(r.message);
           })
         )
         .catch((error) => {
@@ -753,9 +789,14 @@ export default {
       this.userComment.img = event.target.files[0];
       console.log("get img! ", this.userComment);
     },
-    report(reviewid) {
-      // console.log(reviewid);
-      this.$router.push({ path:`/report/${reviewid}`})
+    report(id) {
+      this.$router.push({ path: `/report/${id}` });
+    },
+    enterProfile(userid) {
+      this.$router.push({ path: `/profile/${userid}` });
+    },
+    enterGroup(groupid) {
+      this.$router.push({ path: `/group/${groupid}` });
     },
   },
 };
@@ -869,6 +910,7 @@ export default {
 .comment-publisher {
   font-size: 18px;
   font-weight: 600;
+  cursor: pointer;
 }
 .comment-box {
   padding: 15px 0;
