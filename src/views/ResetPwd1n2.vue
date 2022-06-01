@@ -19,7 +19,7 @@
             </el-row>
             <el-row justify="center" type="flex">
                 <el-col :span="8"><div class="Box">
-                  <el-button type="primary">确定设置</el-button>
+                  <el-button type="primary" @click="confirmNewPassword">确定设置</el-button>
                 </div></el-col>
             </el-row>
         </div>
@@ -38,12 +38,68 @@ export default {
         return{
             password1:'',
             password2:'',
+            token:'',
         }
     },
     methods: {
         returnLogin() {
             this.$router.push({ path:'/login'} );
+        },
+        getToken(token) {
+            this.$axios({
+            method:'get',
+            url:'/api/v1/auth/request-validate/?token=' + token,
+            })
+            .then((res) => {
+                console.log(res);
+                // console.log(res.data.tokens.access);
+                localStorage.setItem('token', res.data.tokens.access);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    },
+    confirmNewPassword() {
+        if(this.password1 == '' || this.password2 == '') {
+            this.$message.warning("新密码和重复新密码不可为空");
+            return;
         }
+        const formData = new FormData();
+        formData.append("password", this.password1);
+        formData.append("password2", this.password2);
+
+        var header = {};
+        if (localStorage.getItem("token"))
+          header = { Authorization: "Bearer " + localStorage.getItem("token") };
+
+        this.$axios({
+            method:'put',
+            url:'/api/v1/auth/resetpwd/email/',
+            data: formData,
+            headers: header,
+            })
+            .then((res) => {
+                console.log(res);
+                this.$router.push({ path:'/login'}),
+                this.$message.success("设置成功，马上用新密码登录吧~")
+            })
+            .catch((error) => {
+                console.log(error);
+                console.log(error.response.data.error);
+                switch(error.response.data.error[0]) {
+                    case "Password must match.":
+                        this.$message.warning("新密码和重复新密码不匹配");
+                        break;
+                    default:
+                         this.$message.warning("密码需包含字母、数字及符号且字符数>=8");
+                }
+            });
+        
+    },
+    },
+    mounted() {
+        const token = this.$route.query.token;
+        this.getToken(token);
     }
 }
 </script>

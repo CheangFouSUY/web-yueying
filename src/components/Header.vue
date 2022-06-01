@@ -66,7 +66,7 @@ export default {
     },
     created() {
         const userInfo = user.getters.getUser(user.state());
-        if (userInfo) {
+        if (userInfo.user.confirmed) {
             this.isLogin = true;
             this.userName = userInfo.user.username;
             this.profileP = userInfo.user.profilePic;

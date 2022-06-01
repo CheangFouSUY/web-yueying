@@ -49,6 +49,7 @@
 
 <script>
 import Header from '@/components/Header.vue'
+ import user from "@/store/user";
 
 export default {
     name:'Register',
@@ -72,7 +73,7 @@ export default {
         Login(){
             this.$router.push('/login');
         },
-        async Submit(){
+        Submit(){
             if(this.form.username === '' || this.form.email === '' || this.form.password === '' || this.form.password2 === '' || 
             this.form.securityQ === 0 || this.form.securityQans === '') {
                 this.$message.warning("请填写所有空格（包括密保问题）");
@@ -86,18 +87,22 @@ export default {
             formData.append("securityQuestion",this.form.securityQ);
             formData.append("securityAnswer",this.form.securityQans);
 
-            await this.$axios({
+            this.$axios({
             method: 'post',  
             url: '/api/v1/auth/register/',
             data: formData,
         })
         .then(res => {
             console.log(res);
-            console.log("HELLOWORLD")
             switch (res.status) {
             case 201:
                 // this.$message.success("注册成功，请到邮箱进行认证");
                 this.$router.push('/registersuccess');
+                this.$store.dispatch('saveUserInfo', {
+                user: {
+                    "confirmed": false,
+                }
+                });
                 break;
             }
         })

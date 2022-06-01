@@ -124,12 +124,25 @@ const routes = [
     path: '/registersuccess',
     name: 'register success',
     component: () => import('../views/RegisterSuccess.vue'),
-    
+    meta: {
+      requireSuccess: true,
+    }
   },
   {
     path: '/resetpassword',
     name: 'reset password',
     component: () => import('../views/ResetPwd1n2.vue'),
+    meta: {
+      requireReset: true,
+    }
+  },
+  {
+    path: '/activatesuccess',
+    name: 'activate account success',
+    component: () => import('../views/Activated.vue'),
+    meta: {
+      requireSuccess: true,
+    }
   }
 ]
 
@@ -143,8 +156,8 @@ router.beforeEach((to, from, next) => {
   // 通过 Vuex 获取用户登录信息
   const userInfo = user.getters.getUser(user.state());
 
-  // 若前往的是登录路由，则保存当前路由到 preRoute 的键值对中，以便登录成功后跳转
-  if (to.path === '/login') {
+  // 若前往的是登录路由，则保存当前路由到 preRoute 的键值对中，以便登录成功后跳转 (Success和Reset则不保存)
+  if (to.path === '/login' && !to.meta.requireSuccess || !to.meta.requireReset) {
     localStorage.setItem("preRoute", router.currentRoute.fullPath);
   }
 
@@ -155,13 +168,12 @@ router.beforeEach((to, from, next) => {
     })
   }
 
-  //if signed in cannot go to login page
-  if (userInfo && to.meta.requireNotAuth) {
+  //If signed in cannot visit to login page and register/activate success page
+  if (userInfo && userInfo.user.confirmed && (to.meta.requireNotAuth || to.meta.requireSuccess || to.meta.requireReset)) {
     next({
         name: 'home',
     })
-}
-
+  }
 
   next()
 })

@@ -66,9 +66,11 @@ export default {
       })
       .then(res => {
         console.log(res);
+        this.$message.success("发送成功！请到邮箱进行密码恢复");
       })
       .catch(err =>{
         console.log(err);
+        this.$message.warning("邮箱和用户名错误");
       })
       
     }

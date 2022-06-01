@@ -8,11 +8,11 @@
         </div>
         <div class='inputBox'>
         <img class="icon" src="@/assets/Email.svg" alt="email_icon">
-        <input type="text" v-model="form.username" placeholder="输入你的名字或邮箱">
+        <input type="text" v-model="form.username" placeholder="请输入用户名或邮箱">
         </div>
         <div class='inputBox'>
         <img class="icon" src="@/assets/Password.svg" alt="password_icon">  
-        <input @keyup.enter="Login" type="password" v-model="form.password" placeholder="输入你的密码">
+        <input @keyup.enter="Login" type="password" v-model="form.password" placeholder="请输入密码">
         </div>
         <div class='ForgetnRegister'>
         <span @click='ForgetPw'>忘记密码</span>
@@ -51,6 +51,11 @@ export default {
         this.$router.push("/register");
     },
     async Login() {
+        if(this.form.username == '' || this.form.password == '') {
+            this.$message.warning("邮箱/用户名和密码不可为空");
+            return;
+        }
+
         const formData = new FormData();
         formData.append("username", this.form.username);
         formData.append("password", this.form.password);
@@ -88,17 +93,8 @@ export default {
             }
         })
         .catch(err => {
-            const key = Object.keys(err.response.data)[0];
-            switch(err.response.data[key][0]) {
-            case "Invalid credentials, try again":
-                this.$message.warning("用户名不存在/密码错误");
-                break;
-            case "This field may not be blank.":
-                this.$message.warning("请输入用户名和密码");
-                break;
-            default:
-                this.$message.warning(err.response.data[key][0]);
-            }
+            console.log(err);
+            this.$message.warning("用户名/邮箱不存在或密码错误");
          })
     }
   }
