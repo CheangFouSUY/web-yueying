@@ -60,12 +60,12 @@
           <el-avatar :size="50" icon="el-icon-user-solid"></el-avatar>
         </el-col>
         <el-col :span="20">
-          <el-row v-if="!isPublic" class="feed-publisher">
-            {{ groupName }}
+          <el-row v-if="!isPublic" class="feed-publisher" @click="enterGroup()">
+            <span @click="enterGroup(belongTo)" style="cursor: pointer">{{ groupName }}</span>
             <el-divider direction="vertical"></el-divider>
-            {{ publisherName }}
+            <span @click="enterProfile(createdBy)" style="cursor: pointer">{{ publisherName }}</span>
           </el-row>
-          <el-row v-else class="feed-publisher">{{ publisherName }}</el-row>
+          <el-row v-else class="feed-publisher" @click="enterProfile(createdBy)" style="cursor: pointer">{{ publisherName }}</el-row>
           <el-row class="feed-time">
             <i class="el-icon-time"></i>
             {{ dateStr(createdAt) }}
@@ -132,7 +132,7 @@
           alt="comment"
         />
         <span class="comment-count">{{ commentCount }}</span>
-        <img @click="report" src="@/assets/Report.svg" alt="report icon" />
+        <img @click="report('f&' + id)" src="@/assets/Report.svg" alt="report icon" />
       </el-row>
 
       <!-- 评论区 -->
@@ -247,7 +247,7 @@
               <el-row type="flex" justify="center">
                 <img
                   id="report"
-                  @click="report(c.id)"
+                  @click="report('r&' + c.id)"
                   src="@/assets/Report.svg"
                   alt="report icon"
                 />
@@ -753,9 +753,14 @@ export default {
       this.userComment.img = event.target.files[0];
       console.log("get img! ", this.userComment);
     },
-    report(reviewid) {
-      // console.log(reviewid);
-      this.$router.push({ path:`/report/${reviewid}`})
+    report(id) {
+      this.$router.push({ path:`/report/${id}`})
+    },
+    enterProfile(userid) {
+      this.$router.push({ path:`/profile/${userid}`})
+    },
+    enterGroup(groupid) {
+      this.$router.push({ path:`/group/${groupid}`})
     },
   },
 };
