@@ -174,35 +174,33 @@
           </el-row>
         </div>
         <el-row>
-            <el-row class="feed-header">
-              <span :style="{ color: allColor }" @click="showAll()">
-                所有
-              </span>
-              <el-divider direction="vertical"></el-divider>
-              <span :style="{ color: featureColor }" @click="showFeature()">
-                精华
-              </span>
-            </el-row>
-            <div class="group-feed" v-if="isShowFeature && status">
-              <FeedBox
-                v-for="item in featuredFeeds"
-                :key="item.id"
-                :initialFeedId="item.id"
-                :initialIsPin="item.isPin"
-                :initialIsFeatured="item.isFeature"
-                :initialIsAdmin="isOwnerOrAdmin"
-              ></FeedBox>
-            </div>
-            <div class="group-feed" v-else-if="!isShowFeature && status">
-              <FeedBox
-                v-for="item in feeds"
-                :key="item.id"
-                :initialFeedId="item.id"
-                :initialIsPin="item.isPin"
-                :initialIsFeatured="item.isFeatured"
-                :initialIsAdmin="isOwnerOrAdmin"
-              ></FeedBox>
-            </div>
+          <el-row class="feed-header">
+            <span :style="{ color: allColor }" @click="showAll()"> 所有 </span>
+            <el-divider direction="vertical"></el-divider>
+            <span :style="{ color: featureColor }" @click="showFeature()">
+              精华
+            </span>
+          </el-row>
+          <div class="group-feed" v-if="isShowFeature && status">
+            <FeedBox
+              v-for="item in featuredFeeds"
+              :key="item.id"
+              :initialFeedId="item.id"
+              :initialIsPin="item.isPin"
+              :initialIsFeatured="item.isFeature"
+              :initialIsAdmin="isOwnerOrAdmin"
+            ></FeedBox>
+          </div>
+          <div class="group-feed" v-else-if="!isShowFeature && status">
+            <FeedBox
+              v-for="item in feeds"
+              :key="item.id"
+              :initialFeedId="item.id"
+              :initialIsPin="item.isPin"
+              :initialIsFeatured="item.isFeatured"
+              :initialIsAdmin="isOwnerOrAdmin"
+            ></FeedBox>
+          </div>
         </el-row>
       </el-col>
       <el-col :span="4">
@@ -279,6 +277,9 @@
       </el-col>
     </el-row>
     <Footer id="footer"></Footer>
+    <el-backtop target=".groupInner">
+      <i class="el-icon-arrow-up" style="color: #456268"></i>
+    </el-backtop>
   </div>
 </template>
 
@@ -435,7 +436,7 @@ export default {
               this.isOwner = true;
               this.isOwnerTemp = true;
             }
-            this.status=true;
+            this.status = true;
           })
         )
         .catch((err) => {
@@ -586,11 +587,11 @@ export default {
         headers: header,
       }).then((res) => {
         this.feeds = res.data.results;
-        for(let i=0; i< this.feeds.length; i++){
-          if(this.feeds[i].isPin==0) this.feeds[i].isPin=false;
-          else this.feeds[i].isPin=true;
-          if(this.feeds[i].isFeatured==0) this.feeds[i].isFeatured=false;
-          else this.feeds[i].isFeatured=true;
+        for (let i = 0; i < this.feeds.length; i++) {
+          if (this.feeds[i].isPin == 0) this.feeds[i].isPin = false;
+          else this.feeds[i].isPin = true;
+          if (this.feeds[i].isFeatured == 0) this.feeds[i].isFeatured = false;
+          else this.feeds[i].isFeatured = true;
         }
         console.log(this.feeds);
       });
@@ -749,7 +750,7 @@ export default {
   },
   data() {
     return {
-      status:false,
+      status: false,
       isGroupMember: false,
       isOwnerOrAdmin: false,
       isOwnerOrAdminTemp: false,
@@ -1022,6 +1023,10 @@ export default {
 /* button {
   font-family: "Microsoft JhengHei", 微软正黑体, "Microsoft YaHei", 微软雅黑;
 } */
+.groupInner {
+  height: 100vh;
+  overflow-x: hidden;
+}
 #footer {
   position: relative;
   height: 88px;
