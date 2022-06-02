@@ -34,9 +34,6 @@
                  <div class="item-container" v-for="item in column" :key="item.id"><span id="feedTitle"  @click="toFeed(item.id)">{{item.title}}</span>
                  <br/><span id="feedCon" @click="toFeed(item.id)">{{item.description}}</span></div>
                 </div></div>
-                <!-- <el-col :span="7" v-for="item in items" :key="item.id"><div class="bg-blue">{{ item.content }}</div></el-col> -->
-                <!-- <el-col :span="7" ><div class="bg-yellow">{{ item.content  }}</div></el-col>
-                <el-col :span="7"><div class="bg-blue">{{ item.content }}</div></el-col> -->
             </el-row>
         </el-row >
         <el-row v-if="!noGroupData" class="Group">
@@ -69,6 +66,11 @@ export default {
     Footer,
     Swiper,
     FeedBox,
+  },
+  watch: {
+    $route: {
+      handler: "searchReload",
+    }
   },
   data() {
       return {
@@ -169,6 +171,9 @@ export default {
     },
     toFeed(feedId) {
       this.$router.push({path: `/feed/${feedId}`})
+    },
+    searchReload() {
+      location.reload();
     }
   },
   mounted() {

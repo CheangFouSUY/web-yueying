@@ -186,10 +186,10 @@ const router = new VueRouter({
   routes
 })
 
-window.popStateDetected = false
-window.addEventListener('popstate', () => {
-  window.popStateDetected = true
-})
+// window.popStateDetected = false
+// window.addEventListener('popstate', () => {
+//   window.popStateDetected = true
+// })
 
 router.beforeEach((to, from, next) => {
   // 通过 Vuex 获取用户登录信息
@@ -214,12 +214,12 @@ router.beforeEach((to, from, next) => {
     })
   }
   
-  const IsItABackButton = window.popStateDetected
-  window.popStateDetected = false
+  // const IsItABackButton = window.popStateDetected
+  // window.popStateDetected = false
 
-  if(to.path === '/empty' && IsItABackButton) {
-    history.go(-1);
-  }
+  // if(to.path === '/empty' && IsItABackButton) {
+  //   history.go(-1);
+  // }
 
 
 

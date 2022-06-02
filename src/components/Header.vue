@@ -108,7 +108,7 @@ export default {
       });
     },
     search() {
-      this.$router.push("/empty");
+      // this.$router.push("/empty");
       setTimeout(() => {
         this.$router.push(
           "/search" + this.searchType + "/?name=" + this.searchInfo
