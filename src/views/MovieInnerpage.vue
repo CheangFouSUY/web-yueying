@@ -147,7 +147,7 @@
             </el-row>
             <el-row class="comment-title">{{ item.title }}</el-row>
             <el-row>{{ item.description }}</el-row>
-            <el-image v-if="item.img" :src="item.img"></el-image>
+            <el-image v-if="item.img" class="comment-image" :src="item.img"></el-image>
           </el-col>
         </el-row>
         <el-row class="comment-action">
@@ -735,6 +735,9 @@ export default {
   font-size: 18px;
   font-weight: 600;
   text-decoration: underline;
+}
+.comment-image {
+  max-width: 100%;
 }
 .comment-time {
   font-size: 12px;

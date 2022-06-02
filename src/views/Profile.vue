@@ -14,8 +14,6 @@
                     action=""
                     :http-request="uploadAvatar"
                     :show-file-list="false"
-                    :on-success="handleAvatarSuccess"
-                    :before-upload="beforeAvatarUpload"
                     accept="image/jpeg,image/gif,image/png,image/jpg"
                   >
                     <div id="change-pic">更换头像</div>
@@ -136,6 +134,9 @@
       </el-col>
     </el-row>
     <Footer id="footer" />
+    <el-backtop target=".Profile">
+      <i class="el-icon-arrow-up" style="color: #456268"></i>
+    </el-backtop>
   </div>
 </template>
 
@@ -151,6 +152,12 @@ export default {
     Header,
     Footer,
     FeedBox,
+  },
+  watch: {
+    $route: {
+      handler: "profileReload",
+    //   immediate: true,
+    },
   },
   data() {
     return {
@@ -183,6 +190,9 @@ export default {
     this.getFeed();
   },
   methods: {
+    profileReload() {
+      location.reload();
+    },
     async uploadAvatar(file) {
       const formData = new FormData();
       formData.append("email", this.form.email);
@@ -250,24 +260,6 @@ export default {
         .catch((err) => {
           this.$message.warning(err);
         });
-    },
-    handleAvatarSuccess(res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw);
-    },
-    beforeAvatarUpload(file) {
-      const isTypeTrue =
-        file.type === "image/jpeg" ||
-        file.type === "image/jpg" ||
-        file.type === "image/png";
-      const isLt2M = file.size / 1024 / 1024 < 2;
-
-      if (!isTypeTrue) {
-        this.$message.error("上传头像图片只能是 JPG/PNG 格式!");
-      }
-      if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 2MB!");
-      }
-      return isTypeTrue && isLt2M;
     },
     cancelChanges() {
       this.changeVisible = false;
@@ -356,7 +348,11 @@ export default {
   background: yellow;
 }
 .feedbox {
-  width: 1266px;
+  /* width: 1266px; */
+}
+.Profile {
+  height: 100vh;
+  overflow-x: hidden;
 }
 #footer {
   position: relative;

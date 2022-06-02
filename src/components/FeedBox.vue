@@ -215,7 +215,7 @@
               </el-row>
               <el-row class="comment-title">{{ c.title }}</el-row>
               <el-row>{{ c.description }}</el-row>
-              <img v-if="c.img" :src="c.img" alt="comment-image" />
+              <img v-if="c.img" :src="c.img" class="comment-image" alt="comment-image" />
             </el-col>
           </el-row>
           <el-row class="comment-action">
@@ -672,7 +672,7 @@ export default {
           });
       }
       // console.log("getAll() done");
-      console.log("!!!!!", this.comments);
+      // console.log("!!!!!", this.comments);
 
       //获取评论的详情
       for (let i = 0; i < this.comments.length; i++) {
@@ -886,6 +886,9 @@ export default {
 .comment-action {
   width: 300px;
   padding-top: 10px;
+}
+.comment-image {
+  max-width: 100%;
 }
 .comment-time {
   font-size: 12px;

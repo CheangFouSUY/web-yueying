@@ -15,6 +15,12 @@ Vue.prototype.$qs = qs
 axios.defaults.baseURL = 'http://127.0.0.1:8000'
 window.jQuery = $
 window.$ = $
+router.beforeEach((to, from, next) => {
+  document.body.scrollTop = 0
+  document.documentElement.scrollTop = 0
+  window.pageYOffset = 0
+  next()
+})
 
 Vue.config.productionTip = false
 

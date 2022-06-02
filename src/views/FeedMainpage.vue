@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="all">
     <Header></Header>
     <div class="main">
       <el-row class="action">
@@ -85,6 +85,9 @@
       </div>
     </div>
     <Footer id="footer"></Footer>
+    <el-backtop target=".all">
+      <i class="el-icon-arrow-up" style="color: #456268"></i>
+    </el-backtop>
   </div>
 </template>
 
@@ -459,6 +462,10 @@ export default {
 .main {
   width: 1200px;
   margin: 30px auto;
+}
+.all {
+  height: 100vh;
+  overflow-x: hidden;
 }
 button {
   font-family: "Microsoft JhengHei", 微软正黑体, "Microsoft YaHei", 微软雅黑;
