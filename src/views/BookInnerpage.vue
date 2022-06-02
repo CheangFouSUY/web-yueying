@@ -84,7 +84,8 @@
       <el-row v-if="islogin" class="publish-box">
         <el-row :gutter="70">
           <el-col :span="1">
-            <el-avatar :size="50" icon="el-icon-user-solid"></el-avatar>
+          <el-avatar v-if="userAvatar" :size="50" :src="userAvatar"></el-avatar>
+          <el-avatar v-else :size="50" icon="el-icon-user-solid"></el-avatar>
           </el-col>
           <el-col :span="22">
             <el-row class="comment-publisher">{{ user }}</el-row>
@@ -128,7 +129,8 @@
         <el-divider></el-divider>
         <el-row :gutter="70">
           <el-col :span="1">
-            <el-avatar :size="50" icon="el-icon-user-solid"></el-avatar>
+          <el-avatar v-if="item.publisherAvatar" :size="50" :src="item.publisherAvatar"></el-avatar>
+          <el-avatar v-else :size="50" icon="el-icon-user-solid"></el-avatar>
           </el-col>
           <el-col :span="22">
             <el-row v-if="status" class="comment-publisher">
@@ -217,7 +219,7 @@ export default {
       status: false, //控制数据渲染
       islogin: false,
       user: "陌上花开",
-      // userImg: "",
+      userAvatar: "",
       id: "B11111",
       title: "盗墓笔记",
       isbn: "20134568",
@@ -307,6 +309,7 @@ export default {
     if ((userInfo = User.getters.getUser(User.state()))) {
       this.islogin = true;
       this.user = userInfo.user.username;
+      if (userInfo.user.profilePic != "None") this.userAvatar = userInfo.user.profilePic;
     }
     this.getAll();
   },
@@ -598,11 +601,12 @@ export default {
           .get("/api/v1/user/" + this.comments[i].createdBy)
           .then((res) => {
             this.comments[i].publisherName = res.data.username;
+            if(res.data.profile) this.comments[i].publisherAvatar = res.data.profile;
 
-            for (let j = i + 1; j < this.comments.length; j++) {
-              if (this.comments[i].createdBy == this.comments[j].createdBy)
-                this.comments[j].publisherName = this.comments[i].publisherName;
-            }
+            // for (let j = i + 1; j < this.comments.length; j++) {
+            //   if (this.comments[i].createdBy == this.comments[j].createdBy)
+            //     this.comments[j].publisherName = this.comments[i].publisherName;
+            // }
             if (i == this.comments.length - 1) this.status = true;
           })
           .catch((error) => {

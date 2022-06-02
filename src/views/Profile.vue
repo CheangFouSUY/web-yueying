@@ -16,10 +16,40 @@
                     :show-file-list="false"
                     accept="image/jpeg,image/gif,image/png,image/jpg"
                   >
+                    <!-- <el-image
+                    ></el-image> -->
+                    <el-avatar
+                      v-if="form.imageUrl"
+                      shape="square"
+                      :size="256"
+                      :src="form.imageUrl"
+                    >
+                    </el-avatar>
+                    <el-avatar
+                      v-else
+                      shape="square"
+                      :size="256"
+                      icon="el-icon-user-solid"
+                    >
+                    </el-avatar>
                     <div id="change-pic">更换头像</div>
-                    <el-image :src="form.imageUrl"></el-image>
                   </el-upload>
-                  <el-image v-else :src="form.imageUrl"></el-image>
+                  <div v-else>
+                    <el-avatar
+                      v-if="form.imageUrl"
+                      shape="square"
+                      :size="256"
+                      :src="form.imageUrl"
+                    >
+                    </el-avatar>
+                    <el-avatar
+                      v-else
+                      shape="square"
+                      :size="256"
+                      icon="el-icon-user-solid"
+                    >
+                    </el-avatar>
+                  </div>
                 </div></div
             ></el-col>
             <el-col :span="15"
@@ -156,7 +186,6 @@ export default {
   watch: {
     $route: {
       handler: "profileReload",
-    //   immediate: true,
     },
   },
   data() {
@@ -178,7 +207,7 @@ export default {
       changeVisible: false,
       formLabelWidth: "120px",
       feeds: [],
-    }
+    };
   },
   created() {
     var userInfo;
@@ -199,6 +228,7 @@ export default {
       formData.append("username", this.form.name);
       formData.append("profile", file.file);
       formData.append("userId", this.form.id);
+      console.log(file.file);
 
       var header = {};
       if (localStorage.getItem("token"))
@@ -253,9 +283,7 @@ export default {
           this.form.email = r.email;
           this.form.about = r.about;
           this.form.aboutTemp = r.about;
-          if (r.profile == null) {
-            this.form.imageUrl = require("@/assets/DefaultProfile.jpg");
-          } else this.form.imageUrl = r.profile;
+          if (r.profile) this.form.imageUrl = r.profile;
         })
         .catch((err) => {
           this.$message.warning(err);

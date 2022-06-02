@@ -43,7 +43,8 @@
     </el-dialog>
     <span v-if="isLogin" id="userInfo" @click="viewProfile">{{userName}}</span>
     <!-- <span v-if="!isLogin" id="userInfo">MIKIWONGaaaaaaa</span> -->
-    <el-avatar v-if="isLogin" id="userAvatar" src="https://www.pngall.com/wp-content/uploads/5/Pokemon-Pikachu-PNG-Image.png"></el-avatar>
+          <el-avatar v-if="isLogin && profileP" id="userAvatar" :src="profileP"></el-avatar>
+          <el-avatar v-else-if="isLogin && !profileP" id="userAvatar" icon="el-icon-user-solid"></el-avatar>
     <!-- <span v-else id="loginname" @click="login">{{ userName }}</span> -->
 </div>
 </template>
@@ -69,7 +70,7 @@ export default {
         if (userInfo.user.confirmed) {
             this.isLogin = true;
             this.userName = userInfo.user.username;
-            this.profileP = userInfo.user.profilePic;
+            if(userInfo.user.profilePic != "None")this.profileP = userInfo.user.profilePic;
             this.userId = userInfo.user.id;
         }
     },

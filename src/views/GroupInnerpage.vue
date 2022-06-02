@@ -219,16 +219,34 @@
           <el-row v-for="item in groupInfo.mainadmin" :key="item.id">
             <el-col :span="24"
               ><div class="adminlist">
-                <el-avatar :size="30" icon="el-icon-user-solid"></el-avatar
-                ><span>&nbsp;{{ item.username }}</span>
+                <el-avatar
+                  v-if="item.profile"
+                  :size="30"
+                  :src="item.profile"
+                ></el-avatar>
+                <el-avatar
+                  v-else
+                  :size="30"
+                  icon="el-icon-user-solid"
+                ></el-avatar>
+                <span>&nbsp;{{ item.username }}</span>
                 <i class="el-icon-star-off"></i></div
             ></el-col>
           </el-row>
           <el-row v-for="item in groupInfo.admin" :key="item.id">
             <el-col :span="24"
               ><div class="adminlist">
-                <el-avatar :size="30" icon="el-icon-user-solid"></el-avatar
-                ><span @click="setRole1(item.id)" class="setRole"
+                <el-avatar
+                  v-if="item.profile"
+                  :size="30"
+                  :src="item.profile"
+                ></el-avatar>
+                <el-avatar
+                  v-else
+                  :size="30"
+                  icon="el-icon-user-solid"
+                ></el-avatar>
+                <span @click="setRole1(item.id)" class="setRole"
                   >&nbsp;{{ item.username }}</span
                 >
                 <i class="el-icon-star-off"></i></div
@@ -244,8 +262,17 @@
           <el-row v-for="item in groupInfo.member" :key="item.id">
             <el-col :span="24"
               ><div class="memberlist">
-                <el-avatar :size="30" icon="el-icon-user-solid"></el-avatar
-                ><span @click="setRole2(item.id)" class="setRole"
+                <el-avatar
+                  v-if="item.profile"
+                  :size="30"
+                  :src="item.profile"
+                ></el-avatar>
+                <el-avatar
+                  v-else
+                  :size="30"
+                  icon="el-icon-user-solid"
+                ></el-avatar>
+                <span @click="setRole2(item.id)" class="setRole"
                   >&nbsp;{{ item.username }}</span
                 >
               </div></el-col
