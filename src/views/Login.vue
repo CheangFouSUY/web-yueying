@@ -77,7 +77,7 @@ export default {
                     'username': res.data.username,
                     "confirmed": true,
                     'id': res.data.id,
-                    "profilePic": res.data.thumbnail,
+                    "profilePic": res.data.profile,
                 }
                 });
 

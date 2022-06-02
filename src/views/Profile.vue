@@ -76,7 +76,7 @@
               </div></el-col
             >
             <el-dialog
-              title="更改小组信息"
+              title="编辑个人信息"
               :visible.sync="changeVisible"
               :close-on-click-modal="false"
               :show-close="false"
@@ -274,7 +274,43 @@ export default {
       this.form.nameTemp = this.form.name;
       this.form.aboutTemp = this.form.about;
     },
-    updateProfileInfo() {},
+    async updateProfileInfo() {
+      const formData = new FormData();
+      formData.append("email", this.form.email);
+      formData.append("username", this.form.nameTemp);
+      formData.append("userId", this.form.id);
+      formData.append("about", this.form.aboutTemp);
+
+      var header = {};
+      if (localStorage.getItem("token"))
+        header = { Authorization: "Bearer " + localStorage.getItem("token") };
+
+      await this.$axios({
+        method: "put",
+        url: "/api/v1/user/" + this.$route.params.id,
+        data: formData,
+        headers: header,
+      })
+        .then((res) => {
+          console.log(res);
+          this.form.name = this.form.nameTemp;
+          this.form.about = this.form.aboutTemp;
+          this.changeVisible = false;
+          this.$store.commit('saveUserInfo', {
+          user: {
+              'username': res.data.username,
+              "confirmed": true,
+              'id': res.data.id,
+              "profilePic": res.data.profile,
+           }
+          });
+          this.$message.success("恭喜！修改成功");
+        })
+        .catch((err) => {
+          console.log(err);
+          this.$message.warning("抱歉！用户名已被使用");
+        });
+    },
   },
 };
 </script>

@@ -125,9 +125,34 @@ const routes = [
     // }
   },
   {
-    path: '/search',
+    path: '/searchall',
     name: 'search',
     component: () => import('../views/Search.vue')
+  },
+  {
+    path: '/searchbook',
+    name: 'search',
+    component: () => import('../views/SearchBook.vue')
+  },
+  {
+    path: '/searchdrama',
+    name: 'search',
+    component: () => import('../views/SearchDrama.vue')
+  },
+  {
+    path: '/searchfeed',
+    name: 'search',
+    component: () => import('../views/SearchFeed.vue')
+  },
+  {
+    path: '/searchgroup',
+    name: 'search',
+    component: () => import('../views/SearchGroup.vue')
+  },
+  {
+    path: '/feed/:id',
+    name: 'feed inner',
+    component: () => import('../views/FeedInnerpage.vue')
   },
   {
     path: '/registersuccess',
@@ -161,6 +186,11 @@ const router = new VueRouter({
   routes
 })
 
+window.popStateDetected = false
+window.addEventListener('popstate', () => {
+  window.popStateDetected = true
+})
+
 router.beforeEach((to, from, next) => {
   // 通过 Vuex 获取用户登录信息
   const userInfo = user.getters.getUser(user.state());
@@ -183,14 +213,18 @@ router.beforeEach((to, from, next) => {
         name: 'home',
     })
   }
+  
+  const IsItABackButton = window.popStateDetected
+  window.popStateDetected = false
 
-  // if (userInfo && !userInfo.user.confirmed && to.meta.requireSuccess) {
-  //   next({
-  //     name: 'register success',
-  //   })
-  // }
+  if(to.path === '/empty' && IsItABackButton) {
+    history.go(-1);
+  }
+
+
 
   next()
 })
+
 
 export default router
