@@ -600,6 +600,17 @@ export default {
       // console.log("getAll() done");
       // console.log("!!!!!", this.comments);
 
+      if (this.islogin)
+        await this.$axios
+          .get("/api/v1/user/" + this.userId)
+          .then((res) => {
+            this.user = res.data.username;
+            this.userAvatar = res.data.profile;
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+
       //获取评论的详情
       for (let i = 0; i < this.comments.length; i++) {
         this.comments[i].time = new Date(this.comments[i].createdAt).getTime();
@@ -613,17 +624,6 @@ export default {
           .catch((error) => {
             console.log(error);
           });
-
-        if (this.islogin)
-          await this.$axios
-            .get("/api/v1/user/" + this.userId)
-            .then((res) => {
-              this.user = res.data.username;
-              this.userAvatar = res.data.profile;
-            })
-            .catch((error) => {
-              console.log(error);
-            });
 
         this.$axios
           .get("/api/v1/user/" + this.comments[i].createdBy)

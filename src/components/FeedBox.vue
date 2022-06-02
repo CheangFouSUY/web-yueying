@@ -375,24 +375,9 @@ export default {
         header = { Authorization: "Bearer " + localStorage.getItem("token") };
       console.log(header);
 
-      if (this.isPublic)
         await this.$axios({
           method: "delete",
           url: "/api/v1/feed/" + this.id,
-          data: formData,
-          headers: header,
-        })
-          .then((res) => {
-            console.log(res);
-            location.reload();
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      else
-        await this.$axios({
-          method: "delete",
-          url: "/api/v1/group/delFeed/" + this.belongTo + "/" + this.id,
           data: formData,
           headers: header,
         })
