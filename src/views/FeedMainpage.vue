@@ -308,6 +308,7 @@ export default {
       })
         .then((res) => {
           console.log(res);
+          this.formVisible = false;
           switch (res.status) {
             case 201:
               this.$notify({

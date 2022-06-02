@@ -84,6 +84,7 @@ export default {
       userName: this.initialUsername,
       searchInfo: "",
       userId: "",
+      profileP: "",
       // userNames:'aaaaaaaaaaaaaaaaaaaaa',
       searchType: "all",
     };

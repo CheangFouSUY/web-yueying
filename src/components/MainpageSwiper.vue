@@ -11,7 +11,7 @@
               class="item-box"
               v-for="item in showList"
               :key="item.id"
-              :style="{ minWidth: width }"
+              :style="{ minWidth: width, maxWidth: width}"
             >
               <div class="image-box">
                 <el-image
@@ -35,7 +35,7 @@
           ></i>
           <i
             class="el-icon-arrow-right"
-            v-show="currentOffset > -854"
+            v-show="currentOffset > -854 && listLength>6"
             @click="right"
           ></i>
         </div>
@@ -57,6 +57,7 @@ export default {
   data() {
     return {
       showList: this.initialList,
+      listLength: "",
       type: this.listType,
       currentOffset: 0,
       boxWidth: "",
@@ -65,6 +66,7 @@ export default {
   },
   mounted() {
     this.setCardWidth();
+    this.listLength = this.showList.length;
   },
   methods: {
     setCardWidth() {

@@ -124,6 +124,7 @@ export default {
           url: "/api/v1/feed/" + arr[1],
         })
           .then((res) => {
+            this.Report.feedId = arr[1];
             this.Report.con = res.data.description;
             this.Report.getreportid = res.data.createdBy;
           })
@@ -145,6 +146,7 @@ export default {
           url: "/api/v1/review/" + arr[1],
         })
           .then((res) => {
+            this.Report.reviewId = arr[1];
             this.Report.con = res.data.description;
             this.Report.getreportid = res.data.createdBy;
           })

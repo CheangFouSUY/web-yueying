@@ -16,8 +16,6 @@
                     :show-file-list="false"
                     accept="image/jpeg,image/gif,image/png,image/jpg"
                   >
-                    <!-- <el-image
-                    ></el-image> -->
                     <el-avatar
                       v-if="form.imageUrl"
                       shape="square"
@@ -421,11 +419,11 @@ export default {
   width: 256px;
   height: 256px;
 }
-.profilePic .el-image {
+/* .profilePic .el-image {
   display: block;
   width: 256px;
   height: 256px;
-}
+} */
 .profile-info {
   font-size: 20px;
   margin-top: 15px;

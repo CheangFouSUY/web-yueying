@@ -84,8 +84,12 @@
       <el-row v-if="islogin" class="publish-box">
         <el-row :gutter="70">
           <el-col :span="1">
-          <el-avatar v-if="userAvatar" :size="50" :src="userAvatar"></el-avatar>
-          <el-avatar v-else :size="50" icon="el-icon-user-solid"></el-avatar>
+            <el-avatar
+              v-if="userAvatar"
+              :size="50"
+              :src="userAvatar"
+            ></el-avatar>
+            <el-avatar v-else :size="50" icon="el-icon-user-solid"></el-avatar>
           </el-col>
           <el-col :span="22">
             <el-row class="comment-publisher">{{ user }}</el-row>
@@ -96,11 +100,23 @@
                   type="text"
                   placeholder="书评标题："
                 />
-                <input
+                <div>
+                  <div
+                    class="comment-autosize"
+                    :v-model="userComment.content"
+                  ></div>
+                  <textarea
+                    v-model="userComment.content"
+                    resize="none"
+                    placeholder="书评内容："
+                  ></textarea>
+                </div>
+
+                <!-- <input
                   v-model="userComment.content"
                   type="text"
                   placeholder="书评内容："
-                />
+                /> -->
                 <span class="showFileName"></span>
                 <el-row class="publish-action" :span="20">
                   <i
@@ -129,12 +145,19 @@
         <el-divider></el-divider>
         <el-row :gutter="70">
           <el-col :span="1">
-          <el-avatar v-if="item.publisherAvatar" :size="50" :src="item.publisherAvatar"></el-avatar>
-          <el-avatar v-else :size="50" icon="el-icon-user-solid"></el-avatar>
+            <el-avatar
+              v-if="item.publisherAvatar"
+              :size="50"
+              :src="item.publisherAvatar"
+            ></el-avatar>
+            <el-avatar v-else :size="50" icon="el-icon-user-solid"></el-avatar>
           </el-col>
           <el-col :span="22">
             <el-row v-if="status" class="comment-publisher">
-              <span @click="enterProfile(item.createdBy)" style="cursor: pointer">
+              <span
+                @click="enterProfile(item.createdBy)"
+                style="cursor: pointer"
+              >
                 {{ item.publisherName }}
               </span>
             </el-row>
@@ -144,7 +167,11 @@
             </el-row>
             <el-row class="comment-title">{{ item.title }}</el-row>
             <el-row>{{ item.description }}</el-row>
-            <el-image v-if="item.img" class="comment-image" :src="item.img"></el-image>
+            <el-image
+              v-if="item.img"
+              class="comment-image"
+              :src="item.img"
+            ></el-image>
           </el-col>
         </el-row>
         <el-row class="comment-action">
@@ -207,6 +234,12 @@
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
 import User from "@/store/user";
+
+// var textarea = document.querySelector("textarea");
+// textarea.addEventListener("input", (e) => {
+//   textarea.style.height = "100px";
+//   textarea.style.height = e.target.scrollHeight + "px";
+// });
 
 export default {
   name: "BookInnerpage",
@@ -313,6 +346,7 @@ export default {
     }
     this.getAll();
   },
+  watch() {},
   methods: {
     async commentResponse(item, r) {
       var formData = new FormData();
@@ -584,6 +618,17 @@ export default {
       // console.log("getAll() done");
       // console.log("!!!!!", this.comments);
 
+      if (this.islogin)
+        await this.$axios
+          .get("/api/v1/user/" + this.userId)
+          .then((res) => {
+            this.user = res.data.username;
+            this.userAvatar = res.data.profile;
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+
       //获取评论的详情
       for (let i = 0; i < this.comments.length; i++) {
         this.comments[i].time = new Date(this.comments[i].createdAt).getTime();
@@ -598,22 +643,12 @@ export default {
             console.log(error);
           });
 
-if (this.islogin)
-        await this.$axios
-          .get("/api/v1/user/" + this.userId)
-          .then((res) => {
-            this.user = res.data.username;
-            this.userAvatar = res.data.profile;
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-
         this.$axios
           .get("/api/v1/user/" + this.comments[i].createdBy)
           .then((res) => {
             this.comments[i].publisherName = res.data.username;
-            if(res.data.profile) this.comments[i].publisherAvatar = res.data.profile;
+            if (res.data.profile)
+              this.comments[i].publisherAvatar = res.data.profile;
 
             // for (let j = i + 1; j < this.comments.length; j++) {
             //   if (this.comments[i].createdBy == this.comments[j].createdBy)
@@ -722,8 +757,35 @@ if (this.islogin)
   background-color: rgba(121, 163, 177, 0.2);
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.05);
 }
-.publish-box input:focus {
+.publish-box input:focus,
+.publish-box textarea:focus {
   outline: none;
+}
+.publish-box textarea {
+  position: absolute;
+  resize: none;
+  width: 100%;
+  height: 100%;
+  margin: 5px;
+  padding: 10px;
+  border: none;
+  background: none;
+
+  /* box-sizing: border-box; */
+  /* transition: all 0.2s linear; */
+  /* overflow: hidden; */
+  color: #456268;
+  outline: red 1px solid;
+  font-family: "Microsoft JhengHei", 微软正黑体, "Microsoft YaHei", 微软雅黑;
+}
+.comment-autosize {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  margin: 5px;
+  padding: 10px;
+  outline: red 1px solid;
+  /* visibility: hidden; */
 }
 .publish-box input {
   width: 1060px;
@@ -732,12 +794,15 @@ if (this.islogin)
   border: none;
   background: none;
   color: #456268;
+  outline: red 1px solid;
   font-family: "Microsoft JhengHei", 微软正黑体, "Microsoft YaHei", 微软雅黑;
 }
 .publish-write {
+  height: auto;
   margin: 5px 0;
   border-radius: 10px;
   background: rgba(121, 163, 177, 0.1);
+  outline: red 1px solid;
 }
 .comment-like-count {
   font-size: 12px;
