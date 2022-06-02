@@ -56,6 +56,7 @@ export default {
         .then(res =>{
             console.log(res);
             this.hotMovie = res.data.results;
+            this.setRating(this.hotMovie);
             if(this.hotMovie.length == 0)
               this.noData = true;
         })
@@ -65,7 +66,12 @@ export default {
     },
     searchReload() {
       location.reload();
-    }
+    },
+    setRating(arr) {
+      return arr.forEach(function (value, index, array) {
+        array[index].rating = array[index].rating.toFixed(1);
+      });
+    },
   },
   mounted() {
     this.searchItem = this.$route.query.name;

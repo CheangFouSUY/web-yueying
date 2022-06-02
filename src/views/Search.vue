@@ -124,6 +124,8 @@ export default {
             this.hotMovie = mlist.data.results;
             this.feeds = flist.data.results;
             this.groupData = glist.data.results;
+            this.setRating(this.hotBook);
+            this.setRating(this.hotMovie);
 
             if(this.hotBook.length == 0)
               this.noBookData = true;
@@ -174,7 +176,13 @@ export default {
     },
     searchReload() {
       location.reload();
-    }
+    },
+    setRating(arr) {
+      return arr.forEach(function (value, index, array) {
+        array[index].rating = array[index].rating.toFixed(1);
+      });
+    },
+    
   },
   mounted() {
     this.searchItem = this.$route.query.name;
