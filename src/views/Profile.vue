@@ -1,6 +1,6 @@
 <template>
   <div class="Profile">
-    <Header />
+    <Header :initialUsername="form.name"/>
     <el-row type="flex" justify="center">
       <el-col :span="20"
         ><div class="profile-box">
@@ -316,14 +316,17 @@ export default {
           this.form.name = this.form.nameTemp;
           this.form.about = this.form.aboutTemp;
           this.changeVisible = false;
-          this.$store.commit('saveUserInfo', {
-          user: {
-              'username': res.data.username,
-              "confirmed": true,
-              'id': res.data.id,
-              "profilePic": res.data.profile,
-           }
-          });
+          setTimeout(function () {
+            location.reload(true);
+          }, 500);
+          // this.$store.commit('saveUserInfo', {
+          // user: {
+          //     'username': res.data.username,
+          //     "confirmed": true,
+          //     'id': res.data.id,
+          //     "profilePic": res.data.profile,
+          //  }
+          // });
           this.$message.success("恭喜！修改成功");
         })
         .catch((err) => {

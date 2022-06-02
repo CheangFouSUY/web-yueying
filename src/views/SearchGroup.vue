@@ -5,7 +5,10 @@
         <el-row class="Top" align="middle" type="flex">
             <img class="searchicon" src="@/assets/Search2.svg" alt="search_icon"><span>搜索"{{searchItem}}"</span>
         </el-row>
-        <el-row class="Group">
+        <el-row class="noResult">
+            <span v-if="noData">抱歉！没有结果</span>
+        </el-row>
+        <el-row v-if="!noData" class="Group">
             <el-row class="Text" align="middle" type="flex">
             <i class="el-icon-s-flag"></i><span>小组</span>
             </el-row>
@@ -40,6 +43,7 @@ export default {
       return {
         searchItem:'',
         groupData:[],
+        noData: false,
       }
   },
   computed: {
@@ -63,6 +67,8 @@ export default {
         .then(res =>{
             console.log(res);
             this.groupData = res.data.results;
+            if(this.groupData.length == 0)
+              this.noData = true;
         })
         .catch(err =>{
             console.log(err);
@@ -152,6 +158,12 @@ export default {
   /* border: 1px solid; */
   text-align: center;
   width: 340px;
+}
+.noResult{
+  /* border: 1px solid; */
+  margin-top: 20px;
+  font-size: 24px;
+  padding-left: 20px;
 }
 #feedCon{
   font-size: 20px;

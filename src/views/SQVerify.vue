@@ -36,7 +36,7 @@
         <span class='symbol'>|</span>
         <button @click='RegisterNow'>立即注册</button>
       </div>
-      <button id="submit" @click="Submit">验证</button>
+      <button id="submit" @click="Submit">确定设置</button>
     </div>
   </div>
   </div>
@@ -72,6 +72,11 @@ export default {
       this.$router.push('/register')
     },
     Submit() {
+      if(this.username == '' || this.password1 == '' || this.password2 == '' || this.sAnswer == '') {
+        this.$message.warning("请填写所有空格");
+        return;
+      }
+
       const formData = new FormData();
       formData.append("username", this.username);
       formData.append("newpassword", this.password1);
@@ -86,9 +91,21 @@ export default {
       })
       .then(res =>{
         console.log(res);
+        this.$message.success("设置成功！快用新密码登录吧~")
+        this.$router.push({ path:'/login'})
       })
       .catch(err =>{
         console.log(err);
+        switch(err.response.data.message) {
+          case "Password not match.":
+            this.$message.warning("新密码和重复新密码不匹配");
+            break;
+          case "Password too simple.":
+            this.$message.warning("密码需包含字母、数字及符号且字符数>=8");
+            break;
+          default:
+            this.$message.warning("重置失败！");
+        }
       })
     },
     GetQuestion(){

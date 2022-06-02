@@ -6,9 +6,9 @@
             <img class="searchicon" src="@/assets/Search2.svg" alt="search_icon"><span>搜索"{{searchItem}}"</span>
         </el-row>
         <el-row class="noResult">
-            <span>抱歉！没有结果</span>
+            <span v-if="noData">抱歉！没有结果</span>
         </el-row>
-        <el-row class="Book">
+        <el-row v-if="!noBookData" class="Book">
             <el-row class="Text" align="middle" type="flex">
             <img src="@/assets/Book.svg" alt="book icon" /><span>图书</span>
             </el-row>
@@ -16,7 +16,7 @@
                 <Swiper :initialList="hotBook" :listType="'book'" v-if="hotBook.length"></Swiper>
             </el-row>
         </el-row>
-        <el-row class="Drama">
+        <el-row v-if="!noMovieData" class="Drama">
             <el-row class="Text" align="middle" type="flex">
             <img src="@/assets/Video.svg" alt="video icon" /><span>影视</span>
             </el-row>
@@ -24,7 +24,7 @@
                 <Swiper :initialList="hotMovie" :listType="'movie'" v-if="hotMovie.length"></Swiper>
             </el-row>
         </el-row>
-        <el-row class="Feed">
+        <el-row v-if="!noFeedData" class="Feed">
             <el-row class="Text" align="middle" type="flex">
             <i class="el-icon-position"></i><span>话题</span>
             </el-row>
@@ -39,7 +39,7 @@
                 <el-col :span="7"><div class="bg-blue">{{ item.content }}</div></el-col> -->
             </el-row>
         </el-row >
-        <el-row class="Group">
+        <el-row v-if="!noGroupData" class="Group">
             <el-row class="Text" align="middle" type="flex">
             <i class="el-icon-s-flag"></i><span>小组</span>
             </el-row>
@@ -77,6 +77,11 @@ export default {
         hotMovie:[],
         feeds:[],
         groupData:[],
+        noData: false,
+        noBookData: false,
+        noMovieData: false,
+        noFeedData: false,
+        noGroupData: false,
       }
   },
   computed: {
@@ -117,6 +122,18 @@ export default {
             this.hotMovie = mlist.data.results;
             this.feeds = flist.data.results;
             this.groupData = glist.data.results;
+
+            if(this.hotBook.length == 0)
+              this.noBookData = true;
+            if(this.hotMovie.length == 0)
+              this.noMovieData = true;
+            if(this.feeds.length == 0)
+              this.noFeedData = true;
+            if(this.groupData.length == 0)
+              this.noGroupData = true;
+            if(this.hotBook.length == 0 && this.hotMovie.length == 0 && this.feeds.length == 0 && this.groupData.length == 0)
+              this.noData = true;
+              
           })
         )
         .catch((error) => {

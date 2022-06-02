@@ -63,16 +63,20 @@ import user from "@/store/user";
 
 export default {
   name: "Header",
+  props: {
+    initialUsername: String,
+  },
   data() {
     return {
         status: false,
       dialogVisible: false,
       isLogin: false,
-      userName: "",
+      userName: this.initialUsername,
       profileP: "",
       searchInfo: "",
       userId: "",
       // userNames:'aaaaaaaaaaaaaaaaaaaaa',
+      searchType:'all',
     };
   },
   created() {

@@ -6,7 +6,10 @@
         <el-row class="Top" align="middle" type="flex">
             <img class="searchicon" src="@/assets/Search2.svg" alt="search_icon"><span>搜索"{{searchItem}}"</span>
         </el-row>
-        <el-row class="Book">
+        <el-row class="noResult">
+            <span v-if="noData">抱歉！没有结果</span>
+        </el-row>
+        <el-row v-if="!noData" class="Book">
             <el-row class="Text" align="middle" type="flex">
             <img src="@/assets/Book.svg" alt="book icon" /><span>图书</span>
             </el-row>
@@ -36,6 +39,7 @@ export default {
       return {
         searchItem:'',
         hotBook:[],
+        noData: false,
       }
   },
   methods: {
@@ -47,6 +51,8 @@ export default {
         .then(res =>{
             console.log(res);
             this.hotBook = res.data.results;
+            if(this.hotBook.length == 0)
+              this.noData = true;
         })
         .catch(err =>{
             console.log(err);
@@ -125,6 +131,12 @@ export default {
   display: flex;
   align-items: center;
   font-size: 20px;
+}
+.noResult{
+  /* border: 1px solid; */
+  margin-top: 20px;
+  font-size: 24px;
+  padding-left: 20px;
 }
 #feedCon{
   font-size: 20px;

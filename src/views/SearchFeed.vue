@@ -5,7 +5,10 @@
         <el-row class="Top" align="middle" type="flex">
             <img class="searchicon" src="@/assets/Search2.svg" alt="search_icon"><span>搜索"{{searchItem}}"</span>
         </el-row>
-        <el-row class="Feed">
+        <el-row class="noResult">
+            <span v-if="noData">抱歉！没有结果</span>
+        </el-row>
+        <el-row v-if="!noData" class="Feed">
             <el-row class="Text" align="middle" type="flex">
             <i class="el-icon-position"></i><span>话题</span>
             </el-row>
@@ -43,6 +46,7 @@ export default {
         searchItem:'',
         feeds:[],
         feedsId:[],
+        noData: false,
       }
   },
   computed: {
@@ -66,6 +70,8 @@ export default {
         .then(res =>{
             console.log(res.data.results);
             this.feeds = res.data.results;
+            if(this.feeds.length == 0)
+              this.noData = true;
         })
         .catch(err =>{
             console.log(err);
@@ -149,7 +155,12 @@ export default {
   align-items: center;
   font-size: 20px;
 }
-#feedCon{
+.noResult{
+  /* border: 1px solid; */
+  margin-top: 20px;
+  font-size: 24px;
+  padding-left: 20px;
+}dCon{
   font-size: 20px;
 }
 #feedTitle{
