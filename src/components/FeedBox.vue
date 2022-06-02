@@ -334,9 +334,7 @@ export default {
     var userInfo;
     if ((userInfo = User.getters.getUser(User.state()))) {
       this.islogin = true;
-      this.user = userInfo.user.username;
       this.userId = userInfo.user.id;
-      if (userInfo.user.profilePic != "None") this.userAvatar = userInfo.user.profilePic;
     }
     this.getAll();
   },
@@ -641,9 +639,11 @@ export default {
     },
     async getAll() {
       await this.$axios
-        .all([this.getFeedDetail(), this.getComment()])
+        .all([this.getUser(), this.getFeedDetail(), this.getComment()])
         .then(
-          this.$axios.spread((detailRes, commentRes) => {
+          this.$axios.spread((userRes, detailRes, commentRes) => {
+            this.user = userRes.data.username;
+            this.userAvatar = userRes.data.profile;
             var r = detailRes.data;
             this.title = r.title;
             this.description = r.description;
@@ -736,6 +736,12 @@ export default {
         method: "get",
         url: "/api/v1/review/list?feed=" + this.id,
         headers: header,
+      });
+    },
+    getUser() {
+      return this.$axios({
+        method: "get",
+        url: "/api/v1/user/" + this.userId,
       });
     },
     dateStr(date) {

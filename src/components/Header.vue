@@ -1,23 +1,32 @@
 <template>
-<div class="nav">
+  <div class="nav">
     <a href="/" id="logoName">
-        <img id="headerLogo" src="@/assets/LogoWhite.svg">
-        阅·影
+      <img id="headerLogo" src="@/assets/LogoWhite.svg" />
+      阅·影
     </a>
     <a href="/book" class="navLink">图书</a>
     <a href="/movie" class="navLink">影视</a>
     <a href="/feed" class="navLink">话题</a>
     <a href="/group" class="navLink">小组</a>
-    <div class='searchBox'>
-                <select id="Type" name="Type">
-                    <option value="all">全部</option>
-                    <option value="books">图书</option>
-                    <option value="movies">影视</option>
-                    <option value="feeds">话题</option>
-                    <option value="groups">小组</option>
-                </select>
-        <input type='text' v-model='searchInfo' placeholder="输入你想搜索的内容">
-        <img class="navicon" @click="search" src="@/assets/Search.svg" alt="search_icon">
+    <div class="searchBox">
+      <select id="Type" name="Type">
+        <option value="all">全部</option>
+        <option value="books">图书</option>
+        <option value="movies">影视</option>
+        <option value="feeds">话题</option>
+        <option value="groups">小组</option>
+      </select>
+      <input
+        type="text"
+        v-model="searchInfo"
+        placeholder="输入你想搜索的内容"
+      />
+      <img
+        class="navicon"
+        @click="search"
+        src="@/assets/Search.svg"
+        alt="search_icon"
+      />
     </div>
     <el-button v-if="!isLogin" id="login" @click="login">登录</el-button>
     <!-- <el-select v-else v-model="value"
@@ -30,211 +39,230 @@
       :value="item.value">
     </el-option>
   </el-select> -->
-    <el-button slot="reference" v-if="isLogin" id="login" @click="logout">登出</el-button>
-    <el-dialog
-    title="提示"
-    :visible.sync="dialogVisible"
-    width="30%">
-    <span>你确定要登出吗？</span>
-    <span slot="footer" class="dialog-footer">
+    <el-button slot="reference" v-if="isLogin" id="login" @click="logout"
+      >登出</el-button
+    >
+    <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
+      <span>你确定要登出吗？</span>
+      <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取消</el-button>
         <el-button type="primary" @click="realLogout">确定</el-button>
-    </span>
+      </span>
     </el-dialog>
-    <span v-if="isLogin" id="userInfo" @click="viewProfile">{{userName}}</span>
+    <span v-if="isLogin" id="userInfo" @click="viewProfile">{{
+      userName
+    }}</span>
     <!-- <span v-if="!isLogin" id="userInfo">MIKIWONGaaaaaaa</span> -->
-          <el-avatar v-if="isLogin && profileP" id="userAvatar" :src="profileP"></el-avatar>
-          <el-avatar v-else-if="isLogin && !profileP" id="userAvatar" icon="el-icon-user-solid"></el-avatar>
+    <el-avatar
+      v-if="isLogin && profileP"
+      id="userAvatar"
+      :src="profileP"
+    ></el-avatar>
+    <el-avatar
+      v-else-if="isLogin && !profileP"
+      id="userAvatar"
+      icon="el-icon-user-solid"
+    ></el-avatar>
     <!-- <span v-else id="loginname" @click="login">{{ userName }}</span> -->
-</div>
+  </div>
 </template>
 
 <script>
- import user from "@/store/user";
+import user from "@/store/user";
 
 export default {
-    name:'Header',
-    data() {
-        return {
-            dialogVisible: false,
-            isLogin: false,
-            userName:'',
-            profileP:'',
-            searchInfo:'',
-            userId:'',
-            // userNames:'aaaaaaaaaaaaaaaaaaaaa',
-        };
+  name: "Header",
+  data() {
+    return {
+        status: false,
+      dialogVisible: false,
+      isLogin: false,
+      userName: "",
+      profileP: "",
+      searchInfo: "",
+      userId: "",
+      // userNames:'aaaaaaaaaaaaaaaaaaaaa',
+    };
+  },
+  created() {
+    const userInfo = user.getters.getUser(user.state());
+    if (userInfo.user.confirmed) {
+      this.isLogin = true;
+      this.userId = userInfo.user.id;
+      this.getUser();
+    }
+  },
+  methods: {
+    getUser() {
+      this.$axios({
+        method: "get",
+        url: "/api/v1/user/" + this.userId,
+      }).then((res) => {
+          this.userName = res.data.username;
+          this.profileP = res.data.profile;
+          this.status = true;
+      });
     },
-    created() {
-        const userInfo = user.getters.getUser(user.state());
-        if (userInfo.user.confirmed) {
-            this.isLogin = true;
-            this.userName = userInfo.user.username;
-            if(userInfo.user.profilePic != "None")this.profileP = userInfo.user.profilePic;
-            this.userId = userInfo.user.id;
-        }
+    search() {
+      this.$router.push("/search/" + this.searchInfo);
     },
-    methods:{
-        search() { 
-            this.$router.push('/search/' + this.searchInfo)
-        },
-        login() {
-            this.$router.push('/login');
-        },
-        logout() {
-            this.dialogVisible = true;
-        },
-        realLogout() {
-            this.dialogVisible = false;
-            this.isLogin = false;
-            localStorage.removeItem('token');
-            this.$store.dispatch('clear');
-            this.$message.success("登出成功");
-            location.reload();
-        },
-        viewProfile() {
-            this.$router.push({path: `/profile/${this.userId}` })
-        }
+    login() {
+      this.$router.push("/login");
     },
-}
+    logout() {
+      this.dialogVisible = true;
+    },
+    realLogout() {
+      this.dialogVisible = false;
+      this.isLogin = false;
+      localStorage.removeItem("token");
+      this.$store.dispatch("clear");
+      this.$message.success("登出成功");
+      location.reload();
+    },
+    viewProfile() {
+      this.$router.push({ path: `/profile/${this.userId}` });
+    },
+  },
+};
 </script>
 
 <style scoped>
-#headerLogo{
-    width: 55px;
-    float: left;
-    margin-left: 30px;
-    margin-top: -4px;
+#headerLogo {
+  width: 55px;
+  float: left;
+  margin-left: 30px;
+  margin-top: -4px;
 }
-#logoName{
-    height: 45px;
-    font-size: 36px;
-    font-weight: 100;
-    margin: -3px 20px auto -15px;
-    padding: 5px 20px;
-    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+#logoName {
+  height: 45px;
+  font-size: 36px;
+  font-weight: 100;
+  margin: -3px 20px auto -15px;
+  padding: 5px 20px;
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
-.nav{
-    height: 55px;
-    font-size: 22px;
-    background-color: #79A3B1;
+.nav {
+  height: 55px;
+  font-size: 22px;
+  background-color: #79a3b1;
 }
-.navLink:hover{
-    background-color: #6f9caa;
+.navLink:hover {
+  background-color: #6f9caa;
 }
-a{
-    display: block;
-    float: left;
-    height: 35px;
-    /* outline: 1px black solid; */
-    margin: auto;
-    padding: 10px 15px;
-    padding-right: 15px;
-    color: white;
-    text-decoration: none;
+a {
+  display: block;
+  float: left;
+  height: 35px;
+  /* outline: 1px black solid; */
+  margin: auto;
+  padding: 10px 15px;
+  padding-right: 15px;
+  color: white;
+  text-decoration: none;
 }
-.searchBox{
-    position: absolute;
-    display: inline-block;
-    border-radius: 10px;
-    background-color: rgba(208, 232, 242, 0.1);
-    height: 40px;
-    width: 400px;
-    margin-top: 8px;
-    margin-left: 180px; 
-    /* border: 1px black solid; */
+.searchBox {
+  position: absolute;
+  display: inline-block;
+  border-radius: 10px;
+  background-color: rgba(208, 232, 242, 0.1);
+  height: 40px;
+  width: 400px;
+  margin-top: 8px;
+  margin-left: 180px;
+  /* border: 1px black solid; */
 }
-.searchBox input{
-    font-family: "Microsoft JhengHei", 微软正黑体, "Microsoft YaHei", 微软雅黑;
-    height: 30px;
-    width: 275px;
-    margin-top: 5px;
-    margin-left: 10px;
-    border: none;
-    color: white;
-    background-color: rgba(208, 232, 242, 0.01);
+.searchBox input {
+  font-family: "Microsoft JhengHei", 微软正黑体, "Microsoft YaHei", 微软雅黑;
+  height: 30px;
+  width: 275px;
+  margin-top: 5px;
+  margin-left: 10px;
+  border: none;
+  color: white;
+  background-color: rgba(208, 232, 242, 0.01);
 }
-.searchBox input::placeholder{
-    color: white;
+.searchBox input::placeholder {
+  color: white;
 }
 .searchBox input:focus {
-    outline: none;
+  outline: none;
 }
 .navicon {
-    width: 30px;
-    float: right;
-    margin-top: 5px;
-    margin-right: 5px;
+  width: 30px;
+  float: right;
+  margin-top: 5px;
+  margin-right: 5px;
 }
-.navicon:hover{
-    cursor: pointer;
+.navicon:hover {
+  cursor: pointer;
 }
-#userInfo{
-    /* border: 1px solid black; */
-    float:right;
-    max-width: 150px;
-    margin-top: 15px;
-    margin-right: 10px;
-    font-size: 18px;
-    color: white;
-    overflow: hidden;
-    text-overflow: ellipsis;
+#userInfo {
+  /* border: 1px solid black; */
+  float: right;
+  max-width: 150px;
+  margin-top: 15px;
+  margin-right: 10px;
+  font-size: 18px;
+  color: white;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-#userInfo:hover{
-    cursor: pointer;
-    color: #cef3ff;
+#userInfo:hover {
+  cursor: pointer;
+  color: #cef3ff;
 }
-#userAvatar{
-    float: right;
-    margin-top: 7px;
-    margin-right: 5px;
+#userAvatar {
+  float: right;
+  margin-top: 7px;
+  margin-right: 5px;
 }
-#login{
-    float:right;
-    margin-top: 8px;
-    margin-right: 10px;
-    color: white;
-    background-color: rgba(208, 232, 242, 0.01);
+#login {
+  float: right;
+  margin-top: 8px;
+  margin-right: 10px;
+  color: white;
+  background-color: rgba(208, 232, 242, 0.01);
 }
-#login:active{
-    border-color: white;
+#login:active {
+  border-color: white;
 }
-#loginname{
-    float: right;
-    margin-top: 13px;
-    margin-right: 20px;
-    color: white;
-    font-size: 20px;
+#loginname {
+  float: right;
+  margin-top: 13px;
+  margin-right: 20px;
+  color: white;
+  font-size: 20px;
 }
-#Type{
-    float: left;
-    height: 30px;
-    background-color: rgba(208, 232, 242, 0.01);
-    margin-left: 10px;
-    margin-top: 5px;
-    font-size: 16px;
-    color: white;
-    font-family: "Microsoft JhengHei", 微软正黑体, "Microsoft YaHei", 微软雅黑;
-    outline: none;
-    position: relative;
-    border: none;
+#Type {
+  float: left;
+  height: 30px;
+  background-color: rgba(208, 232, 242, 0.01);
+  margin-left: 10px;
+  margin-top: 5px;
+  font-size: 16px;
+  color: white;
+  font-family: "Microsoft JhengHei", 微软正黑体, "Microsoft YaHei", 微软雅黑;
+  outline: none;
+  position: relative;
+  border: none;
 }
-#Type:hover{
-    cursor: pointer;
+#Type:hover {
+  cursor: pointer;
 }
-#Type option{
-    background-color: #79A3B1;
+#Type option {
+  background-color: #79a3b1;
 }
 </style>
 
 <style>
-.loginOption{
-    float: right;
-    margin-top: 8px;
-    margin-right: 10px;
-    background-color: rgba(208, 232, 242, 0.01);
+.loginOption {
+  float: right;
+  margin-top: 8px;
+  margin-right: 10px;
+  background-color: rgba(208, 232, 242, 0.01);
 }
-.loginOption2{
-    background-color: rgba(208, 232, 242, 0.01);
+.loginOption2 {
+  background-color: rgba(208, 232, 242, 0.01);
 }
 </style>

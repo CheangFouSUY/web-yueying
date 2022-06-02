@@ -223,6 +223,7 @@ export default {
       status: false, //控制数据渲染
       islogin: false,
       user: "陌上花开",
+      userId: "",
       userAvatar: "",
       id: "M0001",
       title: "猎罪图鉴",
@@ -310,8 +311,7 @@ export default {
     var userInfo;
     if ((userInfo = User.getters.getUser(User.state()))) {
       this.islogin = true;
-      this.user = userInfo.user.username;
-      if (userInfo.user.profilePic != "None") this.userAvatar = userInfo.user.profilePic;
+      this.userId = userInfo.user.id;
     }
     this.getAll();
   },
@@ -555,9 +555,11 @@ export default {
     },
     async getAll() {
       await this.$axios
-        .all([this.getMovieDetail(), this.getComment()])
+        .all([this.getUser(), this.getMovieDetail(), this.getComment()])
         .then(
-          this.$axios.spread((detailRes, commentRes) => {
+          this.$axios.spread((userRes, detailRes, commentRes) => {
+            this.user = userRes.data.username;
+            this.userAvatar = userRes.data.profile;
             var r = detailRes.data;
             this.id = r.id;
             this.title = r.title;
@@ -635,6 +637,12 @@ export default {
         method: "get",
         url: "/api/v1/review/list?movie=" + this.$route.params.id,
         headers: header,
+      });
+    },
+    getUser() {
+      return this.$axios({
+        method: "get",
+        url: "/api/v1/user/" + this.userId,
       });
     },
     dateStr(date) {

@@ -219,6 +219,7 @@ export default {
       status: false, //控制数据渲染
       islogin: false,
       user: "陌上花开",
+      userId: "",
       userAvatar: "",
       id: "B11111",
       title: "盗墓笔记",
@@ -308,8 +309,7 @@ export default {
     var userInfo;
     if ((userInfo = User.getters.getUser(User.state()))) {
       this.islogin = true;
-      this.user = userInfo.user.username;
-      if (userInfo.user.profilePic != "None") this.userAvatar = userInfo.user.profilePic;
+      this.userId = userInfo.user.id;
     }
     this.getAll();
   },
@@ -554,9 +554,11 @@ export default {
     },
     async getAll() {
       await this.$axios
-        .all([this.getBookDetail(), this.getComment()])
+        .all([this.getUser(), this.getBookDetail(), this.getComment()])
         .then(
-          this.$axios.spread((detailRes, commentRes) => {
+          this.$axios.spread((userRes, detailRes, commentRes) => {
+            this.user = userRes.data.username;
+            this.userAvatar = userRes.data.profile;
             var r = detailRes.data;
             this.id = r.id;
             this.title = r.title;
@@ -629,11 +631,16 @@ export default {
       var header = {};
       if (localStorage.getItem("token"))
         header = { Authorization: "Bearer " + localStorage.getItem("token") };
-      console.log(header);
       return this.$axios({
         method: "get",
         url: "/api/v1/review/list?book=" + this.$route.params.id,
         headers: header,
+      });
+    },
+    getUser() {
+      return this.$axios({
+        method: "get",
+        url: "/api/v1/user/" + this.userId,
       });
     },
     dateStr(date) {
