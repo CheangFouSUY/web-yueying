@@ -136,9 +136,11 @@
             <el-avatar :size="50" icon="el-icon-user-solid"></el-avatar>
           </el-col>
           <el-col :span="22">
-            <el-row v-if="status" class="comment-publisher">{{
-              item.publisherName
-            }}</el-row>
+            <el-row v-if="status" class="comment-publisher">
+              <span @click="enterProfile(item.createdBy)" style="cursor: pointer">
+                {{ item.publisherName }}
+              </span>
+            </el-row>
             <el-row v-if="status" class="comment-time">
               <i class="el-icon-time"></i>
               {{ dateStr(item.time) }}
@@ -582,9 +584,8 @@ export default {
 
       //获取评论的详情
       for (let i = 0; i < this.comments.length; i++) {
-        this.comments.img = this.comments.img + "/";
         this.comments[i].time = new Date(this.comments[i].createdAt).getTime();
-        this.$axios
+        await this.$axios
           .get("api/v1/review/" + this.comments[i].id)
           .then((res) => {
             this.comments[i].img = res.data.img;
@@ -667,6 +668,9 @@ export default {
       $(".showFileName").html(fileName);
       this.userComment.img = event.target.files[0];
       console.log("get img! ", this.userComment);
+    },
+    enterProfile(userid) {
+      this.$router.push({ path: `/profile/${userid}` });
     },
     report(id) {
       this.$router.push({ path:`/report/${id}`})

@@ -120,9 +120,9 @@ const routes = [
     path: '/profile/:id',
     name: 'profile',
     component: () => import('../views/Profile.vue'),
-    meta: {
-      requireAuth: true
-    }
+    // meta: {
+    //   requireAuth: true
+    // }
   },
   {
     path: '/search',
