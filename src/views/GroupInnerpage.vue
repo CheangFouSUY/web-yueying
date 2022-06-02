@@ -67,13 +67,50 @@
             >
           </el-row>
           <el-row>
-            <el-col :span="4" :offset="1"
+            <el-col :span="5" :offset="1"
               ><div class="groupPic">
-                <el-image
-                  style="width: 200px; height: 250px"
-                  :src="groupInfo.pic"
-                  fit="fill"
-                ></el-image>
+
+                <el-upload
+                    v-if="isOwnerOrAdmin"
+                    id="avatar-uploader"
+                    action=""
+                    :http-request="uploadAvatar"
+                    :show-file-list="false"
+                    accept="image/jpeg,image/gif,image/png,image/jpg"
+                  >
+                    <el-avatar
+                      v-if="groupInfo.pic"
+                      shape="square"
+                      :size="256"
+                      :src="groupInfo.pic"
+                    >
+                    </el-avatar>
+                    <el-avatar
+                      v-else
+                      shape="square"
+                      :size="256"
+                      icon="el-icon-lollipop"
+                    >
+                    </el-avatar>
+                    <div id="change-pic">更换头像</div>
+                  </el-upload>
+
+                  <div v-else>
+                    <el-avatar
+                      v-if="groupInfo.pic"
+                      shape="square"
+                      :size="256"
+                      :src="groupInfo.pic"
+                    >
+                    </el-avatar>
+                    <el-avatar
+                      v-else
+                      shape="square"
+                      :size="256"
+                      icon="el-icon-lollipop"
+                    >
+                    </el-avatar>
+                  </div>
               </div>
             </el-col>
             <el-col :span="18">
@@ -118,6 +155,7 @@
                 </el-row>
                 <el-button
                   id="post"
+                  v-if="isGroupMember"
                   @click="openPostFeed"
                   icon="el-icon-position"
                   >发表话题</el-button
@@ -333,6 +371,7 @@ export default {
       this.userId = userInfo.user.id;
       this.isLogin = true;
     }
+    console.log(this.groupInfo)
   },
   methods: {
     join() {
@@ -424,6 +463,7 @@ export default {
             this.groupInfo.name = gDetail.data.groupName;
             this.groupInfo.nameTemp = gDetail.data.groupName;
             this.groupInfo.owner = gDetail.data.owner;
+            this.groupInfo.pic = gDetail.data.img;
             this.groupInfo.date = gDetail.data.createdAt.slice(0, 10);
             if (gDetail.data.category === "b") this.groupInfo.type = "图书";
             else if (gDetail.data.category === "m")
@@ -540,6 +580,7 @@ export default {
         headers: header,
       })
         .then((res) => {
+          this.formVisible = false;
           console.log(res);
           switch (res.status) {
             case 201:
@@ -573,6 +614,33 @@ export default {
               });
               break;
           }
+        });
+    },
+    async uploadAvatar(file) {
+      const formData = new FormData();
+      formData.append("groupName", this.groupInfo.name);
+      formData.append("description", this.groupInfo.desc);
+      formData.append("img", file.file);
+      formData.append("groupId", this.$route.params.id);
+      console.log(file.file);
+
+      var header = {};
+      if (localStorage.getItem("token"))
+        header = { Authorization: "Bearer " + localStorage.getItem("token") };
+
+      await this.$axios({
+        method: "put",
+        url: "/api/v1/group/" + this.$route.params.id,
+        data: formData,
+        headers: header,
+      })
+        .then((res) => {
+          console.log(res);
+          this.groupInfo.pic = res.data.profile;
+          location.reload();
+        })
+        .catch((err) => {
+          console.log(err);
         });
     },
     updateGroupInfo() {
@@ -846,6 +914,25 @@ export default {
 .groupMember .el-row {
   margin-bottom: 0px;
 }
+.groupPic:hover #change-pic {
+  display: block;
+}
+#change-pic:hover {
+  cursor: pointer;
+}
+#change-pic {
+  display: none;
+  height: 40px;
+  width: 256px;
+  position: absolute;
+  top: 216px;
+  z-index: 99;
+  background-color: rgba(0, 0, 0, 0.4);
+  color: #ffffff;
+  font-size: 20px;
+  text-align: center;
+  line-height: 40px;
+}
 .el-col {
   border-radius: 4px;
 }
@@ -893,9 +980,6 @@ export default {
 }
 .groupPost {
   margin-left: 50px;
-}
-.groupPic {
-  height: 250px;
 }
 .groupInfoInfo {
   height: 250px;
@@ -958,41 +1042,6 @@ export default {
   margin-bottom: 0px;
   color: #456268;
   /* outline: 1px black solid; */
-}
-.feed-unfollow:hover,
-.feed-follow:hover {
-  cursor: pointer;
-}
-.feed-unfollow {
-  width: 130px;
-  margin-left: 20px;
-  font-size: 18px;
-  line-height: 32px;
-  font-weight: 600;
-  border-radius: 15px;
-  background: none;
-  color: #456268;
-  border: #456268 1px solid;
-}
-.feed-follow {
-  width: 130px;
-  margin-left: 20px;
-  font-size: 18px;
-  font-weight: 600;
-  line-height: 32px;
-  border: 1px #456268 solid;
-  color: #fcf8ec;
-  background-color: #456268;
-  border-radius: 15px;
-}
-.feed-title {
-  margin: 20px 0;
-  font-size: 28px;
-  font-weight: 600;
-  color: #456268;
-}
-.feed-content {
-  font-size: 18px;
 }
 .el-icon-star-off {
   margin-top: 4px;

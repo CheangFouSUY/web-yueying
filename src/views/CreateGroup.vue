@@ -116,7 +116,7 @@ export default {
         formData.append("groupName", this.form.gName);
         formData.append("description", this.form.desc);
         formData.append("category", this.form.type);
-        formData.append("img", this.form.imageFile);
+        formData.append("img", this.form.imageUrl);
 
         var header = {}
         if (localStorage.getItem('token'))
