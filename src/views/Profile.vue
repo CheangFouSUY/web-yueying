@@ -73,7 +73,7 @@
                   <el-col :span="20"
                     ><div class="profile-info">
                       <span class="profile-text1">性别&nbsp;:</span>
-                      <span class="profile-text2">&nbsp;{{ form.sex }}</span>
+                      <span class="profile-text2">&nbsp;{{ form.sexWord }}</span>
                     </div>
                   </el-col>
                 </el-row>
@@ -114,9 +114,21 @@
                   <el-input
                     v-model="form.nameTemp"
                     autocomplete="off"
-                    maxlength="10"
+                    maxlength="15"
                     show-word-limit
                   ></el-input>
+                </el-form-item>
+                  <el-form-item label="性别">
+                    <el-radio-group v-model="form.sexTemp">
+                      <el-radio label="M">男</el-radio>
+                      <el-radio label="F">女</el-radio>
+                      <el-radio label="O">其他</el-radio>
+                    </el-radio-group>
+                  </el-form-item>
+                <el-form-item label="生日">
+                  <el-col :span="11">
+                    <el-date-picker type="date" placeholder="选择你的生日日期" v-model="form.dobTemp" style="width: 100%;" value-format="yyyy-MM-dd"></el-date-picker>
+                  </el-col>
                 </el-form-item>
                 <el-form-item label="自我介绍" :label-width="formLabelWidth">
                   <el-input
@@ -198,8 +210,11 @@ export default {
         id: "",
         name: "",
         nameTemp: "",
+        sexWord: "",
         sex: "",
+        sexTemp: "",
         dob: "",
+        dobTemp: "",
         email: "",
         about: "",
         aboutTemp: "",
@@ -279,11 +294,23 @@ export default {
           this.form.name = r.username;
           this.form.nameTemp = r.username;
           this.form.sex = r.gender;
+          this.form.sexTemp = r.gender;
+          console.log(this.form.sexTemp);
           this.form.dob = r.dob;
+          this.form.dobTemp = r.dob;
           this.form.email = r.email;
           this.form.about = r.about;
           this.form.aboutTemp = r.about;
           if (r.profile) this.form.imageUrl = r.profile;
+          if (this.form.sex == "M") {
+            this.form.sexWord = "男";
+          }
+          if (this.form.sex == "F") {
+            this.form.sexWord = "女";
+          }
+          if (this.form.sex == "O") {
+            this.form.sexWord = "其他";
+          }
         })
         .catch((err) => {
           this.$message.warning(err);
@@ -293,6 +320,8 @@ export default {
       this.changeVisible = false;
       this.form.nameTemp = this.form.name;
       this.form.aboutTemp = this.form.about;
+      this.form.sexTemp = this.form.sex;
+      this.form.dobTemp = this.form.dob;
     },
     async updateProfileInfo() {
       const formData = new FormData();
@@ -300,6 +329,8 @@ export default {
       formData.append("username", this.form.nameTemp);
       formData.append("userId", this.form.id);
       formData.append("about", this.form.aboutTemp);
+      formData.append("gender", this.form.sexTemp);
+      formData.append("dob", this.form.dobTemp);
 
       var header = {};
       if (localStorage.getItem("token"))
@@ -315,6 +346,17 @@ export default {
           console.log(res);
           this.form.name = this.form.nameTemp;
           this.form.about = this.form.aboutTemp;
+          this.form.dob = this.form.dobTemp;
+          this.form.sex = this.form.sexTemp;
+          if (this.form.sex == "M") {
+            this.form.sexWord = "男";
+          }
+          if (this.form.sex == "F") {
+            this.form.sexWord = "女";
+          }
+          if (this.form.sex == "O") {
+            this.form.sexWord = "其他";
+          }
           this.changeVisible = false;
           setTimeout(function () {
             location.reload(true);
