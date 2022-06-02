@@ -67,6 +67,7 @@ export default {
       .then(res => {
         console.log(res);
         this.$message.success("发送成功！请到邮箱进行密码恢复");
+        this.$router.push({ path:'/login'});
       })
       .catch(err =>{
         console.log(err);

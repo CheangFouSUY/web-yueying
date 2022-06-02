@@ -178,7 +178,7 @@ export default {
       changeVisible: false,
       formLabelWidth: "120px",
       feeds: [],
-    };
+    }
   },
   created() {
     var userInfo;

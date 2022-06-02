@@ -8,18 +8,26 @@
     </div>
     <h1 class="sqTitle">密保问题验证</h1>
     <div class="verifyBox">
-      <button id="getQuest" @click="GetQuest">获取密保问题</button>
+      <button id="getQuest" @click="GetQuestion">获取密保问题</button>
       <div class="inputBox">
-        <img class="icon" src="@/assets/Email.svg" alt="email_icon">  
-        <input type="text" v-model="email" placeholder="输入邮箱">
+        <img class="icon" src="@/assets/Usericon.svg" alt="email_icon">  
+        <input type="text" v-model="username" placeholder="输入用户名">
       </div>
       <div class="inputBox">
-        <img class="icon" src="@/assets/Question.svg" alt="key_icon">  
-        <span>请先获取密保问题</span>
+        <img class="icon" src="@/assets/Question.svg" alt="question_icon">  
+        <span id="sQuestion">{{ sQuestion }}</span>
       </div>
-      <div class="inputBox">
-        <img class="icon" src="@/assets/Check.svg" alt="key_icon">  
-        <input type="text" v-model="verifyKey" placeholder="输入密保答案">
+      <div v-if="isCorrect" class="inputBox">
+        <img class="icon" src="@/assets/Check.svg" alt="answer_icon">  
+        <input type="text" v-model="sAnswer" placeholder="输入密保答案">
+      </div>
+        <div v-if="isCorrect" class="inputBox">
+        <img class="icon" src="@/assets/Key.svg" alt="key_icon">  
+        <input type="password" v-model="password1" placeholder="输入新密码">
+      </div>
+        <div v-if="isCorrect" class="inputBox">
+        <img class="icon" src="@/assets/Key.svg" alt="key_icon">  
+        <input type="password" v-model="password2" placeholder="重新输入新密码">
       </div>
       <div class='changeLoginWay'>
         <button @click='EmailVerify'>邮箱验证</button>
@@ -42,6 +50,17 @@ export default {
   components: {
     Header
   },
+  data() {
+    return {
+      username:'',
+      sQuestion:'',
+      sQuestionNum:0,
+      sAnswer:'',
+      password1:'',
+      password2:'',
+      isCorrect: false,
+    }
+  },
   methods:{
     EmailVerify(){
       this.$router.push('/emailverify')
@@ -52,14 +71,80 @@ export default {
     RegisterNow(){
       this.$router.push('/register')
     },
-    GetQuest(){
+    Submit() {
+      const formData = new FormData();
+      formData.append("username", this.username);
+      formData.append("newpassword", this.password1);
+      formData.append("newpassword2", this.password2);
+      formData.append("securityQuestion", this.sQuestionNum);
+      formData.append("securityAnswer", this.sAnswer);
 
+      this.$axios({
+        method:'put',
+        url:'/api/v1/auth/resetpwd/question/',
+        data: formData,
+      })
+      .then(res =>{
+        console.log(res);
+      })
+      .catch(err =>{
+        console.log(err);
+      })
+    },
+    GetQuestion(){
+      if(this.username == '') {
+        this.$message.warning("用户名不可为空");
+        return;
+      }
+
+      this.$axios({
+        method:'get',
+        url:'/api/v1/auth/requestquestion/?username=' + this.username,
+      })
+      .then(res =>{
+        console.log(res);
+        this.isCorrect = true;
+        switch(res.data.securityQuestion) {
+          case 1:
+            this.sQuestion = "您最喜欢的颜色是？";
+            this.sQuestionNum = 1;
+            console.log("THIS IS 1");
+            break;
+          case 2:
+            this.sQuestion = "您最讨厌的食物？";
+            console.log("THIS IS 2");
+            this.sQuestionNum = 2;
+            break;
+          case 3:
+            this.sQuestion = "您的最要好闺蜜/兄弟是？";
+            console.log("THIS IS 3");
+            this.sQuestionNum = 3;
+            break;
+          case 4:
+            this.sQuestion = "您的爱好是？";
+            console.log("THIS IS 4");
+            this.sQuestionNum = 4;
+            break;
+          case 5:
+            this.sQuestion = "您的初恋是？";
+            console.log("THIS IS 5");
+            this.sQuestionNum = 5;
+            break;            
+        }
+      })
+      .catch(err =>{
+        console.log(err);
+        this.$message.warning("用户名不存在");
+      })
     }
   }
 }
 </script>
 
 <style scoped>
+::placeholder{
+  font-size: 18px;
+}
 /* logo和标题 */
 #logo{
     width: 350px;
@@ -106,7 +191,7 @@ export default {
   display: block;
   float: left;
   width: 40px;
-  margin: 5px 10px;
+  margin: 7px 10px;
   /* outline: 1px black solid; */
 }
 input:focus{
@@ -201,6 +286,10 @@ button{
     text-align: center;
     font-size: 20px;
     /* outline: 1px black solid; */
+}
+#sQuestion{
+  font-size: 18px;
+  margin-top: 3px;
 }
 #Border{
     width: 720px; 
