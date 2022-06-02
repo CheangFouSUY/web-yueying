@@ -131,27 +131,27 @@ const routes = [
   },
   {
     path: '/searchall',
-    name: 'search',
+    name: 'searchAll',
     component: () => import('../views/Search.vue')
   },
   {
     path: '/searchbook',
-    name: 'search',
+    name: 'searchBook',
     component: () => import('../views/SearchBook.vue')
   },
   {
     path: '/searchdrama',
-    name: 'search',
+    name: 'searchDrama',
     component: () => import('../views/SearchDrama.vue')
   },
   {
     path: '/searchfeed',
-    name: 'search',
+    name: 'searchFeed',
     component: () => import('../views/SearchFeed.vue')
   },
   {
     path: '/searchgroup',
-    name: 'search',
+    name: 'searchGroup',
     component: () => import('../views/SearchGroup.vue')
   },
   {
