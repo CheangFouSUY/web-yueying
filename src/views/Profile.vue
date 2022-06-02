@@ -286,6 +286,32 @@ export default {
           this.form.aboutTemp = this.form.about;
       },
       updateProfileInfo() {
+          const formData = new FormData();
+          formData.append("username", this.form.nameTemp);
+          formData.append("about", this.form.aboutTemp);
+          formData.append("email", this.form.email);
+          formData.append("userId", this.form.id);
+        //   formData.append("profile", this.form.imageUrl);
+
+        var header = {};
+        if (localStorage.getItem("token"))
+          header = { Authorization: "Bearer " + localStorage.getItem("token") };
+
+        this.$axios({
+            method:'put',
+            url: `/api/v1/user/${this.form.id}`,
+            data: formData,
+            headers: header,
+        })
+        .then(res =>{
+            console.log(res);
+            this.form.name = this.form.nameTemp;
+            this.form.about = this.form.aboutTemp;
+            this.$message.success("编辑成功！")
+        })
+        .catch(err =>{
+            console.log(err);
+        })
 
       },
     }

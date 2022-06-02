@@ -636,6 +636,8 @@ export default {
       })
         .then((res) => {
           console.log(res);
+          this.setRoleVisible = false;
+          location.reload();
         })
         .catch((err) => {
           console.log(err);

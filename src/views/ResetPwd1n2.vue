@@ -43,7 +43,7 @@ export default {
     },
     methods: {
         returnLogin() {
-            this.$router.push({ path:'/login'} );
+            this.$router.push({ path:'/login'});
         },
         getToken(token) {
             this.$axios({
@@ -57,6 +57,8 @@ export default {
             })
             .catch((error) => {
                 console.log(error);
+                this.$message.warning("此链接已过期，请重新申请邮箱验证");
+                this.$router.push({path:'/emailverify'});
             });
     },
     confirmNewPassword() {
@@ -85,8 +87,12 @@ export default {
             })
             .catch((error) => {
                 console.log(error);
-                console.log(error.response.data.error);
-                switch(error.response.data.error[0]) {
+                console.log(error.response.data.detail);
+
+                if(error.response.data.detail == "Authentication credentials were not provided.")
+                    this.$message.warning("此链接已过期，请重新申请邮箱验证");
+
+                else switch(error.response.data.error[0]) {
                     case "Password must match.":
                         this.$message.warning("新密码和重复新密码不匹配");
                         break;

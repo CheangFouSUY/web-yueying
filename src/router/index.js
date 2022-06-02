@@ -18,7 +18,10 @@ const routes = [
   {
     path: '/register',
     name: 'register',
-    component: () => import('../views/Register.vue')
+    component: () => import('../views/Register.vue'),
+    meta: {
+      requireNotAuth: true,
+    }
   },
   {
     path: '/login',
@@ -31,12 +34,18 @@ const routes = [
   {
     path: '/emailverify',
     name: 'email verify',
-    component: () => import('../views/EmailVerify.vue')
+    component: () => import('../views/EmailVerify.vue'),
+    meta: {
+      requireNotAuth: true,
+    }
   },
   {
     path: '/sqverify',
     name: 'security question verify',
-    component: () => import('../views/SQVerify.vue')
+    component: () => import('../views/SQVerify.vue'),
+    meta: {
+        requireNotAuth: true,
+    }
   },
   {
     path: '/book',
@@ -174,6 +183,12 @@ router.beforeEach((to, from, next) => {
         name: 'home',
     })
   }
+
+  // if (userInfo && !userInfo.user.confirmed && to.meta.requireSuccess) {
+  //   next({
+  //     name: 'register success',
+  //   })
+  // }
 
   next()
 })

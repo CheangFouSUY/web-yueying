@@ -31,7 +31,27 @@ export default {
     methods: {
         returnLogin() {
             this.$router.push({ path:'/login'} );
-        }
+        },
+        getToken(token) {
+            this.$axios({
+            method:'get',
+            url:'/api/v1/auth/activate/?token=' + token,
+            })
+            .then((res) => {
+                console.log(res);
+                // console.log(res.data.tokens.access);
+                // localStorage.setItem('token', res.data.tokens.access);
+            })
+            .catch((error) => {
+                console.log(error);
+                this.$message.warning("此链接已过期");
+                this.$router.push({path:'/register'});
+            });
+        },
+    },
+    mounted() {
+        const token = this.$route.query.token;
+        this.getToken(token);
     }
 }
 </script>
