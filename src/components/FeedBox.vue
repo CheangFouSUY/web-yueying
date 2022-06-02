@@ -57,7 +57,11 @@
       <el-row :gutter="70" align="middle" type="flex">
         <!-- 发布者头像、昵称、发布时间 -->
         <el-col :span="1">
-          <el-avatar v-if="publisherAvatar" :size="50" :src="publisherAvatar"></el-avatar>
+          <el-avatar
+            v-if="publisherAvatar"
+            :size="50"
+            :src="publisherAvatar"
+          ></el-avatar>
           <el-avatar v-else :size="50" icon="el-icon-user-solid"></el-avatar>
         </el-col>
         <el-col :span="20">
@@ -154,8 +158,16 @@
         <el-row v-if="islogin" class="publish-box">
           <el-row :gutter="70">
             <el-col :span="1">
-          <el-avatar v-if="userAvatar" :size="50" :src="userAvatar"></el-avatar>
-          <el-avatar v-else :size="50" icon="el-icon-user-solid"></el-avatar>
+              <el-avatar
+                v-if="userAvatar"
+                :size="50"
+                :src="userAvatar"
+              ></el-avatar>
+              <el-avatar
+                v-else
+                :size="50"
+                icon="el-icon-user-solid"
+              ></el-avatar>
             </el-col>
             <el-col :span="22">
               <el-row class="comment-publisher">{{ user }}</el-row>
@@ -201,8 +213,16 @@
           <el-divider></el-divider><br />
           <el-row :gutter="70">
             <el-col :span="1">
-          <el-avatar v-if="c.publisherAvatar" :size="50" :src="c.publisherAvatar"></el-avatar>
-          <el-avatar v-else :size="50" icon="el-icon-user-solid"></el-avatar>
+              <el-avatar
+                v-if="c.publisherAvatar"
+                :size="50"
+                :src="c.publisherAvatar"
+              ></el-avatar>
+              <el-avatar
+                v-else
+                :size="50"
+                icon="el-icon-user-solid"
+              ></el-avatar>
             </el-col>
             <el-col :span="22">
               <el-row v-if="status" @click="enterProfile(c.createdBy)">
@@ -639,11 +659,9 @@ export default {
     },
     async getAll() {
       await this.$axios
-        .all([this.getUser(), this.getFeedDetail(), this.getComment()])
+        .all([this.getFeedDetail(), this.getComment()])
         .then(
-          this.$axios.spread((userRes, detailRes, commentRes) => {
-            this.user = userRes.data.username;
-            this.userAvatar = userRes.data.profile;
+          this.$axios.spread((detailRes, commentRes) => {
             var r = detailRes.data;
             this.title = r.title;
             this.description = r.description;
@@ -665,6 +683,18 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+
+      if (this.islogin)
+        await this.$axios
+          .get("/api/v1/user/" + this.userId)
+          .then((res) => {
+            this.user = res.data.username;
+            this.userAvatar = res.data.profile;
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+
       await this.$axios
         .get("/api/v1/user/" + this.createdBy)
         .then((res) => {

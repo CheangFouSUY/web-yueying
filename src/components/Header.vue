@@ -8,16 +8,25 @@
     <a href="/movie" class="navLink">影视</a>
     <a href="/feed" class="navLink">话题</a>
     <a href="/group" class="navLink">小组</a>
-    <div class='searchBox'>
-                <select id="Type" name="Type" v-model="searchType">
-                    <option value="all">全部</option>
-                    <option value="book">图书</option>
-                    <option value="drama">影视</option>
-                    <option value="feed">话题</option>
-                    <option value="group">小组</option>
-                </select>
-        <input type='text' v-model='searchInfo' placeholder="输入你想搜索的内容">
-        <img class="navicon" @click="search" src="@/assets/Search.svg" alt="search_icon">
+    <div class="searchBox">
+      <select id="Type" name="Type" v-model="searchType">
+        <option value="all">全部</option>
+        <option value="book">图书</option>
+        <option value="drama">影视</option>
+        <option value="feed">话题</option>
+        <option value="group">小组</option>
+      </select>
+      <input
+        type="text"
+        v-model="searchInfo"
+        placeholder="输入你想搜索的内容"
+      />
+      <img
+        class="navicon"
+        @click="search"
+        src="@/assets/Search.svg"
+        alt="search_icon"
+      />
     </div>
     <el-button v-if="!isLogin" id="login" @click="login">登录</el-button>
     <!-- <el-select v-else v-model="value"
@@ -68,7 +77,7 @@ export default {
   },
   data() {
     return {
-        status: false,
+      status: false,
       dialogVisible: false,
       isLogin: false,
       userName: this.initialUsername,
@@ -76,12 +85,12 @@ export default {
       searchInfo: "",
       userId: "",
       // userNames:'aaaaaaaaaaaaaaaaaaaaa',
-      searchType:'all',
+      searchType: "all",
     };
   },
   created() {
-    const userInfo = user.getters.getUser(user.state());
-    if (userInfo.user.confirmed) {
+    var userInfo;
+    if (userInfo = user.getters.getUser(user.state())) {
       this.isLogin = true;
       this.userId = userInfo.user.id;
       this.getUser();
@@ -93,16 +102,18 @@ export default {
         method: "get",
         url: "/api/v1/user/" + this.userId,
       }).then((res) => {
-          this.userName = res.data.username;
-          this.profileP = res.data.profile;
-          this.status = true;
+        this.userName = res.data.username;
+        this.profileP = res.data.profile;
+        this.status = true;
       });
     },
-    search() { 
-        this.$router.push('/empty');
-        setTimeout(() => {
-                        this.$router.push('/search' + this.searchType + '/?name=' + this.searchInfo);
-            }, 10);
+    search() {
+      this.$router.push("/empty");
+      setTimeout(() => {
+        this.$router.push(
+          "/search" + this.searchType + "/?name=" + this.searchInfo
+        );
+      }, 10);
     },
     login() {
       this.$router.push("/login");

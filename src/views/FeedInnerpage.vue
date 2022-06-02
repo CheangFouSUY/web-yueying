@@ -1,31 +1,57 @@
 <template>
-    <div>
-        <Header></Header>
-        <span>I am feed {{id}} inner</span>
+  <div>
+    <Header></Header>
+    <div class="main">
+      <FeedBox
+      v-if="id"
+        :initialFeedId="id"
+        :initialIsPin="false"
+        :initialIsFeatured="false"
+        :initialIsAdmin="false"
+      ></FeedBox>
     </div>
-    
+    <Footer id="footer"></Footer>
+  </div>
 </template>
 
 <script>
 import Header from "@/components/Header.vue";
+import Footer from "@/components/Footer.vue";
+import FeedBox from "@/components/FeedBox.vue";
 
 export default {
-    name:'Feed Innerpage',
-    components: {
-        Header,
+  name: "FeedInnerpage",
+  components: {
+    Header,
+    Footer,
+    FeedBox,
+  },
+  data() {
+    return {
+      id: "",
+    };
+  },
+  mounted() {
+    this.id = this.$route.params.id;
+  },
+  method: {
+    getFeed() {
+      this.$axios({
+        method: "get",
+        url: "",
+      });
     },
-    data() {
-        return {
-            id:'',
-        }
-    },
-    mounted() {
-        this.id = this.$router.params.id;
-    }
-
-}
+  },
+};
 </script>
 
 <style scoped>
-
+.main {
+  width: 1200px;
+  margin: 30px auto;
+}
+#footer {
+  position: relative;
+  height: 88px;
+}
 </style>

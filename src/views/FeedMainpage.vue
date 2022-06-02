@@ -247,7 +247,7 @@ export default {
     var userInfo;
     if ((userInfo = User.getters.getUser(User.state()))) {
       this.islogin = true;
-      this.user = userInfo.user.username;
+      this.userId = userInfo.user.id;
     }
     this.getFeed();
   },

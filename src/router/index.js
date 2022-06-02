@@ -68,6 +68,11 @@ const routes = [
     component: () => import('../views/GroupMainpage.vue')
   },
   {
+    path: '/feed/:id',
+    name: 'feed inner',
+    component: () => import('../views/FeedInnerpage.vue')
+  },
+  {
     path: '/book/detail/:id',
     name: 'book datail',
     component: () => import('../views/BookInnerpage.vue'),
@@ -148,11 +153,6 @@ const routes = [
     path: '/searchgroup',
     name: 'search',
     component: () => import('../views/SearchGroup.vue')
-  },
-  {
-    path: '/feed/:id',
-    name: 'feed inner',
-    component: () => import('../views/FeedInnerpage.vue')
   },
   {
     path: '/registersuccess',
