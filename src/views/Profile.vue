@@ -14,14 +14,42 @@
                     action=""
                     :http-request="uploadAvatar"
                     :show-file-list="false"
-                    :on-success="handleAvatarSuccess"
-                    :before-upload="beforeAvatarUpload"
                     accept="image/jpeg,image/gif,image/png,image/jpg"
                   >
+                    <!-- <el-image
+                    ></el-image> -->
+                    <el-avatar
+                      v-if="form.imageUrl"
+                      shape="square"
+                      :size="256"
+                      :src="form.imageUrl"
+                    >
+                    </el-avatar>
+                    <el-avatar
+                      v-else
+                      shape="square"
+                      :size="256"
+                      icon="el-icon-user-solid"
+                    >
+                    </el-avatar>
                     <div id="change-pic">更换头像</div>
-                    <el-image :src="form.imageUrl"></el-image>
                   </el-upload>
-                  <el-image v-else :src="form.imageUrl"></el-image>
+                  <div v-else>
+                    <el-avatar
+                      v-if="form.imageUrl"
+                      shape="square"
+                      :size="256"
+                      :src="form.imageUrl"
+                    >
+                    </el-avatar>
+                    <el-avatar
+                      v-else
+                      shape="square"
+                      :size="256"
+                      icon="el-icon-user-solid"
+                    >
+                    </el-avatar>
+                  </div>
                 </div></div
             ></el-col>
             <el-col :span="15"
@@ -136,6 +164,9 @@
       </el-col>
     </el-row>
     <Footer id="footer" />
+    <el-backtop target=".Profile">
+      <i class="el-icon-arrow-up" style="color: #456268"></i>
+    </el-backtop>
   </div>
 </template>
 
@@ -151,6 +182,11 @@ export default {
     Header,
     Footer,
     FeedBox,
+  },
+  watch: {
+    $route: {
+      handler: "profileReload",
+    },
   },
   data() {
     return {
@@ -171,7 +207,7 @@ export default {
       changeVisible: false,
       formLabelWidth: "120px",
       feeds: [],
-    }
+    };
   },
   created() {
     var userInfo;
@@ -183,12 +219,16 @@ export default {
     this.getFeed();
   },
   methods: {
+    profileReload() {
+      location.reload();
+    },
     async uploadAvatar(file) {
       const formData = new FormData();
       formData.append("email", this.form.email);
       formData.append("username", this.form.name);
       formData.append("profile", file.file);
       formData.append("userId", this.form.id);
+      console.log(file.file);
 
       var header = {};
       if (localStorage.getItem("token"))
@@ -243,31 +283,11 @@ export default {
           this.form.email = r.email;
           this.form.about = r.about;
           this.form.aboutTemp = r.about;
-          if (r.profile == null) {
-            this.form.imageUrl = require("@/assets/DefaultProfile.jpg");
-          } else this.form.imageUrl = r.profile;
+          if (r.profile) this.form.imageUrl = r.profile;
         })
         .catch((err) => {
           this.$message.warning(err);
         });
-    },
-    handleAvatarSuccess(res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw);
-    },
-    beforeAvatarUpload(file) {
-      const isTypeTrue =
-        file.type === "image/jpeg" ||
-        file.type === "image/jpg" ||
-        file.type === "image/png";
-      const isLt2M = file.size / 1024 / 1024 < 2;
-
-      if (!isTypeTrue) {
-        this.$message.error("上传头像图片只能是 JPG/PNG 格式!");
-      }
-      if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 2MB!");
-      }
-      return isTypeTrue && isLt2M;
     },
     cancelChanges() {
       this.changeVisible = false;
@@ -392,7 +412,11 @@ export default {
   background: yellow;
 }
 .feedbox {
-  width: 1266px;
+  /* width: 1266px; */
+}
+.Profile {
+  height: 100vh;
+  overflow-x: hidden;
 }
 #footer {
   position: relative;

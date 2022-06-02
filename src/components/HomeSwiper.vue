@@ -13,11 +13,15 @@
               :key="item.id"
               :style="{ minWidth: width }"
             >
-              <div class="image-box" @click="gotodetails(item)">
-                <img :src="item.src" alt="" />
+              <div class="image-box" @click="enterDetail(item.id)">
+                <el-image
+                  class="poster"
+                  :src="item.thumbnail"
+                  @click="goDetails(item.id)"
+                ></el-image>
               </div>
               <div class="title-wrap">
-                <span class="book-title" @click="gotodetails(item)">
+                <span class="book-title" @click="enterDetail(item.id)">
                   {{ item.title }}
                 </span>
                 <span class="rating">{{ item.rating }}</span>
@@ -45,6 +49,7 @@ export default {
   name: "HomeSwiper",
   props: {
     initialList: Array,
+    initialIsBook: Boolean,
     width: {
       default: "20%",
     },
@@ -52,6 +57,7 @@ export default {
   data() {
     return {
       showList: this.initialList,
+      isBook: this.initialIsBook,
       currentOffset: 0,
       boxWidth: "",
       fatherWith: 0,
@@ -78,9 +84,9 @@ export default {
       if (this.currentOffset >= 0) return;
       this.currentOffset += this.fatherWith / 5;
     },
-    gotodetails(item) {
-      // console.log(this.books)
-      this.$router.push({ name: item.name });
+    enterDetail(id) {
+      if (this.isBook) this.$router.push({ path: `/book/detail/${id}` });
+      else this.$router.push({ path: `/movie/detail/${id}` });
     },
   },
 };
@@ -110,7 +116,7 @@ export default {
 .book-title {
   display: block;
   float: left;
-  width: 150px;
+  width: 145px;
   text-decoration: none;
   color: #456268;
 }
@@ -120,11 +126,12 @@ export default {
   position: relative;
   top: -4px;
   box-sizing: border-box;
-  font-size: 20px;
+  font-size: 18px;
   background-color: #fcf8ec;
 }
-img {
+.poster {
   width: 100%;
+  height: 270px;
 }
 .image-box {
   height: 238px;

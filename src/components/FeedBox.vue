@@ -57,7 +57,8 @@
       <el-row :gutter="70" align="middle" type="flex">
         <!-- 发布者头像、昵称、发布时间 -->
         <el-col :span="1">
-          <el-avatar :size="50" icon="el-icon-user-solid"></el-avatar>
+          <el-avatar v-if="publisherAvatar" :size="50" :src="publisherAvatar"></el-avatar>
+          <el-avatar v-else :size="50" icon="el-icon-user-solid"></el-avatar>
         </el-col>
         <el-col :span="20">
           <el-row v-if="!isPublic" class="feed-publisher">
@@ -153,7 +154,8 @@
         <el-row v-if="islogin" class="publish-box">
           <el-row :gutter="70">
             <el-col :span="1">
-              <el-avatar :size="50" icon="el-icon-user-solid"></el-avatar>
+          <el-avatar v-if="userAvatar" :size="50" :src="userAvatar"></el-avatar>
+          <el-avatar v-else :size="50" icon="el-icon-user-solid"></el-avatar>
             </el-col>
             <el-col :span="22">
               <el-row class="comment-publisher">{{ user }}</el-row>
@@ -199,7 +201,8 @@
           <el-divider></el-divider><br />
           <el-row :gutter="70">
             <el-col :span="1">
-              <el-avatar :size="50" icon="el-icon-user-solid"></el-avatar>
+          <el-avatar v-if="c.publisherAvatar" :size="50" :src="c.publisherAvatar"></el-avatar>
+          <el-avatar v-else :size="50" icon="el-icon-user-solid"></el-avatar>
             </el-col>
             <el-col :span="22">
               <el-row v-if="status" @click="enterProfile(c.createdBy)">
@@ -215,7 +218,12 @@
               </el-row>
               <el-row class="comment-title">{{ c.title }}</el-row>
               <el-row>{{ c.description }}</el-row>
-              <img v-if="c.img" :src="c.img" alt="comment-image" />
+              <img
+                v-if="c.img"
+                :src="c.img"
+                class="comment-image"
+                alt="comment-image"
+              />
             </el-col>
           </el-row>
           <el-row class="comment-action">
@@ -291,9 +299,11 @@ export default {
       deleteDialogVisible: false,
       user: "陌上花开",
       userId: "123456789",
+      userAvatar: "",
       id: this.initialFeedId,
       createdBy: "U123456",
       publisherName: "娱乐八卦姐",
+      publisherAvatar: "",
       isMine: false,
       createdAt: 1642014005919,
       isPublic: true,
@@ -324,7 +334,6 @@ export default {
     var userInfo;
     if ((userInfo = User.getters.getUser(User.state()))) {
       this.islogin = true;
-      this.user = userInfo.user.username;
       this.userId = userInfo.user.id;
     }
     this.getAll();
@@ -600,6 +609,7 @@ export default {
           newReview.dislikes = 0;
           newReview.response = "O";
           newReview.publisherName = this.user;
+          newReview.publisherAvatar = this.userAvatar;
           this.comments.unshift(newReview);
 
           this.userComment.title = "";
@@ -629,9 +639,11 @@ export default {
     },
     async getAll() {
       await this.$axios
-        .all([this.getFeedDetail(), this.getComment()])
+        .all([this.getUser(), this.getFeedDetail(), this.getComment()])
         .then(
-          this.$axios.spread((detailRes, commentRes) => {
+          this.$axios.spread((userRes, detailRes, commentRes) => {
+            this.user = userRes.data.username;
+            this.userAvatar = userRes.data.profile;
             var r = detailRes.data;
             this.title = r.title;
             this.description = r.description;
@@ -657,6 +669,7 @@ export default {
         .get("/api/v1/user/" + this.createdBy)
         .then((res) => {
           this.publisherName = res.data.username;
+          if (res.data.profile) this.publisherAvatar = res.data.profile;
         })
         .catch((error) => {
           console.log(error);
@@ -672,7 +685,7 @@ export default {
           });
       }
       // console.log("getAll() done");
-      console.log("!!!!!", this.comments);
+      // console.log("!!!!!", this.comments);
 
       //获取评论的详情
       for (let i = 0; i < this.comments.length; i++) {
@@ -691,11 +704,13 @@ export default {
           .get("/api/v1/user/" + this.comments[i].createdBy)
           .then((res) => {
             this.comments[i].publisherName = res.data.username;
+            if (res.data.profile)
+              this.comments[i].publisherAvatar = res.data.profile;
 
-            for (let j = i + 1; j < this.comments.length; j++) {
-              if (this.comments[i].createdBy == this.comments[j].createdBy)
-                this.comments[j].publisherName = this.comments[i].publisherName;
-            }
+            // for (let j = i + 1; j < this.comments.length; j++) {
+            //   if (this.comments[i].createdBy == this.comments[j].createdBy)
+            //     this.comments[j].publisherName = this.comments[i].publisherName;
+            // }
             if (i == this.comments.length - 1) this.status = true;
           })
           .catch((error) => {
@@ -721,6 +736,12 @@ export default {
         method: "get",
         url: "/api/v1/review/list?feed=" + this.id,
         headers: header,
+      });
+    },
+    getUser() {
+      return this.$axios({
+        method: "get",
+        url: "/api/v1/user/" + this.userId,
       });
     },
     dateStr(date) {
@@ -886,6 +907,9 @@ export default {
 .comment-action {
   width: 300px;
   padding-top: 10px;
+}
+.comment-image {
+  max-width: 100%;
 }
 .comment-time {
   font-size: 12px;
