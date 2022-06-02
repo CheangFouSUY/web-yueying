@@ -9,20 +9,21 @@
               ><div class="profile-content">
                 <div class="profilePic">
                   <el-upload
+                    v-if="isOwnProfile"
                     id="avatar-uploader"
                     action=""
                     :http-request="uploadAvatar"
                     :show-file-list="false"
                     :on-success="handleAvatarSuccess"
                     :before-upload="beforeAvatarUpload"
-        accept="image/jpeg,image/gif,image/png,image/jpg"
+                    accept="image/jpeg,image/gif,image/png,image/jpg"
                   >
-                  <div id="change-pic">更换头像</div>
+                    <div id="change-pic">更换头像</div>
                     <el-image :src="form.imageUrl"></el-image>
                   </el-upload>
-                </div>
-              </div></el-col
-            >
+                  <el-image v-else :src="form.imageUrl"></el-image>
+                </div></div
+            ></el-col>
             <el-col :span="15"
               ><div class="profile-content">
                 <el-row>
@@ -182,10 +183,31 @@ export default {
     this.getFeed();
   },
   methods: {
-      async uploadAvatar(file){
-        //   const formData = new FormData();
-        //   formData.append("")
-      },
+    async uploadAvatar(file) {
+      const formData = new FormData();
+      formData.append("email", this.form.email);
+      formData.append("username", this.form.name);
+      formData.append("profile", file.file);
+      formData.append("userId", this.form.id);
+
+      var header = {};
+      if (localStorage.getItem("token"))
+        header = { Authorization: "Bearer " + localStorage.getItem("token") };
+
+      await this.$axios({
+        method: "put",
+        url: "/api/v1/user/" + this.$route.params.id,
+        data: formData,
+        headers: header,
+      })
+        .then((res) => {
+          console.log(res);
+          this.form.imageUrl = res.data.profile;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     async getFeed() {
       var header = {};
       if (localStorage.getItem("token"))
@@ -195,10 +217,14 @@ export default {
         method: "get",
         url: "/api/v1/feed/list?createdBy=" + this.$route.params.id,
         headers: header,
-      }).then((res) => {
-        this.feeds = res.data.results;
-        console.log(this.feeds);
-      });
+      })
+        .then((res) => {
+          this.feeds = res.data.results;
+          console.log(this.feeds);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     async getProfile() {
       console.log(this.$route.params.id);

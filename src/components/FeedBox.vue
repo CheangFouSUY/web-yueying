@@ -69,13 +69,11 @@
               publisherName
             }}</span>
           </el-row>
-          <el-row
-            v-else
-            class="feed-publisher"
-            @click="enterProfile(createdBy)"
-            style="cursor: pointer"
-            >{{ publisherName }}</el-row
-          >
+          <el-row v-else class="feed-publisher">
+            <span @click="enterProfile(createdBy)" style="cursor: pointer">
+              {{ publisherName }}
+            </span>
+          </el-row>
           <el-row class="feed-time">
             <i class="el-icon-time"></i>
             {{ dateStr(createdAt) }}
@@ -217,9 +215,7 @@
               </el-row>
               <el-row class="comment-title">{{ c.title }}</el-row>
               <el-row>{{ c.description }}</el-row>
-              <el-row class="comment-image" v-for="cimg in c.image" :key="cimg">
-                <img v-if="c.img" :src="c.img" alt="comment-image" />
-              </el-row>
+              <img v-if="c.img" :src="c.img" alt="comment-image" />
             </el-col>
           </el-row>
           <el-row class="comment-action">
@@ -591,36 +587,25 @@ export default {
       })
         .then((res) => {
           console.log(res);
-          switch (res.status) {
-            case 201:
-              this.$notify({
-                showClose: true,
-                message: "已发布评论",
-                type: "success",
-                position: "top-left",
-              });
+          this.$notify({
+            showClose: true,
+            message: "已发布评论",
+            type: "success",
+            position: "top-left",
+          });
+          var newReview = res.data;
+          newReview.time = new Date().getTime();
+          newReview.createdBy = this.userId;
+          newReview.likes = 0;
+          newReview.dislikes = 0;
+          newReview.response = "O";
+          newReview.publisherName = this.user;
+          this.comments.unshift(newReview);
 
-              setTimeout(function () {
-                location.reload();
-              }, 1500);
-              // var a = {};
-              // a.feed = this.id;
-              // a.title = this.userComment.title;
-              // a.description = this.userComment.content;
-              // a.img = this.userComment.img;
-              // a.time = new Date().getTime();
-              // a.createdBy = this.userId;
-              // a.likes = 0;
-              // a.dislikes = 0;
-              // a.response = "O";
-              // a.publisherName = this.user;
-              // console.log(a.img);
-              // this.comments.unshift(a);
-              // this.userComment.title = "";
-              // this.userComment.content = "";
-              // this.userComment.img = "";
-              break;
-          }
+          this.userComment.title = "";
+          this.userComment.content = "";
+          this.userComment.img = "";
+          $(".showFileName").html("");
         })
         .catch((err) => {
           console.log(err);
@@ -687,13 +672,12 @@ export default {
           });
       }
       // console.log("getAll() done");
-      // console.log("!!!!!", this.comments);
+      console.log("!!!!!", this.comments);
 
       //获取评论的详情
       for (let i = 0; i < this.comments.length; i++) {
-        this.comments.img = this.comments.img + "/";
         this.comments[i].time = new Date(this.comments[i].createdAt).getTime();
-        this.$axios
+        await this.$axios
           .get("api/v1/review/" + this.comments[i].id)
           .then((res) => {
             this.comments[i].img = res.data.img;
@@ -703,7 +687,7 @@ export default {
           .catch((error) => {
             console.log(error);
           });
-        this.$axios
+        await this.$axios
           .get("/api/v1/user/" + this.comments[i].createdBy)
           .then((res) => {
             this.comments[i].publisherName = res.data.username;
