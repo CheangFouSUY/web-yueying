@@ -42,6 +42,11 @@ export default {
         noData: false,
       }
   },
+  watch: {
+    $route: {
+      handler: "searchReload",
+    }
+  },
   methods: {
     getDrama() {
         this.$axios({
@@ -58,6 +63,9 @@ export default {
             console.log(err);
         })
     },
+    searchReload() {
+      location.reload();
+    }
   },
   mounted() {
     this.searchItem = this.$route.query.name;

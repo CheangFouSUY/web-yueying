@@ -46,6 +46,11 @@ export default {
         noData: false,
       }
   },
+  watch: {
+    $route: {
+      handler: "searchReload",
+    }
+  },
   computed: {
     columns2 () {
       let columns = []
@@ -77,6 +82,9 @@ export default {
     toGroup(groupId) {
       this.$router.push({path: `/group/${groupId}`})
     },
+    searchReload() {
+      location.reload();
+    }
   },
   mounted() {
     this.searchItem = this.$route.query.name;

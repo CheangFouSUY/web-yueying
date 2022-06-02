@@ -18,9 +18,6 @@
                  <div class="item-container" v-for="item in column" :key="item.id"><span id="feedTitle" @click="toFeed(item.id)">{{item.title}}</span>
                  <br/><span id="feedCon" @click="toFeed(item.id)">{{item.description}}</span></div>
                 </div></div>
-                <!-- <el-col :span="7" v-for="item in items" :key="item.id"><div class="bg-blue">{{ item.content }}</div></el-col> -->
-                <!-- <el-col :span="7" ><div class="bg-yellow">{{ item.content  }}</div></el-col>
-                <el-col :span="7"><div class="bg-blue">{{ item.content }}</div></el-col> -->
             </el-row>
         </el-row >
         </div>
@@ -48,6 +45,11 @@ export default {
         feedsId:[],
         noData: false,
       }
+  },
+  watch: {
+    $route: {
+      handler: "searchReload",
+    }
   },
   computed: {
     columns () {
@@ -79,6 +81,9 @@ export default {
     },
     toFeed(feedId) {
       this.$router.push({path: `/feed/${feedId}`})
+    },
+    searchReload() {
+      location.reload();
     }
   },
   mounted() {
@@ -160,7 +165,8 @@ export default {
   margin-top: 20px;
   font-size: 24px;
   padding-left: 20px;
-}dCon{
+}
+#feedCon{
   font-size: 20px;
 }
 #feedTitle{
