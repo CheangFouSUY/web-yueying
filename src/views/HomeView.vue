@@ -13,32 +13,32 @@
             <div class="Book">
               <img src="@/assets/Book.svg" alt="book icon" /><span>图书</span>
             </div>
-            <Swiper :initialList="hotBook"></Swiper>
+            <Swiper v-if="status" :initialList="bookHotList" :initialIsBook="true"></Swiper>
         </el-row>
         <!-- <el-divider></el-divider> -->
         <el-row>
             <div class="Book">
               <img src="@/assets/Video.svg" alt="video icon" /><span>影视</span>
             </div>
-            <Swiper :initialList="hotDrama"></Swiper>
+            <Swiper v-if="status" :initialList="movieHotList" :initialIsBook="false"></Swiper>
         </el-row>
       </el-col>
 
       <el-col :span="6">
         <el-col class="hot-list-wrap">
           <el-row class="hot-list-title">热 榜</el-row>
-          <el-tabs v-model="activeName" type="border-card" stretch="true">
+          <el-tabs v-model="activeName" type="border-card" stretch>
             <el-tab-pane label="图书" name="book">
               <li
                 class="hot-list"
                 v-for="(item, index) in bookHotList.slice(0,10)"
-                :key="item.title"
+                :key="item.id"
                 :style="{ color: listColor[index+1 - 1] }"
               >
                 <img id="hot" v-if="index+1 === 1" src="@/assets/Hot.jpg" alt="hot icon" />
                 <span v-else>&nbsp;&nbsp;&nbsp;&nbsp;</span>
                 <span class="hot-list-number">{{ index+1 }}</span>
-                <span class="hot-list-name">{{ item.title }}</span>
+                <span class="hot-list-name" @click="enterBook(item.id)">{{ item.title }}</span>
               </li>
             </el-tab-pane>
             <el-tab-pane label="影视" name="drama">
@@ -51,7 +51,7 @@
                 <img id="hot" v-if="index+1 === 1" src="@/assets/Hot.jpg" alt="hot icon" />
                 <span v-else>&nbsp;&nbsp;&nbsp;&nbsp;</span>
                 <span class="hot-list-number">{{ index+1 }}</span>
-                <span class="hot-list-name">{{ item.title }}</span>
+                <span class="hot-list-name" @click="enterMovie(item.id)">{{ item.title }}</span>
               </li>
             </el-tab-pane>
           </el-tabs>
@@ -77,6 +77,7 @@ export default {
   },
   data() {
     return {
+      status: false,
       carouselImg: [
         require("../assets/poster/poster1.jpg"),
         require("../assets/poster/poster2.jpg"),
@@ -101,150 +102,6 @@ export default {
       ],
       movieHotList: [
       ],
-      hotBook: [
-        {
-          id: "B001",
-          title: "盗墓笔记1",
-          rating: 4.6,
-          src: require("../assets/poster/DaoMuBiJi.jpg"),
-          name: "daomubiji",
-        },
-        {
-          id: "B002",
-          title: "盗墓笔记2",
-          rating: 4.6,
-          src: require("../assets/poster/DaoMuBiJi.jpg"),
-          name: "daomubiji",
-        },
-        {
-          id: "B003",
-          title: "盗墓笔记3",
-          rating: 4.6,
-          src: require("../assets/poster/DaoMuBiJi.jpg"),
-          name: "daomubiji",
-        },
-        {
-          id: "B004",
-          title: "盗墓笔记4",
-          rating: 4.6,
-          src: require("../assets/poster/DaoMuBiJi.jpg"),
-          namel: "daomubiji",
-        },
-        {
-          id: "B005",
-          title: "盗墓笔记5",
-          rating: 4.6,
-          src: require("../assets/poster/DaoMuBiJi.jpg"),
-          name: "daomubiji",
-        },
-        {
-          id: "B006",
-          title: "盗墓笔记6",
-          rating: 4.6,
-          src: require("../assets/poster/DaoMuBiJi.jpg"),
-          name: "daomubiji",
-        },
-        {
-          id: "B007",
-          title: "盗墓笔记7",
-          rating: 4.6,
-          src: require("../assets/poster/DaoMuBiJi.jpg"),
-          name: "daomubiji",
-        },
-        {
-          id: "B008",
-          title: "盗墓笔记8",
-          rating: 4.6,
-          src: require("../assets/poster/DaoMuBiJi.jpg"),
-          name: "daomubiji",
-        },
-        {
-          id: "B009",
-          title: "盗墓笔记9",
-          rating: 4.6,
-          src: require("../assets/poster/DaoMuBiJi.jpg"),
-          name: "daomubiji",
-        },
-        {
-          id: "B0010",
-          title: "盗墓笔记10",
-          rating: 4.6,
-          src: require("../assets/poster/DaoMuBiJi.jpg"),
-          name: "daomubiji",
-        },
-      ],
-      hotDrama: [
-        {
-          id: "D001",
-          title: "猎罪图鉴1",
-          rating: 4.8,
-          src: require("../assets/poster/LieZuiTuJian.jpg"),
-          name: "liezuitujian",
-        },
-        {
-          id: "B002",
-          title: "猎罪图鉴2",
-          rating: 4.6,
-          src: require("../assets/poster/LieZuiTuJian.jpg"),
-          name: "liezuitujian",
-        },
-        {
-          id: "B003",
-          title: "猎罪图鉴3",
-          rating: 4.6,
-          src: require("../assets/poster/LieZuiTuJian.jpg"),
-          name: "liezuitujian",
-        },
-        {
-          id: "B004",
-          title: "猎罪图鉴4",
-          rating: 4.6,
-          src: require("../assets/poster/LieZuiTuJian.jpg"),
-          namel: "liezuitujian",
-        },
-        {
-          id: "B005",
-          title: "猎罪图鉴5",
-          rating: 4.6,
-          src: require("../assets/poster/LieZuiTuJian.jpg"),
-          name: "liezuitujian",
-        },
-        {
-          id: "B006",
-          title: "猎罪图鉴6",
-          rating: 4.6,
-          src: require("../assets/poster/LieZuiTuJian.jpg"),
-          name: "liezuitujian",
-        },
-        {
-          id: "B007",
-          title: "猎罪图鉴7",
-          rating: 4.6,
-          src: require("../assets/poster/LieZuiTuJian.jpg"),
-          name: "liezuitujian",
-        },
-        {
-          id: "B008",
-          title: "猎罪图鉴8",
-          rating: 4.6,
-          src: require("../assets/poster/LieZuiTuJian.jpg"),
-          name: "liezuitujian",
-        },
-        {
-          id: "B009",
-          title: "猎罪图鉴9",
-          rating: 4.6,
-          src: require("../assets/poster/LieZuiTuJian.jpg"),
-          name: "liezuitujian",
-        },
-        {
-          id: "B0010",
-          title: "猎罪图鉴10",
-          rating: 4.6,
-          src: require("../assets/poster/LieZuiTuJian.jpg"),
-          name: "liezuitujian",
-        },
-      ],
     };
   },
   mounted() {
@@ -261,6 +118,9 @@ export default {
         this.$axios.spread((bookList, movieList) => {
          this.bookHotList = bookList.data.results;
          this.movieHotList = movieList.data.results;
+         this.setRating(this.bookHotList);
+         this.setRating(this.movieHotList);
+        this.status = true;
         })
       )
     },
@@ -275,7 +135,18 @@ export default {
         method: "get",
         url: "/api/v1/movie/list?orderBy=l",
       });
-    }
+    },
+    setRating(arr) {
+      return arr.forEach(function (value, index, array) {
+        array[index].rating = array[index].rating.toFixed(1);
+      });
+    },
+    enterBook(bookid){
+      this.$router.push({ path: `/book/detail/${bookid}` });
+    },
+    enterMovie(movieid){
+      this.$router.push({ path: `/movie/detail/${movieid}` });
+    },
   },
 };
 </script>
@@ -294,7 +165,7 @@ export default {
   /* outline: 1px slateblue solid; */
 }
 .hot-list-name:hover {
-  color: blue;
+  color: #79a3b1;
   cursor: pointer;
 }
 .hot-list-number {
