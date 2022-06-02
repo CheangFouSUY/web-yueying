@@ -554,11 +554,9 @@ export default {
     },
     async getAll() {
       await this.$axios
-        .all([this.getUser(), this.getBookDetail(), this.getComment()])
+        .all([this.getBookDetail(), this.getComment()])
         .then(
-          this.$axios.spread((userRes, detailRes, commentRes) => {
-            this.user = userRes.data.username;
-            this.userAvatar = userRes.data.profile;
+          this.$axios.spread((detailRes, commentRes) => {
             var r = detailRes.data;
             this.id = r.id;
             this.title = r.title;
@@ -599,6 +597,18 @@ export default {
           .catch((error) => {
             console.log(error);
           });
+
+if (this.islogin)
+        await this.$axios
+          .get("/api/v1/user/" + this.userId)
+          .then((res) => {
+            this.user = res.data.username;
+            this.userAvatar = res.data.profile;
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+
         this.$axios
           .get("/api/v1/user/" + this.comments[i].createdBy)
           .then((res) => {

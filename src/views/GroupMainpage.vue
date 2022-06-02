@@ -110,6 +110,7 @@
 <script>
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
+import User from "@/store/user";
 
 export default {
   name: 'GroupMainpage',
@@ -118,6 +119,11 @@ export default {
     Footer,
   },
   mounted() {
+    var userInfo;
+    if ((userInfo = User.getters.getUser(User.state()))) {
+      this.islogin = true;
+      this.userId = userInfo.user.id;
+    }
     this.getGroup();
   },
   computed: {
@@ -187,6 +193,7 @@ export default {
         if (localStorage.getItem('token'))
             header = { 'Authorization': 'Bearer ' + localStorage.getItem('token')}
 
+      if(this.islogin)
       this.$axios({
         method:'get',
         url:'/api/v1/group/joined',
@@ -204,6 +211,7 @@ export default {
   },
   data() {
         return {
+          islogin: false,
           leaderboardDataB: [],
           leaderboardDataM: [],
           leaderboardDataO: [],

@@ -74,6 +74,7 @@ export default {
   name: "Header",
   props: {
     initialUsername: String,
+    initialProfilePic: String,
   },
   data() {
     return {
@@ -81,7 +82,6 @@ export default {
       dialogVisible: false,
       isLogin: false,
       userName: this.initialUsername,
-      profileP: "",
       searchInfo: "",
       userId: "",
       // userNames:'aaaaaaaaaaaaaaaaaaaaa',
@@ -90,10 +90,12 @@ export default {
   },
   created() {
     var userInfo;
-    if (userInfo = user.getters.getUser(user.state())) {
-      this.isLogin = true;
-      this.userId = userInfo.user.id;
-      this.getUser();
+    if ((userInfo = user.getters.getUser(user.state()))) {
+      if (userInfo.user.confirmed) {
+        this.isLogin = true;
+        this.userId = userInfo.user.id;
+        this.getUser();
+      }
     }
   },
   methods: {

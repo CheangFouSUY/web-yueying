@@ -258,6 +258,7 @@ export default {
         .then((res) => {
           console.log(res);
           this.form.imageUrl = res.data.profile;
+          location.reload();
         })
         .catch((err) => {
           console.log(err);

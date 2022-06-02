@@ -89,8 +89,12 @@
       <el-row v-if="islogin" class="publish-box">
         <el-row :gutter="70">
           <el-col :span="1">
-          <el-avatar v-if="userAvatar" :size="50" :src="userAvatar"></el-avatar>
-          <el-avatar v-else :size="50" icon="el-icon-user-solid"></el-avatar>
+            <el-avatar
+              v-if="userAvatar"
+              :size="50"
+              :src="userAvatar"
+            ></el-avatar>
+            <el-avatar v-else :size="50" icon="el-icon-user-solid"></el-avatar>
           </el-col>
           <el-col :span="22">
             <el-row class="comment-publisher">{{ user }}</el-row>
@@ -134,12 +138,19 @@
         <el-divider></el-divider>
         <el-row :gutter="70">
           <el-col :span="1">
-          <el-avatar v-if="item.publisherAvatar" :size="50" :src="item.publisherAvatar"></el-avatar>
-          <el-avatar v-else :size="50" icon="el-icon-user-solid"></el-avatar>
+            <el-avatar
+              v-if="item.publisherAvatar"
+              :size="50"
+              :src="item.publisherAvatar"
+            ></el-avatar>
+            <el-avatar v-else :size="50" icon="el-icon-user-solid"></el-avatar>
           </el-col>
           <el-col :span="22">
             <el-row v-if="status" class="comment-publisher">
-              <span @click="enterProfile(item.createdBy)" style="cursor: pointer">
+              <span
+                @click="enterProfile(item.createdBy)"
+                style="cursor: pointer"
+              >
                 {{ item.publisherName }}
               </span>
             </el-row>
@@ -149,7 +160,11 @@
             </el-row>
             <el-row class="comment-title">{{ item.title }}</el-row>
             <el-row>{{ item.description }}</el-row>
-            <el-image v-if="item.img" class="comment-image" :src="item.img"></el-image>
+            <el-image
+              v-if="item.img"
+              class="comment-image"
+              :src="item.img"
+            ></el-image>
           </el-col>
         </el-row>
         <el-row class="comment-action">
@@ -555,11 +570,9 @@ export default {
     },
     async getAll() {
       await this.$axios
-        .all([this.getUser(), this.getMovieDetail(), this.getComment()])
+        .all([this.getMovieDetail(), this.getComment()])
         .then(
-          this.$axios.spread((userRes, detailRes, commentRes) => {
-            this.user = userRes.data.username;
-            this.userAvatar = userRes.data.profile;
+          this.$axios.spread((detailRes, commentRes) => {
             var r = detailRes.data;
             this.id = r.id;
             this.title = r.title;
@@ -600,11 +613,24 @@ export default {
           .catch((error) => {
             console.log(error);
           });
+
+        if (this.islogin)
+          await this.$axios
+            .get("/api/v1/user/" + this.userId)
+            .then((res) => {
+              this.user = res.data.username;
+              this.userAvatar = res.data.profile;
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+
         this.$axios
           .get("/api/v1/user/" + this.comments[i].createdBy)
           .then((res) => {
             this.comments[i].publisherName = res.data.username;
-            if(res.data.profile) this.comments[i].publisherAvatar = res.data.profile;
+            if (res.data.profile)
+              this.comments[i].publisherAvatar = res.data.profile;
 
             // for (let j = i + 1; j < this.comments.length; j++) {
             //   if (this.comments[i].createdBy == this.comments[j].createdBy)
@@ -685,7 +711,7 @@ export default {
       this.$router.push({ path: `/profile/${userid}` });
     },
     report(id) {
-      this.$router.push({ path:`/report/${id}`})
+      this.$router.push({ path: `/report/${id}` });
     },
   },
 };
