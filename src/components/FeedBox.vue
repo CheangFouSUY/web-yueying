@@ -65,16 +65,7 @@
           <el-avatar v-else :size="50" icon="el-icon-user-solid"></el-avatar>
         </el-col>
         <el-col :span="20">
-          <el-row v-if="!isPublic" class="feed-publisher">
-            <span @click="enterGroup(belongTo)" style="cursor: pointer">{{
-              groupName
-            }}</span>
-            <el-divider direction="vertical"></el-divider>
-            <span @click="enterProfile(createdBy)" style="cursor: pointer">{{
-              publisherName
-            }}</span>
-          </el-row>
-          <el-row v-else class="feed-publisher">
+          <el-row class="feed-publisher">
             <span @click="enterProfile(createdBy)" style="cursor: pointer">
               {{ publisherName }}
             </span>
@@ -84,33 +75,18 @@
             {{ dateStr(createdAt) }}
           </el-row>
         </el-col>
-
-        <!-- 话题关注、取消关注 -->
-        <el-row>
-          <button
-            class="feed-follow"
-            v-if="!isFollow && !isMine"
-            @click="follow()"
-          >
-            关注
-          </button>
-          <button
-            class="feed-unfollow"
-            v-else-if="isFollow && !isMine"
-            @click="follow()"
-          >
-            取消关注
-          </button>
-        </el-row>
       </el-row>
 
       <!-- 话题标题、内容、展开功能 -->
-      <el-row class="feed-title">{{ title }}</el-row>
+      <el-row class="feed-title">
+        <span @click="enterFeed()">{{ title }}</span>
+      </el-row>
       <el-row class="feed-content">
-        <span v-html="contentCalc()"></span>
+        <span class="feed-hashtag" @click="enterTag(belongTag)">#{{ tagTitle }}#</span>
+        <span v-html="descriptionCalc()"></span>
       </el-row>
       <el-row type="flex" justify="end">
-        <div v-if="isNeedExpand">
+        <div v-if="isNeedExpand && !isShowComment">
           <button
             class="expand-button"
             v-if="this.isExpand === false"
@@ -139,11 +115,7 @@
         />
         <img v-else @click="like()" src="@/assets/Love.svg" alt="love" />
         <span class="like-count">{{ likeCount }}</span>
-        <img
-          @click="changeCommentShow()"
-          src="@/assets/Comment.svg"
-          alt="comment"
-        />
+        <img @click="enterFeed()" src="@/assets/Comment.svg" alt="comment" />
         <span class="comment-count">{{ commentCount }}</span>
         <img
           @click="report('f&' + id)"
@@ -173,34 +145,37 @@
               <el-row class="comment-publisher">{{ user }}</el-row>
               <el-row class="publish-write">
                 <form>
-                  <input
-                    v-model="userComment.title"
-                    type="text"
-                    placeholder="评论标题："
-                  />
-                  <input
-                    v-model="userComment.content"
-                    type="text"
-                    placeholder="评论内容："
-                  />
+                  <div class="comment-autosize-wrapper">
+                    <pre
+                      class="comment-autosize"
+                    ><br>{{ userComment.content }}</pre>
+                    <textarea
+                      v-model="userComment.content"
+                      placeholder="书评内容："
+                    ></textarea>
+                  </div>
                   <span class="showFileName"></span>
+                  <i
+                    v-if="userComment.img"
+                    class="el-icon-delete"
+                    @click="deleteImg()"
+                    style="cursor: pointer"
+                  ></i>
                   <el-row class="publish-action" :span="20">
                     <i
                       class="el-icon-picture-outline-round"
                       onclick="$('input[id=imgUpload]').click();"
                     ></i>
-                    <i
-                      id="imgIcon"
-                      class="el-icon-position"
-                      @click="submitReview($event)"
-                    ></i>
-
                     <input
                       id="imgUpload"
                       type="file"
                       accept="image/png,image/gif,image/jpeg"
                       @change="getImg($event)"
                     />
+                    <i
+                      class="el-icon-position"
+                      @click="submitReview($event)"
+                    ></i>
                   </el-row>
                 </form>
               </el-row>
@@ -236,8 +211,10 @@
                 <i class="el-icon-time"></i>
                 {{ dateStr(c.time) }}
               </el-row>
-              <el-row class="comment-title">{{ c.title }}</el-row>
-              <el-row>{{ c.description }}</el-row>
+              <span
+                style="word-wrap: break-word"
+                v-html="contentCalc(c.description)"
+              ></span>
               <img
                 v-if="c.img"
                 :src="c.img"
@@ -308,6 +285,7 @@ export default {
   name: "FeedBox",
   props: {
     initialFeedId: String,
+    initialIsInnerpage: Boolean,
     initialIsPin: Boolean,
     initialIsFeatured: Boolean,
     initialIsAdmin: Boolean,
@@ -328,6 +306,8 @@ export default {
       createdAt: 1642014005919,
       isPublic: true,
       belongTo: "",
+      belongTag: "654321",
+      tagTitle: "针不戳",
       isPin: this.initialIsPin,
       isFeatured: this.initialIsFeatured,
       isAdmin: this.initialIsAdmin,
@@ -336,14 +316,13 @@ export default {
       description:
         "67歲美國影星布魯斯威利（Bruce Willis）在今年3月閃電宣布引退，家人證實他罹患失語症，將漸漸失去說話和閱讀的能力。今年來他接片數量雖不少，但戲份大多不如以往，壓箱作品之一的《終極夜路》（Gasoline Alley），也將於近期在台灣上映。\n\n以洛杉磯街頭為背景的《終極夜路》，由布魯斯威利和戴文沙瓦（Devon Sawa）主演。故事描述一名有前科的刺青師，被警方認定為一宗連續殺人案的嫌疑犯，為了證明自己的清白，他必須設法查出真相。導演愛德華德雷克（Edward Drake）已經是第四次與布魯斯威利合作，對於這位昔日動作天王的表現，他依舊是讚譽有佳：「布魯斯是我有幸認識和合作過的最善良的人之一。」為了向布魯斯威利過去的事蹟致意，他表示劇組很認真的在製作這部電影，「我對這個人的評價不能再高了，他是個偉大的人。」\n\n除了布魯斯威利之外，愛德華德雷克這次還邀請曾演出《絕命終結站》的性格男星戴文沙瓦演出，對於這次和他合作的心得，愛德華德雷克表示：「戴文是我合作過最好的演員之一。他是非凡的。你可以從他的眼神中看出他的角色正在做決定，當他在推測他的選擇可能帶來的後果。」他又說：「當我遇到戴文之後，我才意識到我們有機會製作一部非常特別的作品。」《終極夜路》將於6月2日上映。\n\n转载于：ETtoday新聞雲",
       isExpand: false,
-      image: require("@/assets/feedpic1.jpg"),
+      image: "",
       likeCount: 204,
       commentCount: 2,
-      isShowComment: false,
+      isShowComment: this.initialIsInnerpage,
       isFollow: false,
       response: "O",
       userComment: {
-        title: "",
         content: "",
         img: "",
       },
@@ -375,19 +354,19 @@ export default {
         header = { Authorization: "Bearer " + localStorage.getItem("token") };
       console.log(header);
 
-        await this.$axios({
-          method: "delete",
-          url: "/api/v1/feed/" + this.id,
-          data: formData,
-          headers: header,
+      await this.$axios({
+        method: "delete",
+        url: "/api/v1/feed/" + this.id,
+        data: formData,
+        headers: header,
+      })
+        .then((res) => {
+          console.log(res);
+          location.reload();
         })
-          .then((res) => {
-            console.log(res);
-            location.reload();
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        .catch((err) => {
+          console.log(err);
+        });
     },
     async feature() {
       var formData = new FormData();
@@ -582,7 +561,6 @@ export default {
     submitReview(event) {
       event.preventDefault();
       let formData = new FormData();
-      formData.append("title", this.userComment.title);
       formData.append("description", this.userComment.content);
       formData.append("img", this.userComment.img);
       formData.append("feed", this.id);
@@ -607,30 +585,24 @@ export default {
             type: "success",
             position: "top-left",
           });
-          var newReview = res.data;
-          newReview.time = new Date().getTime();
-          newReview.createdBy = this.userId;
-          newReview.likes = 0;
-          newReview.dislikes = 0;
-          newReview.response = "O";
-          newReview.publisherName = this.user;
-          newReview.publisherAvatar = this.userAvatar;
-          this.comments.unshift(newReview);
-
-          this.userComment.title = "";
-          this.userComment.content = "";
-          this.userComment.img = "";
-          $(".showFileName").html("");
+          location.reload();
         })
         .catch((err) => {
           console.log(err);
           switch (err.response.status) {
             case 400:
-              this.$notify({
-                title: "标题和内容不能为空！",
-                type: "warning",
-                position: "top-left",
-              });
+              if (this.userComment.content.length > 5000)
+                this.$notify({
+                  title: "评论长度不可超过5000字符！",
+                  type: "warning",
+                  position: "top-left",
+                });
+              else
+                this.$notify({
+                  title: "评论不能为空！",
+                  type: "warning",
+                  position: "top-left",
+                });
               break;
             case 401:
               this.$notify({
@@ -654,6 +626,7 @@ export default {
             this.isPublic = r.isPublic;
             this.createdBy = r.createdBy;
             this.belongTo = r.belongTo;
+            this.belongTag = r.belongTag;
             this.createdAt = new Date(r.createdAt).getTime();
             this.likeCount = r.likes;
             this.commentCount = commentRes.data.count;
@@ -661,7 +634,7 @@ export default {
             this.response = r.response;
             this.isFollow = r.isFollow;
             this.isMine = r.createdBy == this.userId;
-            // console.log(this.comments[0]);
+            // console.log(this.belongTag, this.belongTo);
             // console.log(r.message);
           })
         )
@@ -689,6 +662,7 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+
       if (!this.isPublic) {
         await this.$axios
           .get("/api/v1/group/" + this.belongTo)
@@ -699,8 +673,16 @@ export default {
             console.log(error);
           });
       }
-      // console.log("getAll() done");
-      // console.log("!!!!!", this.comments);
+      else{
+        await this.$axios
+          .get("/api/v1/tag/" + this.belongTag)
+          .then((res) => {
+            this.tagTitle = res.data.title;
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
 
       //获取评论的详情
       for (let i = 0; i < this.comments.length; i++) {
@@ -788,7 +770,9 @@ export default {
         return y + "-" + m + "-" + d + " " + h + ":" + mn;
       }
     },
-    contentCalc() {
+    descriptionCalc() {
+      if (this.isShowComment)
+        return this.description.replace(/(\r\n|\n|\r)/gm, "<br/>");
       var s = "";
       if (this.isExpand === false) {
         s = this.description.substring(0, 180) + "...";
@@ -800,14 +784,19 @@ export default {
     changeExpand() {
       this.isExpand = !this.isExpand;
     },
-    changeCommentShow() {
-      this.isShowComment = !this.isShowComment;
-    },
     getImg(event) {
       var fileName = event.target.files[0].name;
       $(".showFileName").html(fileName);
       this.userComment.img = event.target.files[0];
-      console.log("get img! ", this.userComment);
+      console.log(this.id, "get img! ", this.userComment);
+    },
+    deleteImg() {
+      this.userComment.imgName = "";
+      this.userComment.img = "";
+      console.log(this.userComment);
+    },
+    contentCalc(s) {
+      return s.replace(/(\r\n|\n|\r)/gm, "<br/>");
     },
     report(id) {
       this.$router.push({ path: `/report/${id}` });
@@ -817,6 +806,12 @@ export default {
     },
     enterGroup(groupid) {
       this.$router.push({ path: `/group/${groupid}` });
+    },
+    enterTag(tagid) {
+      this.$router.push({ path: `/tag/${tagid}` });
+    },
+    enterFeed() {
+      this.$router.push({ path: `/feed/${this.id}` });
     },
   },
 };
@@ -885,17 +880,40 @@ export default {
   background-color: rgba(121, 163, 177, 0.2);
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.05);
 }
-.publish-box input:focus {
+.publish-box input:focus,
+.publish-box textarea:focus {
   outline: none;
 }
-.publish-box input {
-  width: 1060px;
-  margin: 5px;
-  padding: 10px;
+.publish-box textarea {
+  position: absolute;
+  top: 0;
+  left: 0;
+  resize: none;
+  height: 100%;
   border: none;
   background: none;
+}
+.publish-box textarea,
+.comment-autosize {
+  width: 100%;
+  min-height: 40px;
+  padding: 10px;
+  box-sizing: border-box;
   color: #456268;
+  overflow: hidden;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  word-break: break-word;
+  font-size: 16px;
   font-family: "Microsoft JhengHei", 微软正黑体, "Microsoft YaHei", 微软雅黑;
+}
+.comment-autosize-wrapper {
+  position: relative;
+  width: 100%;
+}
+.comment-autosize {
+  margin: 0;
+  visibility: hidden;
 }
 .publish-write {
   margin: 5px 0;
@@ -924,6 +942,7 @@ export default {
   padding-top: 10px;
 }
 .comment-image {
+  display: block;
   max-width: 100%;
 }
 .comment-time {
@@ -937,6 +956,7 @@ export default {
 }
 .comment-box {
   padding: 15px 0;
+  word-wrap: break-word;
 }
 
 .like-comment-wrap {
@@ -1002,11 +1022,17 @@ export default {
 }
 .feed-content {
   font-size: 18px;
+  word-wrap: break-word;
+}
+.feed-hashtag {
+  color: #79a3b1;
+  cursor: pointer;
 }
 .feed-title {
   margin: 20px 0;
   font-size: 30px;
   font-weight: 600;
+  cursor: pointer;
 }
 .feed-time {
   color: grey;

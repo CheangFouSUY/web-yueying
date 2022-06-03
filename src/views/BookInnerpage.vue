@@ -62,7 +62,10 @@
             <div class="book-detail-prop">简介</div>
             <div class="symbol">：</div>
             <span>&nbsp;</span>
-            <span style="word-wrap: break-word;" v-html="contentCalc(description)"></span>
+            <span
+              style="word-wrap: break-word"
+              v-html="contentCalc(description)"
+            ></span>
           </el-col>
         </el-row>
       </el-row>
@@ -102,7 +105,9 @@
                   placeholder="书评标题："
                 />
                 <div class="comment-autosize-wrapper">
-                  <pre class="comment-autosize"><br>{{ userComment.content }}</pre>
+                  <pre
+                    class="comment-autosize"
+                  ><br>{{ userComment.content }}</pre>
                   <textarea
                     v-model="userComment.content"
                     placeholder="书评内容："
@@ -157,8 +162,10 @@
               {{ dateStr(item.time) }}
             </el-row>
             <el-row class="comment-title">{{ item.title }}</el-row>
-            <el-row class="comment-content">{{ item.description }}</el-row>
-            <el-row class="comment-content" v-html="contentCalc(item.description)"></el-row>
+            <el-row
+              class="comment-content"
+              v-html="contentCalc(item.description)"
+            ></el-row>
             <el-image
               v-if="item.img"
               class="comment-image"
@@ -422,11 +429,24 @@ export default {
           console.log(err);
           switch (err.response.status) {
             case 400:
-              this.$notify({
-                title: "标题和内容不能为空！",
-                type: "warning",
-                position: "top-left",
-              });
+              if (this.userComment.title.length > 150)
+                this.$notify({
+                  title: "标题长度不可超过150字符！",
+                  type: "warning",
+                  position: "top-left",
+                });
+              else if (this.userComment.content.length > 5000)
+                this.$notify({
+                  title: "内容长度不可超过5000字符！",
+                  type: "warning",
+                  position: "top-left",
+                });
+              else
+                this.$notify({
+                  title: "标题和内容不能为空！",
+                  type: "warning",
+                  position: "top-left",
+                });
               break;
           }
         });
@@ -758,17 +778,18 @@ export default {
   border: none;
   background: none;
 }
-.publish-box textarea, .comment-autosize {
+.publish-box textarea,
+.comment-autosize {
   width: 100%;
   min-height: 40px;
   padding: 10px;
   box-sizing: border-box;
   color: #456268;
-    overflow:hidden;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    word-break: break-word;
-    font-size: 16px;
+  overflow: hidden;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  word-break: break-word;
+  font-size: 16px;
   font-family: "Microsoft JhengHei", 微软正黑体, "Microsoft YaHei", 微软雅黑;
 }
 .comment-autosize-wrapper {
@@ -786,7 +807,7 @@ export default {
   border: none;
   background: none;
   color: #456268;
-    font-size: 16px;
+  font-size: 16px;
   font-family: "Microsoft JhengHei", 微软正黑体, "Microsoft YaHei", 微软雅黑;
 }
 .publish-write {
@@ -809,12 +830,14 @@ export default {
 }
 .comment-content {
   font-size: 18px;
+  word-wrap: break-word;
 }
 .comment-title {
   margin: 10px 0;
   font-size: 22px;
   font-weight: 600;
   text-decoration: underline;
+  word-wrap: break-word;
 }
 .comment-image {
   max-width: 100%;

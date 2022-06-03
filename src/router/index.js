@@ -68,6 +68,11 @@ const routes = [
     component: () => import('../views/GroupMainpage.vue')
   },
   {
+    path: '/tag/:id',
+    name: 'tag inner',
+    component: () => import('../views/TagInnerpage.vue')
+  },
+  {
     path: '/feed/:id',
     name: 'feed inner',
     component: () => import('../views/FeedInnerpage.vue')
@@ -125,9 +130,6 @@ const routes = [
     path: '/profile/:id',
     name: 'profile',
     component: () => import('../views/Profile.vue'),
-    // meta: {
-    //   requireAuth: true
-    // }
   },
   {
     path: '/searchall',

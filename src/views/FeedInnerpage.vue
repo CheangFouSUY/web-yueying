@@ -5,6 +5,7 @@
       <FeedBox
       v-if="id"
         :initialFeedId="id"
+        :initialIsInnerpage="true"
         :initialIsPin="false"
         :initialIsFeatured="false"
         :initialIsAdmin="false"

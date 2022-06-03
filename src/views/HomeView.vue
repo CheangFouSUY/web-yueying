@@ -10,17 +10,44 @@
     <el-row class="main">
       <el-col :span="17" :offset="1">
         <el-row>
-            <div class="Book">
-              <img src="@/assets/Book.svg" alt="book icon" /><span>图书</span>
-            </div>
-            <Swiper v-if="status" :initialList="bookHotList" :initialIsBook="true"></Swiper>
+          <div class="Book">
+            <img src="@/assets/Book.svg" alt="book icon" /><span>热门图书</span>
+          </div>
+          <Swiper
+            v-if="status"
+            :initialList="bookHotList"
+            :initialIsBook="true"
+          ></Swiper>
         </el-row>
-        <!-- <el-divider></el-divider> -->
         <el-row>
-            <div class="Book">
-              <img src="@/assets/Video.svg" alt="video icon" /><span>影视</span>
-            </div>
-            <Swiper v-if="status" :initialList="movieHotList" :initialIsBook="false"></Swiper>
+          <div class="Book">
+            <img src="@/assets/Video.svg" alt="video icon" /><span>热门影视</span>
+          </div>
+          <Swiper
+            v-if="status"
+            :initialList="movieHotList"
+            :initialIsBook="false"
+          ></Swiper>
+        </el-row>
+        <el-row>
+          <div class="Book">
+            <img src="@/assets/Video.svg" alt="video icon" /><span>热门评论</span>
+          </div>
+          
+        </el-row>
+        <el-row>
+          <div class="Book">
+            <img src="@/assets/Feed.svg" alt="feed icon" /><span>热门话题</span>
+          </div>
+          <div class="tag-box">
+            <span
+              v-for="item in tagList"
+              :key="item.id"
+              @click="enterTag(item.id)"
+            >
+              #{{ item.title }}#
+            </span>
+          </div>
         </el-row>
       </el-col>
 
@@ -31,30 +58,54 @@
             <el-tab-pane label="图书" name="book">
               <li
                 class="hot-list"
-                v-for="(item, index) in bookHotList.slice(0,10)"
+                v-for="(item, index) in bookHotList.slice(0, 10)"
                 :key="item.id"
-                :style="{ color: listColor[index+1 - 1] }"
+                :style="{ color: listColor[index + 1 - 1] }"
               >
-                <img id="hot" v-if="index+1 === 1" src="@/assets/Hot.jpg" alt="hot icon" />
+                <img
+                  id="hot"
+                  v-if="index + 1 === 1"
+                  src="@/assets/Hot.jpg"
+                  alt="hot icon"
+                />
                 <span v-else>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                <span class="hot-list-number">{{ index+1 }}</span>
-                <span class="hot-list-name" @click="enterBook(item.id)">{{ item.title }}</span>
+                <span class="hot-list-number">{{ index + 1 }}</span>
+                <span class="hot-list-name" @click="enterBook(item.id)">{{
+                  item.title
+                }}</span>
               </li>
             </el-tab-pane>
             <el-tab-pane label="影视" name="drama">
               <li
                 class="hot-list"
-                v-for="(item, index) in movieHotList.slice(0,10)"
+                v-for="(item, index) in movieHotList.slice(0, 10)"
                 :key="item.title"
-                :style="{ color: listColor[index+1 - 1] }"
+                :style="{ color: listColor[index + 1 - 1] }"
               >
-                <img id="hot" v-if="index+1 === 1" src="@/assets/Hot.jpg" alt="hot icon" />
+                <img
+                  id="hot"
+                  v-if="index + 1 === 1"
+                  src="@/assets/Hot.jpg"
+                  alt="hot icon"
+                />
                 <span v-else>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                <span class="hot-list-number">{{ index+1 }}</span>
-                <span class="hot-list-name" @click="enterMovie(item.id)">{{ item.title }}</span>
+                <span class="hot-list-number">{{ index + 1 }}</span>
+                <span class="hot-list-name" @click="enterMovie(item.id)">{{
+                  item.title
+                }}</span>
               </li>
             </el-tab-pane>
           </el-tabs>
+        </el-col>
+        <el-col class="hot-list-wrap">
+          <el-row class="tag-list-title">热门话题</el-row>
+          <div class="tag-list"
+              v-for="item in tagList"
+              :key="item.id"
+              @click="enterTag(item.id)"
+            >
+              #{{ item.title }}#
+            </div>
         </el-col>
       </el-col>
     </el-row>
@@ -98,31 +149,28 @@ export default {
         "#456268",
         "#456268",
       ],
-      bookHotList: [
-      ],
-      movieHotList: [
-      ],
+      bookHotList: [],
+      movieHotList: [],
+      tagList: [],
     };
   },
   mounted() {
-    this.getBookMovieList();
+    this.getAll();
   },
   methods: {
-    getBookMovieList() {
+    getAll() {
       this.$axios
-        .all([
-          this.getHotBook(),
-          this.getHotMovie(),
-        ])
+        .all([this.getHotBook(), this.getHotMovie(), this.getTag()])
         .then(
-        this.$axios.spread((bookList, movieList) => {
-         this.bookHotList = bookList.data.results;
-         this.movieHotList = movieList.data.results;
-         this.setRating(this.bookHotList);
-         this.setRating(this.movieHotList);
-        this.status = true;
-        })
-      )
+          this.$axios.spread((bookList, movieList, tagList) => {
+            this.bookHotList = bookList.data.results;
+            this.movieHotList = movieList.data.results;
+            this.setRating(this.bookHotList);
+            this.setRating(this.movieHotList);
+            this.tagList = tagList.data.results;
+            this.status = true;
+          })
+        );
     },
     getHotBook() {
       return this.$axios({
@@ -136,16 +184,25 @@ export default {
         url: "/api/v1/movie/list?orderBy=l",
       });
     },
+    getTag() {
+      return this.$axios({
+        method: "get",
+        url: "/api/v1/tag/list",
+      });
+    },
     setRating(arr) {
       return arr.forEach(function (value, index, array) {
         array[index].rating = array[index].rating.toFixed(1);
       });
     },
-    enterBook(bookid){
+    enterBook(bookid) {
       this.$router.push({ path: `/book/detail/${bookid}` });
     },
-    enterMovie(movieid){
+    enterMovie(movieid) {
       this.$router.push({ path: `/movie/detail/${movieid}` });
+    },
+    enterTag(tagid) {
+      this.$router.push({ path: `/tag/${tagid}` });
     },
   },
 };
@@ -155,7 +212,7 @@ export default {
 .hot-list-name {
   display: -webkit-box;
   -webkit-line-clamp: 1;
-  line-clamp: 2; 
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   /* text-align: center; */
   overflow: hidden;
@@ -196,6 +253,13 @@ export default {
   font-weight: 600;
   background-color: #d0dde2;
 }
+.tag-list-title {
+  border-bottom: #456268 2px solid;
+  /* text-align: center; */
+  font-size: 26px;
+  font-weight: 600;
+  color: #456268;
+}
 .hot-list-title {
   padding: 10px;
   text-align: center;
@@ -205,7 +269,17 @@ export default {
   background-color: #456268;
 }
 .hot-list-wrap {
-  padding: 100px 20px;
+  padding: 100px 20px 0;
+}
+.tag-list:hover {
+  color: #79a3b1;
+  cursor: pointer;
+}
+.tag-list {
+  margin: 10px 10px;
+  font-size: 20px;
+  color: #456268;
+  /* outline: 1px black solid; */
 }
 
 .el-carousel {
@@ -223,7 +297,8 @@ export default {
   position: relative;
   height: 88px;
 }
-.Book img,.Drama img {
+.Book img,
+.Drama img {
   width: 60px;
   vertical-align: middle;
 }
@@ -258,12 +333,12 @@ export default {
 .bg-blue {
   background-color: blue;
 }
-.hot-list img{
+.hot-list img {
   height: 25px;
   width: 25px;
   /* border: solid 1px black; */
 }
-.main{
+.main {
   margin-bottom: 30px;
 }
 #footer {

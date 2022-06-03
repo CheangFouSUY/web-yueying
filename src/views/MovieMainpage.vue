@@ -224,6 +224,7 @@ export default {
   font-size: 32px;
   margin-left: 40px;
   margin-top: 20px;
+  color: #456268;
 }
 
 .main {

@@ -2,15 +2,61 @@
   <div class="all">
     <Header></Header>
     <div class="main">
-      <div class="page-title">
-        <img src="@/assets/Feed.svg" alt="feed icon" />
-        <span>话题广场</span>
-      </div>
-      <el-row class="tag-box">
-        
-        <span v-for="item in tags" :key="item.id" @click="enterTag(item.id)">
-        #{{ item.title }}#
-        </span>
+      <el-row>
+        <span class="tag-title">#{{ tagTitle }}#</span>
+        <el-row class="action">
+          <span @click="formVisible = true"> 发布帖子 </span>
+          <el-divider direction="vertical"></el-divider>
+          <span @click="joinTag()"> 参与话题 </span>
+
+          <el-dialog title="发布话题" :visible.sync="formVisible">
+            <el-form label-position="top" :model="form">
+              <el-form-item label="标题" :label-width="formLabelWidth">
+                <el-input
+                  v-model="form.title"
+                  autocomplete="off"
+                  maxlength="25"
+                  show-word-limit
+                ></el-input>
+              </el-form-item>
+              <el-form-item label="内容" :label-width="formLabelWidth">
+                <el-input
+                  type="textarea"
+                  autosize
+                  v-model="form.description"
+                  autocomplete="off"
+                  minlength="25"
+                  show-word-limit
+                  resize="none"
+                ></el-input>
+                <el-upload
+                  action=""
+                  :auto-upload="false"
+                  :on-change="handleChange"
+                  :before-remove="beforeRemove"
+                  :limit="1"
+                  accept="image/jpeg,image/gif,image/png,image/jpg"
+                  :on-exceed="handleExceed"
+                >
+                  <el-button
+                    class="form-upload-img"
+                    size="small"
+                    type="primary"
+                  >
+                    <i class="el-icon-picture-outline-round"></i>
+                    上传图片
+                  </el-button>
+                </el-upload>
+              </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+              <el-button class="button-no" @click="formVisible = false"
+                >取 消</el-button
+              >
+              <el-button class="button-yes" @click="postFeed()">发布</el-button>
+            </div>
+          </el-dialog>
+        </el-row>
       </el-row>
 
       <FeedBox
@@ -47,10 +93,7 @@ export default {
     return {
       islogin: false,
       user: "栀子花开",
-      activeName: "all",
-      isShowFollow: false,
-      allColor: "#79A3B1",
-      followColor: "#456268",
+      id: "",
       formVisible: false,
       formLabelWidth: "120px",
       form: {
@@ -60,7 +103,6 @@ export default {
       },
       dataList: "",
       feeds: [],
-      tags: [],
     };
   },
   mounted() {
@@ -95,6 +137,15 @@ export default {
       return this.$confirm(`确定移除 ${file.name}？`);
     },
     postFeed() {
+      if(!this.islogin) {
+        this.$notify({
+          showClose: true,
+          type: "warning",
+          title: "请先登录",
+          position: "top-left",
+        });
+        return;
+      }
       if (!this.form.title) {
         this.$notify({
           showClose: true,
@@ -116,6 +167,11 @@ export default {
       formData.append("title", this.form.title);
       formData.append("description", this.form.description);
       formData.append("img", this.form.img);
+      formData.append("belongTag", this.id);
+      console.log(this.form.title)
+      console.log(this.id)
+      console.log(this.id)
+      console.log(this.id)
 
       var header = {};
       if (localStorage.getItem("token"))
@@ -164,27 +220,63 @@ export default {
           }
         });
     },
-    showAll() {
-      this.isShowFollow = false;
-      this.allColor = "#79A3B1";
-      this.followColor = "#456268";
-    },
-    showFollow() {
-      this.isShowFollow = true;
-      this.followColor = "#79A3B1";
-      this.allColor = "#456268";
+    joinTag(){
+      let formData = new FormData();
+      formData.append("user", this.userId);
+      formData.append("tag", this.id);
+
+      var header = {};
+      if (localStorage.getItem("token"))
+        header = { Authorization: "Bearer " + localStorage.getItem("token") };
+
+      this.$axios({
+        method: "post",
+        url: "/api/v1/tag/join/",
+        data: formData,
+        headers: header,
+      })
+        .then((res) => {
+          console.log(res);
+          switch (res.status) {
+            case 201:
+              this.$notify({
+                showClose: true,
+                message: "已参与话题",
+                type: "success",
+                position: "top-left",
+              });
+              setTimeout(function () {
+                location.reload();
+              }, 1500);
+              break;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          switch (err.response.status) {
+            case 403:
+              this.$notify({
+                title: "请先登录",
+                type: "warning",
+                position: "top-left",
+              });
+              break;
+          }
+        });
     },
     getTag() {
+      this.id = this.$route.params.id;
       this.$axios({
         method: "get",
-        url: "/api/v1/tag/list",
-      }).then((res) => {
-        console.log(res);
-        this.tags = res.data.results;
-        console.log(this.tags);
-      }).then((err) =>{
-        console.log(err);
-      });
+        url: "/api/v1/tag/" + this.$route.params.id,
+      })
+        .then((res) => {
+          console.log(res);
+          this.tagTitle = res.data.title;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     getFeed() {
       var header = {};
@@ -193,13 +285,17 @@ export default {
       console.log(header);
       this.$axios({
         method: "get",
-        url: "/api/v1/feed/list",
+        url: "/api/v1/feed/list?tag=" + this.$route.params.id,
         headers: header,
-      }).then((res) => {
-        console.log(res);
-        this.feeds = res.data.results;
-        console.log(this.feeds);
-      });
+      })
+        .then((res) => {
+          console.log(res);
+          this.feeds = res.data.results;
+          console.log(this.feeds);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     getImg(event) {
       console.log("!!!!!");
@@ -209,9 +305,6 @@ export default {
       console.log(fileName);
       this.form.img = event.target.files[0];
       console.log("get img! ", this.form);
-    },
-    enterTag(tagid) {
-      this.$router.push({ path: `/tag/${tagid}` });
     },
   },
 };
@@ -282,36 +375,25 @@ export default {
   background-color: rgba(121, 163, 177, 0.4);
 }
 
-.tag-box span:hover {
-  color: #79a3b1;
+.action span:hover {
   cursor: pointer;
+  color: #79A3B1;
 }
-.tag-box span{
-  display: inline-block;
-  width: 33%;
-  margin: 5px 0;
-  font-size: 20px;
-  color: #456268;
-  /* outline: 1px black solid; */
-}
-.tag-box {
+.action {
   margin: 10px 0 30px;
-}
-.page-title img {
-  width: 65px;
-  /* margin: auto 0 auto 80px; */
-  vertical-align: middle;
-}
-.page-title span {
-  vertical-align: middle;
-  margin-left: 5px;
-}
-.page-title {
-  font-size: 32px;
-  margin-top: 20px;
+  font-size: 18px;
   color: #456268;
 }
-
+.tag-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #456268;
+}
+.el-divider {
+  position: relative;
+  bottom: 2px;
+  margin: auto 15px;
+}
 .main {
   width: 1200px;
   margin: 30px auto;
