@@ -24,9 +24,19 @@
                 <Swiper :initialList="hotMovie" :listType="'movie'" v-if="hotMovie.length"></Swiper>
             </el-row>
         </el-row>
-        <el-row v-if="!noFeedData" class="Feed">
+          <el-row v-if="!noTagData" class="Tag">
             <el-row class="Text" align="middle" type="flex">
             <i class="el-icon-position"></i><span>话题</span>
+            </el-row>
+            <el-row v-for="item in tags" :key="item.id">
+              <el-col :span="12" :offset=2><div class="TagContent">
+                <span id="tagCon" @click="toTag(item.id)">#{{ item.title }}</span>
+                </div></el-col>
+            </el-row>
+        </el-row>
+        <el-row v-if="!noFeedData" class="Feed">
+            <el-row class="Text" align="middle" type="flex">
+            <i class="el-icon-position"></i><span>话题帖子</span>
             </el-row>
             <el-row justify="center" type="flex">
                 <div class="container">
@@ -44,11 +54,23 @@
                 <div class="container">
                 <div class="col" v-for="column in columns2" :key="column">
                  <div class="item-container" v-for="item in column" :key="item.id">
-                     <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+                     <el-avatar :src="item.img"></el-avatar>
                      <div class="textInside"><span @click="toGroup(item.id)">{{item.groupName}}</span></div></div>
                 </div></div>
             </el-row>
         </el-row>
+        <el-row v-if="!noGroupFeedData" class="Feed">
+            <el-row class="Text" align="middle" type="flex">
+            <i class="el-icon-s-flag"></i><span>小组帖子</span>
+            </el-row>
+            <el-row justify="center" type="flex">
+                <div class="container">
+                <div class="col" v-for="column in columns3" :key="column">
+                 <div class="item-container" v-for="item in column" :key="item.id"><span id="feedTitle" @click="toGroupFeed(item.id)">{{item.title}}</span>
+                 <br/><span id="feedCon" @click="toGroupFeed(item.id)">{{item.description}}</span></div>
+                </div></div>
+            </el-row>
+        </el-row >
         </div>
     </div>
 </template>
@@ -79,11 +101,15 @@ export default {
         hotMovie:[],
         feeds:[],
         groupData:[],
+        tags:[],
+        groupFeedData: [],
         noData: false,
         noBookData: false,
         noMovieData: false,
         noFeedData: false,
         noGroupData: false,
+        noTagData: false,
+        noGroupFeedData: false,
       }
   },
   computed: {
@@ -106,7 +132,17 @@ export default {
         columns.push(this.groupData.slice(col * mid, col * mid + mid))
       }
       return columns
-    }
+    },
+    columns3 () {
+      let columns = []
+    //   let mid = Math.ceil(this.items.length / this.cols)
+      let cols = this.groupFeedData.length/3;
+      let mid = 3;
+      for (let col = 0; col < cols; col++) {
+        columns.push(this.groupFeedData.slice(col * mid, col * mid + mid))
+      }
+      return columns
+    },
   },
   methods: {
     getAll() {
@@ -116,14 +152,18 @@ export default {
           this.getMovie(),
           this.getFeed(),
           this.getGroup(),
+          this.getTag(),
+          this.getGroupFeed(),
         ])
         .then(
-          this.$axios.spread((blist, mlist, flist, glist) => {
+          this.$axios.spread((blist, mlist, flist, glist, tlist, gflist) => {
             console.log(flist.data.results);
             this.hotBook = blist.data.results;
             this.hotMovie = mlist.data.results;
             this.feeds = flist.data.results;
             this.groupData = glist.data.results;
+            this.tags = tlist.data.results;
+            this.groupFeedData = gflist.data.results;
             this.setRating(this.hotBook);
             this.setRating(this.hotMovie);
 
@@ -135,7 +175,11 @@ export default {
               this.noFeedData = true;
             if(this.groupData.length == 0)
               this.noGroupData = true;
-            if(this.hotBook.length == 0 && this.hotMovie.length == 0 && this.feeds.length == 0 && this.groupData.length == 0)
+            if(this.groupFeedData.length == 0)
+              this.noGroupFeedData = true;
+            if(this.tags.length == 0)
+              this.noTagData = true;
+            if(this.hotBook.length == 0 && this.hotMovie.length == 0 && this.feeds.length == 0 && this.groupData.length == 0 && this.tags.length == 0 && this.groupFeedData.length == 0)
               this.noData = true;
               
           })
@@ -159,7 +203,7 @@ export default {
     getFeed() {
       return this.$axios({
         method: "get",
-        url: '/api/v1/feed/list?search=' + this.searchItem,
+        url:'/api/v1/feed/list?search=' + this.searchItem + '&isPublic=True',
       });
     },
     getGroup() {
@@ -168,10 +212,28 @@ export default {
         url: '/api/v1/group/list?searchName=' + this.searchItem,
       });
     },
+    getTag() {
+      return this.$axios({
+            method:'get',
+            url:'/api/v1/tag/list?search=' + this.searchItem,
+        });
+    },
+    getGroupFeed() {
+      return this.$axios({
+          method:'get',
+          url:'/api/v1/feed/list?search=' + this.searchItem + '&isPublic=False',
+      })
+    },
     toGroup(groupId) {
       this.$router.push({path: `/group/${groupId}`})
     },
     toFeed(feedId) {
+      this.$router.push({path: `/feed/${feedId}`})
+    },
+    toTag(tagId) {
+      // this.$router.push({path: `/feed/${tagId}`})
+    },
+    toGroupFeed(feedId) {
       this.$router.push({path: `/feed/${feedId}`})
     },
     searchReload() {
@@ -199,11 +261,11 @@ export default {
 .searchicon{
     height: 48px;
 }
-.Book, .Drama, .Feed, .Group{
+.Book, .Drama, .Feed, .Group, .Tag{
     /* border: 1px solid black; */
     margin-top: 20px;
 }
-.Book span, .Drama span, .Feed span, .Group span{
+.Book span, .Drama span, .Feed span, .Group span, .Tag span{
     font-size: 24px;
     color: #456268;
 }
@@ -271,8 +333,15 @@ export default {
   text-align: center;
   width: 340px;
 }
+.textInside span:hover{
+  cursor: pointer;
+  color: #79A3B1;
+}
 .Group .el-avatar{
   margin-right: 8px;
+}
+.TagContent{
+  margin-bottom: 5px;
 }
 #feedCon{
   font-size: 20px;
@@ -286,6 +355,10 @@ export default {
   cursor: pointer;
 }
 #feedCon:hover{
+  color: #79A3B1;
+}
+#tagCon:hover{
+  cursor: pointer;
   color: #79A3B1;
 }
 </style>

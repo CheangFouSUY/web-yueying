@@ -57,12 +57,14 @@
                     >
                   </div>
                 </el-dialog>
-                <el-button id="joinGroup" @click="join" v-if="!isGroupMember"
+                <el-button id="manageGroup" v-if="isOwnerOrAdmin" @click="manageGroup">查看管理员申请</el-button>
+                <el-button id="joinGroup" @click="join" v-if="!isGroupMember && isLogin"
                   >加入小组</el-button
                 >
-                <el-button id="leaveGroup" @click="leave" v-else
+                <el-button id="leaveGroup" @click="leave" v-if="isGroupMember && isLogin"
                   >退出小组</el-button
                 >
+                <el-button id="requestAdmin" v-if="isGroupMember && !isOwnerOrAdmin" @click="requestAdmin">申请成为管理员</el-button>
               </div></el-col
             >
           </el-row>
@@ -394,11 +396,22 @@ export default {
         })
         .catch((error) => {
           console.log(error);
-          this.$notify({
-            title: "请先登录！",
-            type: "warning",
-            position: "top-left",
-          });
+          switch(error.response.data.message) {
+            case "User already join the group":
+                this.$notify({
+                title: "用户已被小组禁止，无法加入",
+                type: "warning",
+                position: "top-left",
+              });
+              break;
+
+            default:
+              this.$notify({
+              title: "请先登录！",
+              type: "warning",
+              position: "top-left",
+            });
+          }
         });
     },
     leave() {
@@ -835,6 +848,34 @@ export default {
       this.featureColor = "#79A3B1";
       this.allColor = "#456268";
     },
+    manageGroup() {
+      this.$router.push({ path:'/managegroup/' + this.groupInfo.groupId})
+
+    },
+    requestAdmin() {
+      const formData = new FormData();
+      formData.append("user", this.userId);
+      formData.append("group", this.groupInfo.groupId);
+      formData.append("groupId", this.groupInfo.groupId);
+
+      var header = {};
+      if (localStorage.getItem("token"))
+        header = { Authorization: "Bearer " + localStorage.getItem("token") };
+
+      this.$axios({
+        method:'post',
+        url:'/api/v1/group/admin/' + this.groupInfo.groupId,
+        data: formData,
+        headers: header,
+      })
+      .then(res =>{
+        console.log(res);
+        this.$message.success("申请成功！请耐心等待管理员的批审")
+      })
+      .catch(err =>{
+        console.log(err);
+      })
+    },
   },
   computed: {
     featuredFeeds() {
@@ -1066,7 +1107,7 @@ export default {
   background-color: #fcf8ec;
 }
 #changeName:hover,
-#leaveGroup:hover {
+#leaveGroup:hover, #manageGroup:hover {
   background-color: rgb(205, 205, 205);
 }
 #joinGroup {
@@ -1084,8 +1125,22 @@ export default {
   background-color: #fcf8ec;
   color: #456268;
 }
-#joinGroup:hover {
+#joinGroup:hover, #requestAdmin:hover {
   background-color: #79a3b1;
+}
+#requestAdmin {
+  margin-top: 5px;
+  margin-right: 10px;
+  background-color: #456268;
+  color: #fcf8ec;
+  float: right;
+}
+#manageGroup {
+  margin-top: 5px;
+  margin-left: 10px;
+  color: #456268;
+  border-color: #456268;
+  background-color: #fcf8ec;
 }
 #post {
   font-size: 20px;

@@ -6,7 +6,7 @@
             <img class="searchicon" src="@/assets/Search2.svg" alt="search_icon"><span>搜索"{{searchItem}}"</span>
         </el-row>
         <el-row class="noResult">
-            <span v-if="noData">抱歉！没有结果</span>
+            <span v-if="noData && noData2">抱歉！没有结果</span>
         </el-row>
         <el-row v-if="!noData" class="Group">
             <el-row class="Text" align="middle" type="flex">
@@ -16,11 +16,24 @@
                 <div class="container">
                 <div class="col" v-for="column in columns2" :key="column">
                  <div class="item-container" v-for="item in column" :key="item.id">
-                     <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
-                     <div class="textInside"><span  @click="toGroup(item.id)">{{item.groupName}}</span></div></div>
+                     <el-avatar v-if="item.img" :src="item.img"></el-avatar>
+                     <el-avatar v-else icon="el-icon-user-solid"></el-avatar>
+                     <div class="textInside"><span @click="toGroup(item.id)">{{item.groupName}}</span></div></div>
                 </div></div>
             </el-row>
         </el-row>
+        <el-row v-if="!noData2" class="Feed">
+            <el-row class="Text" align="middle" type="flex">
+            <i class="el-icon-s-flag"></i><span>小组帖子</span>
+            </el-row>
+            <el-row justify="center" type="flex">
+                <div class="container">
+                <div class="col" v-for="column in columns" :key="column">
+                 <div class="item-container" v-for="item in column" :key="item.id"><span id="feedTitle" @click="toGroupFeed(item.id)">{{item.title}}</span>
+                 <br/><span id="feedCon" @click="toGroupFeed(item.id)">{{item.description}}</span></div>
+                </div></div>
+            </el-row>
+        </el-row >
         </div>
     </div>
 </template>
@@ -43,7 +56,9 @@ export default {
       return {
         searchItem:'',
         groupData:[],
+        groupFeedData:[],
         noData: false,
+        noData2: false,
       }
   },
   watch: {
@@ -52,6 +67,16 @@ export default {
     }
   },
   computed: {
+    columns () {
+      let columns = []
+    //   let mid = Math.ceil(this.items.length / this.cols)
+      let cols = this.groupFeedData.length/3;
+      let mid = 3;
+      for (let col = 0; col < cols; col++) {
+        columns.push(this.groupFeedData.slice(col * mid, col * mid + mid))
+      }
+      return columns
+    },
     columns2 () {
       let columns = []
     //   let mid = Math.ceil(this.items.length / this.cols)
@@ -79,8 +104,26 @@ export default {
             console.log(err);
         })
     },
+    getGroupFeed() {
+        this.$axios({
+            method:'get',
+            url:'/api/v1/feed/list?search=' + this.searchItem + '&isPublic=False',
+        })
+        .then(res =>{
+            console.log(res);
+            this.groupFeedData = res.data.results;
+            if(this.groupFeedData.length == 0)
+              this.noData2 = true;
+        })
+        .catch(err =>{
+            console.log(err);
+        })
+    },
     toGroup(groupId) {
       this.$router.push({path: `/group/${groupId}`})
+    },
+    toGroupFeed(feedId) {
+      this.$router.push({path: `/feed/${feedId}`})
     },
     searchReload() {
       location.reload();
@@ -89,6 +132,7 @@ export default {
   mounted() {
     this.searchItem = this.$route.query.name;
     this.getGroup();
+    this.getGroupFeed();
   }
 }
 </script>
@@ -148,6 +192,7 @@ export default {
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  box-shadow: 5px 8px #458998;
 }
 .Group .item-container {
   border: 1px solid;
@@ -166,6 +211,10 @@ export default {
   /* border: 1px solid; */
   text-align: center;
   width: 340px;
+}
+.textInside span:hover{
+  cursor: pointer;
+  color: #79A3B1;
 }
 .noResult{
   /* border: 1px solid; */
