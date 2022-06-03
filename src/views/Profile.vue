@@ -469,14 +469,14 @@ export default {
 </style>
 
 <style>
-.avatar-uploader .el-upload {
+/* .avatar-uploader .el-upload {
   border: 1px dashed #d9d9d9;
   border-radius: 6px;
   cursor: pointer;
   position: relative;
   overflow: hidden;
-}
-.avatar-uploader-icon {
+} */
+/* .avatar-uploader-icon {
   font-size: 28px;
   color: #8c939d;
   width: 256px;
@@ -484,13 +484,13 @@ export default {
   line-height: 256px;
   text-align: center;
   background-color: white;
-}
-.avatar {
+} */
+/* .avatar {
   width: 256px;
   height: 256px;
   display: block;
-}
-.avatar-uploader .el-upload:hover {
+} */
+/* .avatar-uploader .el-upload:hover {
   border-color: #409eff;
-}
+} */
 </style>
