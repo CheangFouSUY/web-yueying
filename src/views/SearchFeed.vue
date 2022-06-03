@@ -6,11 +6,21 @@
             <img class="searchicon" src="@/assets/Search2.svg" alt="search_icon"><span>搜索"{{searchItem}}"</span>
         </el-row>
         <el-row class="noResult">
-            <span v-if="noData">抱歉！没有结果</span>
+            <span v-if="noData && noData2">抱歉！没有结果</span>
+        </el-row>
+          <el-row v-if="!noData2" class="Tag">
+            <el-row class="Text" align="middle" type="flex">
+            <i class="el-icon-position"></i><span>话题</span>
+            </el-row>
+            <el-row v-for="item in tags" :key="item.id">
+              <el-col :span="12" :offset=2><div class="TagContent">
+                <span id="tagCon" @click="toTag(item.id)">#{{ item.title }}</span>
+                </div></el-col>
+            </el-row>
         </el-row>
         <el-row v-if="!noData" class="Feed">
             <el-row class="Text" align="middle" type="flex">
-            <i class="el-icon-position"></i><span>话题</span>
+            <i class="el-icon-position"></i><span>话题帖子</span>
             </el-row>
             <el-row justify="center" type="flex">
                 <div class="container">
@@ -43,7 +53,9 @@ export default {
         searchItem:'',
         feeds:[],
         feedsId:[],
+        tags:[],
         noData: false,
+        noData2: false,
       }
   },
   watch: {
@@ -67,7 +79,7 @@ export default {
     getFeed() {
         this.$axios({
             method:'get',
-            url:'/api/v1/feed/list?search=' + this.searchItem,
+            url:'/api/v1/feed/list?search=' + this.searchItem + '&isPublic=True',
         })
         .then(res =>{
             console.log(res.data.results);
@@ -79,8 +91,26 @@ export default {
             console.log(err);
         })
     },
+    getTag() {
+      this.$axios({
+            method:'get',
+            url:'/api/v1/tag/list?search=' + this.searchItem,
+        })
+        .then(res =>{
+            console.log(res.data.results);
+            this.tags = res.data.results;
+            if(this.tags.length == 0)
+              this.noData2 = true;
+        })
+        .catch(err =>{
+            console.log(err);
+        })
+    },
     toFeed(feedId) {
       this.$router.push({path: `/feed/${feedId}`})
+    },
+    toTag(tagId) {
+      // this.$router.push({path: `/feed/${tagId}`})
     },
     searchReload() {
       location.reload();
@@ -89,6 +119,7 @@ export default {
   mounted() {
     this.searchItem = this.$route.query.name;
     this.getFeed();
+    this.getTag();
   }
 }
 </script>
@@ -101,16 +132,13 @@ export default {
 .searchicon{
     height: 48px;
 }
-.Book, .Drama, .Feed, .Group{
+.Book, .Drama, .Feed, .Group, .Tag{
     /* border: 1px solid black; */
     margin-top: 20px;
 }
-.Book span, .Drama span, .Feed span, .Group span{
+.Book span, .Drama span, .Feed span, .Group span, .Tag span{
     font-size: 24px;
     color: #456268;
-}
-.Book img, .Drama img{
-    height: 50px;
 }
 .Text{
     padding-left: 60px;
@@ -118,15 +146,6 @@ export default {
 }
 .main{
     margin: 20px 60px;
-}
-.bg-red{
-    background-color: red;
-}
-.bg-blue{
-    background-color: blue;
-}
-.bg-yellow{
-    background-color: yellow;
 }
 .col {
   margin: 10px;
@@ -136,7 +155,7 @@ export default {
   flex-direction: row;
 }
 .Feed .item-container {
-  border: 1px solid;
+  /* border: 1px solid; */
   padding: 5px;
   margin: 10px;
   margin-bottom: 0px;
@@ -150,21 +169,14 @@ export default {
   text-overflow: ellipsis;
   box-shadow: 5px 8px #458998;
 }
-.Group .item-container {
-  /* border: 1px solid; */
-  padding: 5px;
-  margin: 5px;
-  width: 400px;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  font-size: 20px;
-}
 .noResult{
   /* border: 1px solid; */
   margin-top: 20px;
   font-size: 24px;
   padding-left: 20px;
+}
+.TagContent{
+  margin-bottom: 5px;
 }
 #feedCon{
   font-size: 20px;
@@ -178,6 +190,10 @@ export default {
   cursor: pointer;
 }
 #feedCon:hover{
+  color: #79A3B1;
+}
+#tagCon:hover{
+  cursor: pointer;
   color: #79A3B1;
 }
 </style>
