@@ -66,7 +66,8 @@
           <el-col :span="17">
             <div class="book-detail-prop">简介</div>
             <div class="symbol">：</div>
-            {{ description }}
+            <span>&nbsp;</span>
+            <span style="word-wrap: break-word;" v-html="contentCalc(description)"></span>
           </el-col>
         </el-row>
       </el-row>
@@ -105,11 +106,13 @@
                   type="text"
                   placeholder="书评标题："
                 />
-                <input
-                  v-model="userComment.content"
-                  type="text"
-                  placeholder="书评内容："
-                />
+                <div class="comment-autosize-wrapper">
+                  <pre class="comment-autosize"><br>{{ userComment.content }}</pre>
+                  <textarea
+                    v-model="userComment.content"
+                    placeholder="书评内容："
+                  ></textarea>
+                </div>
                 <span class="showFileName"></span>
                 <el-row class="publish-action" :span="20">
                   <i
@@ -159,7 +162,7 @@
               {{ dateStr(item.time) }}
             </el-row>
             <el-row class="comment-title">{{ item.title }}</el-row>
-            <el-row>{{ item.description }}</el-row>
+            <el-row class="comment-content" v-html="contentCalc(item.description)"></el-row>
             <el-image
               v-if="item.img"
               class="comment-image"
@@ -701,6 +704,9 @@ export default {
         return y + "-" + m + "-" + d + " " + h + ":" + mn;
       }
     },
+    contentCalc(s) {
+      return s.replace(/(\r\n|\n|\r)/gm, "<br/>");
+    },
     getImg(event) {
       var fileName = event.target.files[0].name;
       $(".showFileName").html(fileName);
@@ -740,20 +746,54 @@ export default {
   background-color: rgba(121, 163, 177, 0.2);
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.05);
 }
-.publish-box input:focus {
+.publish-box input:focus,
+.publish-box textarea:focus {
   outline: none;
 }
+.publish-box textarea {
+  position: absolute;
+  top: 0;
+  left: 0;
+  resize: none;
+  height: 100%;
+  border: none;
+  background: none;
+}
+.publish-box textarea, .comment-autosize {
+  width: 100%;
+  min-height: 40px;
+  padding: 10px;
+  box-sizing: border-box;
+  color: #456268;
+    overflow:hidden;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-word;
+    font-size: 16px;
+  font-family: "Microsoft JhengHei", 微软正黑体, "Microsoft YaHei", 微软雅黑;
+}
+.comment-autosize-wrapper {
+  position: relative;
+  width: 100%;
+}
+.comment-autosize {
+  margin: 0;
+  visibility: hidden;
+}
 .publish-box input {
-  width: 1060px;
-  margin: 5px;
+  width: 100%;
+  box-sizing: border-box;
   padding: 10px;
   border: none;
   background: none;
   color: #456268;
+    font-size: 16px;
   font-family: "Microsoft JhengHei", 微软正黑体, "Microsoft YaHei", 微软雅黑;
 }
 .publish-write {
+  height: auto;
   margin: 5px 0;
+  padding: 5px;
   border-radius: 10px;
   background: rgba(121, 163, 177, 0.1);
 }
@@ -768,9 +808,12 @@ export default {
   width: 300px;
   padding-top: 10px;
 }
+.comment-content {
+  font-size: 18px;
+}
 .comment-title {
   margin: 10px 0;
-  font-size: 18px;
+  font-size: 22px;
   font-weight: 600;
   text-decoration: underline;
 }
@@ -783,7 +826,7 @@ export default {
 }
 .comment-publisher {
   margin: 5px 0 0;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 600;
 }
 .comment-header {

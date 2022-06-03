@@ -61,7 +61,8 @@
           <el-col :span="17">
             <div class="book-detail-prop">简介</div>
             <div class="symbol">：</div>
-            {{ description }}
+            <span>&nbsp;</span>
+            <span style="word-wrap: break-word;" v-html="contentCalc(description)"></span>
           </el-col>
         </el-row>
       </el-row>
@@ -100,23 +101,13 @@
                   type="text"
                   placeholder="书评标题："
                 />
-                <div>
-                  <div
-                    class="comment-autosize"
-                    :v-model="userComment.content"
-                  ></div>
+                <div class="comment-autosize-wrapper">
+                  <pre class="comment-autosize"><br>{{ userComment.content }}</pre>
                   <textarea
                     v-model="userComment.content"
-                    resize="none"
                     placeholder="书评内容："
                   ></textarea>
                 </div>
-
-                <!-- <input
-                  v-model="userComment.content"
-                  type="text"
-                  placeholder="书评内容："
-                /> -->
                 <span class="showFileName"></span>
                 <el-row class="publish-action" :span="20">
                   <i
@@ -166,7 +157,8 @@
               {{ dateStr(item.time) }}
             </el-row>
             <el-row class="comment-title">{{ item.title }}</el-row>
-            <el-row>{{ item.description }}</el-row>
+            <el-row class="comment-content">{{ item.description }}</el-row>
+            <el-row class="comment-content" v-html="contentCalc(item.description)"></el-row>
             <el-image
               v-if="item.img"
               class="comment-image"
@@ -234,12 +226,6 @@
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
 import User from "@/store/user";
-
-// var textarea = document.querySelector("textarea");
-// textarea.addEventListener("input", (e) => {
-//   textarea.style.height = "100px";
-//   textarea.style.height = e.target.scrollHeight + "px";
-// });
 
 export default {
   name: "BookInnerpage",
@@ -346,7 +332,6 @@ export default {
     }
     this.getAll();
   },
-  watch() {},
   methods: {
     async commentResponse(item, r) {
       var formData = new FormData();
@@ -718,6 +703,9 @@ export default {
         return y + "-" + m + "-" + d + " " + h + ":" + mn;
       }
     },
+    contentCalc(s) {
+      return s.replace(/(\r\n|\n|\r)/gm, "<br/>");
+    },
     getImg(event) {
       var fileName = event.target.files[0].name;
       $(".showFileName").html(fileName);
@@ -763,46 +751,50 @@ export default {
 }
 .publish-box textarea {
   position: absolute;
+  top: 0;
+  left: 0;
   resize: none;
-  width: 100%;
   height: 100%;
-  margin: 5px;
-  padding: 10px;
   border: none;
   background: none;
-
-  /* box-sizing: border-box; */
-  /* transition: all 0.2s linear; */
-  /* overflow: hidden; */
+}
+.publish-box textarea, .comment-autosize {
+  width: 100%;
+  min-height: 40px;
+  padding: 10px;
+  box-sizing: border-box;
   color: #456268;
-  outline: red 1px solid;
+    overflow:hidden;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-word;
+    font-size: 16px;
   font-family: "Microsoft JhengHei", 微软正黑体, "Microsoft YaHei", 微软雅黑;
 }
-.comment-autosize {
-  position: absolute;
+.comment-autosize-wrapper {
+  position: relative;
   width: 100%;
-  height: 100%;
-  margin: 5px;
-  padding: 10px;
-  outline: red 1px solid;
-  /* visibility: hidden; */
+}
+.comment-autosize {
+  margin: 0;
+  visibility: hidden;
 }
 .publish-box input {
-  width: 1060px;
-  margin: 5px;
+  width: 100%;
+  box-sizing: border-box;
   padding: 10px;
   border: none;
   background: none;
   color: #456268;
-  outline: red 1px solid;
+    font-size: 16px;
   font-family: "Microsoft JhengHei", 微软正黑体, "Microsoft YaHei", 微软雅黑;
 }
 .publish-write {
   height: auto;
   margin: 5px 0;
+  padding: 5px;
   border-radius: 10px;
   background: rgba(121, 163, 177, 0.1);
-  outline: red 1px solid;
 }
 .comment-like-count {
   font-size: 12px;
@@ -815,9 +807,12 @@ export default {
   width: 300px;
   padding-top: 10px;
 }
+.comment-content {
+  font-size: 18px;
+}
 .comment-title {
   margin: 10px 0;
-  font-size: 18px;
+  font-size: 22px;
   font-weight: 600;
   text-decoration: underline;
 }
@@ -830,7 +825,7 @@ export default {
 }
 .comment-publisher {
   margin: 5px 0 0;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 600;
 }
 .comment-header {
