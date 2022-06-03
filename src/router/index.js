@@ -114,6 +114,11 @@ const routes = [
     component: () => import('../views/GroupInnerpage.vue')
   },
   {
+    path: '/managegroup/:id',
+    name: 'manage group',
+    component: () => import('../views/ManageGroup.vue')
+  },
+  {
     path: '/report/:id',
     name: 'report',
     component: () => import('../views/Report.vue'),
