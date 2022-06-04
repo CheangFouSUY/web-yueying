@@ -318,7 +318,7 @@
                 <span @click="toProfile(item.id)" class="setRole"
                   >&nbsp;{{ item.username }}</span
                 >
-                <i class="el-icon-more" @click="setRole2(item.id)"></i>
+                <i class="el-icon-more" @click="setRole2(item.id)" v-if="isOwnerOrAdmin"></i>
               </div></el-col
             >
           </el-row>
