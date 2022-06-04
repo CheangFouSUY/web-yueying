@@ -110,7 +110,7 @@ export default {
       this.$router.push({path: `/feed/${feedId}`})
     },
     toTag(tagId) {
-      // this.$router.push({path: `/feed/${tagId}`})
+      this.$router.push({path: `/tag/${tagId}`})
     },
     searchReload() {
       location.reload();
