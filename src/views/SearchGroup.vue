@@ -193,6 +193,7 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   box-shadow: 5px 8px #458998;
+  word-wrap: break-word;
 }
 .Group .item-container {
   border: 1px solid;
@@ -206,6 +207,7 @@ export default {
   padding: 10px;
   box-shadow: 5px 8px #458998;
   border-radius: 10px;
+  word-wrap: break-word;
 }
 .textInside{
   /* border: 1px solid; */

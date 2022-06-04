@@ -168,6 +168,7 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   box-shadow: 5px 8px #458998;
+  word-wrap: break-word;
 }
 .noResult{
   /* border: 1px solid; */

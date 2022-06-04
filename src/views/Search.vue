@@ -309,6 +309,7 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   box-shadow: 5px 8px #458998;
+  word-wrap: break-word;
 }
 .Group .item-container {
   border: 1px solid;
@@ -321,6 +322,7 @@ export default {
   font-size: 20px;
   box-shadow: 5px 8px #458998;
   border-radius: 10px;
+  word-wrap: break-word;
 }
 .noResult{
   /* border: 1px solid; */
