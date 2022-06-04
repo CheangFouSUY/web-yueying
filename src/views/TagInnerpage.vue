@@ -5,9 +5,10 @@
       <el-row>
         <span class="tag-title">#{{ tagTitle }}#</span>
         <el-row class="action">
-          <span @click="formVisible = true"> 发布帖子 </span>
+          <span @click="openForm()"> 发布帖子 </span>
           <el-divider direction="vertical"></el-divider>
-          <span @click="joinTag()"> 参与话题 </span>
+          <span v-if="!isJoined" @click="joinTag()"> 参与话题 </span>
+          <span v-else @click="unjoinTag()"> 退出话题 </span>
 
           <el-dialog title="发布话题" :visible.sync="formVisible">
             <el-form label-position="top" :model="form">
@@ -58,7 +59,6 @@
           </el-dialog>
         </el-row>
       </el-row>
-
       <FeedBox
         v-for="item in notGroupFeeds"
         :key="item.id"
@@ -83,7 +83,7 @@ import FeedBox from "@/components/FeedBox.vue";
 import User from "@/store/user";
 
 export default {
-  name: "FeedMainpage",
+  name: "TagInnerpage",
   components: {
     Header,
     Footer,
@@ -92,8 +92,11 @@ export default {
   data() {
     return {
       islogin: false,
+      count: 0,
       user: "栀子花开",
       id: "",
+      tagTitle: "",
+      isJoined: false,
       formVisible: false,
       formLabelWidth: "120px",
       form: {
@@ -136,8 +139,29 @@ export default {
     beforeRemove(file, fileList) {
       return this.$confirm(`确定移除 ${file.name}？`);
     },
+    openForm() {
+      if (!this.islogin) {
+        this.$notify({
+          showClose: true,
+          type: "warning",
+          title: "请先登录",
+          position: "top-left",
+        });
+        return;
+      }
+      if (!this.isJoined) {
+        this.$notify({
+          showClose: true,
+          type: "warning",
+          title: "请先参与话题",
+          position: "top-left",
+        });
+        return;
+      }
+      this.formVisible = true;
+    },
     postFeed() {
-      if(!this.islogin) {
+      if (!this.islogin) {
         this.$notify({
           showClose: true,
           type: "warning",
@@ -168,10 +192,6 @@ export default {
       formData.append("description", this.form.description);
       formData.append("img", this.form.img);
       formData.append("belongTag", this.id);
-      console.log(this.form.title)
-      console.log(this.id)
-      console.log(this.id)
-      console.log(this.id)
 
       var header = {};
       if (localStorage.getItem("token"))
@@ -220,7 +240,42 @@ export default {
           }
         });
     },
-    joinTag(){
+    unjoinTag() {
+      let formData = new FormData();
+      formData.append("tagId", this.id);
+
+      var header = {};
+      if (localStorage.getItem("token"))
+        header = { Authorization: "Bearer " + localStorage.getItem("token") };
+
+      this.$axios({
+        method: "delete",
+        url: "/api/v1/tag/unjoin/" + this.id,
+        data: formData,
+        headers: header,
+      })
+        .then((res) => {
+          console.log(res);
+          switch (res.status) {
+            case 200:
+              this.$notify({
+                showClose: true,
+                message: "已退出话题",
+                type: "success",
+                position: "top-left",
+              });
+              this.isJoined = false;
+              // setTimeout(function () {
+              //   location.reload();
+              // }, 1500);
+              break;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    joinTag() {
       let formData = new FormData();
       formData.append("user", this.userId);
       formData.append("tag", this.id);
@@ -245,10 +300,8 @@ export default {
                 type: "success",
                 position: "top-left",
               });
-              setTimeout(function () {
-                location.reload();
-              }, 1500);
-              break;
+
+              this.isJoined = true;
           }
         })
         .catch((err) => {
@@ -266,13 +319,20 @@ export default {
     },
     getTag() {
       this.id = this.$route.params.id;
+
+      var header = {};
+      if (localStorage.getItem("token"))
+        header = { Authorization: "Bearer " + localStorage.getItem("token") };
+
       this.$axios({
         method: "get",
         url: "/api/v1/tag/" + this.$route.params.id,
+        headers: header,
       })
         .then((res) => {
           console.log(res);
           this.tagTitle = res.data.title;
+          this.isJoined = res.data.isJoined;
         })
         .catch((err) => {
           console.log(err);
@@ -377,7 +437,7 @@ export default {
 
 .action span:hover {
   cursor: pointer;
-  color: #79A3B1;
+  color: #79a3b1;
 }
 .action {
   margin: 10px 0 30px;

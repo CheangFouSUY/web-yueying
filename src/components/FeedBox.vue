@@ -82,7 +82,7 @@
         <span @click="enterFeed()">{{ title }}</span>
       </el-row>
       <el-row class="feed-content">
-        <span class="feed-hashtag" @click="enterTag(belongTag)">#{{ tagTitle }}#</span>
+        <span v-if="isPublic" class="feed-hashtag" @click="enterTag(belongTag)">#{{ tagTitle }}#</span>
         <span v-html="descriptionCalc()"></span>
       </el-row>
       <el-row type="flex" justify="end">
@@ -286,6 +286,7 @@ export default {
   props: {
     initialFeedId: String,
     initialIsInnerpage: Boolean,
+    initialIsGroup: Boolean,
     initialIsPin: Boolean,
     initialIsFeatured: Boolean,
     initialIsAdmin: Boolean,
