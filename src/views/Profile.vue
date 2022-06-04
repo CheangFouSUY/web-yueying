@@ -112,7 +112,7 @@
                   <el-input
                     v-model="form.nameTemp"
                     autocomplete="off"
-                    maxlength="15"
+                    maxlength="10"
                     show-word-limit
                   ></el-input>
                 </el-form-item>

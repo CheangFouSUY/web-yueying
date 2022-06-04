@@ -271,7 +271,7 @@
                   :size="30"
                   icon="el-icon-user-solid"
                 ></el-avatar>
-                <span>&nbsp;{{ item.username }}</span>
+                <span @click="toProfile(item.id)" class="setRole">&nbsp;{{ item.username }}</span>
                 <i class="el-icon-star-off"></i></div
             ></el-col>
           </el-row>
@@ -288,10 +288,11 @@
                   :size="30"
                   icon="el-icon-user-solid"
                 ></el-avatar>
-                <span @click="setRole1(item.id)" class="setRole"
+                <span @click="toProfile(item.id)" class="setRole"
                   >&nbsp;{{ item.username }}</span
                 >
-                <i class="el-icon-star-off"></i></div
+                <i class="el-icon-star-off"></i>
+                <i class="el-icon-more" @click="setRole1(item.id)" v-if="isOwner"></i></div
             ></el-col>
           </el-row>
           <el-row>
@@ -314,9 +315,10 @@
                   :size="30"
                   icon="el-icon-user-solid"
                 ></el-avatar>
-                <span @click="setRole2(item.id)" class="setRole"
+                <span @click="toProfile(item.id)" class="setRole"
                   >&nbsp;{{ item.username }}</span
                 >
+                <i class="el-icon-more" @click="setRole2(item.id)"></i>
               </div></el-col
             >
           </el-row>
@@ -878,6 +880,9 @@ export default {
         console.log(err);
       })
     },
+    toProfile(userid) {
+      this.$router.push({ path: `/profile/${userid}` });
+    }
   },
   computed: {
     featuredFeeds() {
@@ -1074,6 +1079,7 @@ export default {
   padding-left: 5px;
   padding-top: 5px;
   padding-bottom: 5px;
+  flex-wrap: wrap;
 }
 .setRole:hover {
   color: #d0e8f2;
@@ -1089,6 +1095,14 @@ export default {
 .el-icon-star-off {
   margin-top: 4px;
   margin-left: 5px;
+}
+.el-icon-more{
+  margin-left: auto;
+  margin-right: 5px;
+  order: 2,
+}
+.el-icon-more:hover{
+  cursor: pointer;
 }
 .form-button:hover {
   cursor: pointer;
@@ -1160,6 +1174,7 @@ export default {
   height: 100vh;
   overflow-x: hidden;
 }
+
 #footer {
   position: relative;
   height: 88px;

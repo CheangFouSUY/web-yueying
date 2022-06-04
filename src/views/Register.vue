@@ -79,6 +79,10 @@ export default {
                 this.$message.warning("请填写所有空格（包括密保问题）");
                 return;
             }
+            if(this.form.username.length > 10) {
+                this.$message.warning("名字字符数不超过10");
+                return;
+            }
             const formData = new FormData();
             formData.append("email",this.form.email);
             formData.append("username", this.form.username);
