@@ -119,6 +119,18 @@
                   ></textarea>
                 </div>
                 <span class="showFileName"></span>
+                <i
+                  v-if="userComment.img"
+                  class="el-icon-delete"
+                  @click="deleteImg()"
+                  style="cursor: pointer"
+                ></i>
+                <input
+                  id="imgUpload"
+                  type="file"
+                  accept="image/png,image/gif,image/jpeg"
+                  @change="getImg($event)"
+                />
                 <el-row class="publish-action" :span="20">
                   <i
                     class="el-icon-picture-outline-round"
@@ -129,13 +141,6 @@
                     class="el-icon-position"
                     @click="submitReview($event)"
                   ></i>
-
-                  <input
-                    id="imgUpload"
-                    type="file"
-                    accept="image/png,image/gif,image/jpeg"
-                    @change="getImg($event)"
-                  />
                 </el-row>
               </form>
             </el-row>
@@ -733,6 +738,13 @@ export default {
       $(".showFileName").html(fileName);
       this.userComment.img = event.target.files[0];
       console.log("get img! ", this.userComment);
+    },
+    deleteImg() {
+      $("#imgUpload").attr('type', 'text');
+      $("#imgUpload").attr('type', 'file');
+      $(".showFileName").html("");
+      this.userComment.img = "";
+      console.log(this.userComment);
     },
     enterProfile(userid) {
       this.$router.push({ path: `/profile/${userid}` });

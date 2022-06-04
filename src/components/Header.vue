@@ -157,10 +157,10 @@ export default {
 .nav {
   height: 55px;
   font-size: 22px;
-  background-color: #79a3b1;
+  background-color: #456268;
 }
 .navLink:hover {
-  background-color: #6f9caa;
+  background-color: #3d595f;
 }
 a {
   display: block;
@@ -174,7 +174,6 @@ a {
   text-decoration: none;
 }
 .searchBox {
-  position: absolute;
   display: inline-block;
   border-radius: 10px;
   background-color: rgba(208, 232, 242, 0.1);

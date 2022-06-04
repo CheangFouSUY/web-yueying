@@ -162,9 +162,9 @@ export default {
   width: 400px;
   height: 145px;
   /* text-align: center; */
-  display: -webkit-box;
-  -webkit-line-clamp: 5;
-  -webkit-box-orient: vertical;
+  /* display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical; */
   overflow: hidden;
   text-overflow: ellipsis;
   box-shadow: 5px 8px #458998;
@@ -181,9 +181,13 @@ export default {
 }
 #feedCon{
   font-size: 20px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 #feedTitle{
-  font-size: 30px;
+  font-size: 26px;
   font-weight: bold;
   text-decoration: underline;
 }

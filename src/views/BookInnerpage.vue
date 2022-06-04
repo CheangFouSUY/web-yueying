@@ -44,7 +44,6 @@
             src="@/assets/Bookmark_fill.svg"
             alt="bookmark"
           />
-          <!-- <el-row><i class="el-icon-collection-tag"></i></el-row> -->
           <el-row class="rate-box" type="flex" justify="center">
             <el-col id="rating" :span="10">{{ rating }}</el-col>
             <el-col :span="8" :offset="0">
@@ -114,6 +113,18 @@
                   ></textarea>
                 </div>
                 <span class="showFileName"></span>
+                <i
+                  v-if="userComment.img"
+                  class="el-icon-delete"
+                  @click="deleteImg()"
+                  style="cursor: pointer"
+                ></i>
+                <input
+                  id="imgUpload"
+                  type="file"
+                  accept="image/png,image/gif,image/jpeg"
+                  @change="getImg($event)"
+                />
                 <el-row class="publish-action" :span="20">
                   <i
                     class="el-icon-picture-outline-round"
@@ -124,13 +135,6 @@
                     class="el-icon-position"
                     @click="submitReview($event)"
                   ></i>
-
-                  <input
-                    id="imgUpload"
-                    type="file"
-                    accept="image/png,image/gif,image/jpeg"
-                    @change="getImg($event)"
-                  />
                 </el-row>
               </form>
             </el-row>
@@ -614,6 +618,7 @@ export default {
             this.isBookmark = r.isSave;
             this.isRate = r.isRate;
             this.rateValue = r.score;
+            console.log(r.score);
             console.log(r.message);
           })
         )
@@ -731,6 +736,13 @@ export default {
       $(".showFileName").html(fileName);
       this.userComment.img = event.target.files[0];
       console.log("get img! ", this.userComment);
+    },
+    deleteImg() {
+      $("#imgUpload").attr("type", "text");
+      $("#imgUpload").attr("type", "file");
+      $(".showFileName").html("");
+      this.userComment.img = "";
+      console.log(this.userComment);
     },
     enterProfile(userid) {
       this.$router.push({ path: `/profile/${userid}` });

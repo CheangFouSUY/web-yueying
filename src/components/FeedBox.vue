@@ -161,17 +161,17 @@
                     @click="deleteImg()"
                     style="cursor: pointer"
                   ></i>
-                  <el-row class="publish-action" :span="20">
-                    <i
-                      class="el-icon-picture-outline-round"
-                      onclick="$('input[id=imgUpload]').click();"
-                    ></i>
                     <input
                       id="imgUpload"
                       type="file"
                       accept="image/png,image/gif,image/jpeg"
                       @change="getImg($event)"
                     />
+                  <el-row class="publish-action" :span="20">
+                    <i
+                      class="el-icon-picture-outline-round"
+                      onclick="$('input[id=imgUpload]').click();"
+                    ></i>
                     <i
                       class="el-icon-position"
                       @click="submitReview($event)"
@@ -792,7 +792,9 @@ export default {
       console.log(this.id, "get img! ", this.userComment);
     },
     deleteImg() {
-      this.userComment.imgName = "";
+      $("#imgUpload").attr('type', 'text');
+      $("#imgUpload").attr('type', 'file');
+      $(".showFileName").html("");
       this.userComment.img = "";
       console.log(this.userComment);
     },
