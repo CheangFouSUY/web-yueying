@@ -130,11 +130,10 @@ export default {
       localStorage.removeItem("token");
       this.$store.dispatch("clear");
       this.$message.success("登出成功");
-      setTimeout(function () {
+      setTimeout(() => {
         this.$router.push({ path:'/'});
-        location.reload(true);
+        location.reload();
       }, 500);
-      // location.reload();
     },
     viewProfile() {
       this.$router.push({ path: `/profile/${this.userId}` });
