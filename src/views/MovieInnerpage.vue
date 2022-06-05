@@ -548,6 +548,7 @@ export default {
     async selectRate(value) {
       var formData = new FormData();
       formData.append("movieId", this.id);
+      formData.append("isSaved", this.isBookmark);
       formData.append("rateScore", this.rateValue);
 
       var header = {};

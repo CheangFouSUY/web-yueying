@@ -546,6 +546,7 @@ export default {
       console.log("rate:", value);
       var formData = new FormData();
       formData.append("bookId", this.id);
+      formData.append("isSaved", this.isBookmark);
       formData.append("rateScore", this.rateValue);
 
       var header = {};
@@ -619,6 +620,7 @@ export default {
             this.isRate = r.isRate;
             this.rateValue = r.score;
             console.log(r.score);
+            console.log(r);
             console.log(r.message);
           })
         )

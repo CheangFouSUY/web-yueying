@@ -201,7 +201,7 @@ export default {
 }
 
 .ctg-title {
-  color: #79a3b1;
+  color: #456268;
   font-size: 26px;
   margin: 50px 70px 0;
 }
