@@ -160,9 +160,9 @@
                   v-if="isGroupMember"
                   @click="openPostFeed"
                   icon="el-icon-position"
-                  >发表话题</el-button
+                  >发表帖子</el-button
                 >
-                <el-dialog title="发布话题" :visible.sync="formVisible">
+                <el-dialog title="发布帖子" :visible.sync="formVisible">
                   <el-form label-position="top" :model="form">
                     <el-form-item label="标题" :label-width="formLabelWidth">
                       <el-input
@@ -575,7 +575,7 @@ export default {
         this.$notify({
           showClose: true,
           type: "warning",
-          title: "话题内容不能少于25字",
+          title: "帖子内容不能少于25字",
           position: "top-left",
         });
         return;
@@ -603,7 +603,7 @@ export default {
             case 201:
               this.$notify({
                 showClose: true,
-                message: "已发表话题",
+                message: "已发表帖子",
                 type: "success",
                 position: "top-left",
               });
