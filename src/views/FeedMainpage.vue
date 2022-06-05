@@ -107,7 +107,7 @@ export default {
         this.$notify({
           showClose: true,
           type: "warning",
-          title: "话题内容不能少于25字",
+          title: "帖子内容不能少于25字",
           position: "top-left",
         });
         return;
@@ -134,7 +134,7 @@ export default {
             case 201:
               this.$notify({
                 showClose: true,
-                message: "已发表话题",
+                message: "已发表帖子",
                 type: "success",
                 position: "top-left",
               });
