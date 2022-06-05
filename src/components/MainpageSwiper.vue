@@ -99,7 +99,6 @@ export default {
   display: flex;
   transition: all 0.5s;
   height: 350px;
-  outline: 1px solid red;
 }
 #father {
   overflow: hidden;
