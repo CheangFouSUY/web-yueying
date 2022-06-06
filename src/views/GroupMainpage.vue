@@ -11,8 +11,8 @@
       <el-table class="table"
       :data="leaderboardDataB.slice(0,10)"
       style="width: 90%"
-      :header-cell-style="{background : '#D0E8F2', color : '#456268' }"
-      :cell-style="{background : '#D0E8F2' }"
+      :header-cell-style="{background : '#FCF8EC', color : '#456268' }"
+      :cell-style="{background : '#FCF8EC' }"
       @row-click="rowClick"
       :cell-class-name="cellCSS">
       <el-table-column
@@ -37,8 +37,8 @@
       <el-table class="table"
       :data="leaderboardDataM.slice(0,10)"
       style="width: 90%"
-      :header-cell-style="{background : '#D0E8F2', color : '#456268' }"
-      :cell-style="{background : '#D0E8F2' }"
+      :header-cell-style="{background : '#FCF8EC', color : '#456268' }"
+      :cell-style="{background : '#FCF8EC' }"
       @row-click="rowClick"
       :cell-class-name="cellCSS">
       <el-table-column
@@ -63,8 +63,8 @@
       <el-table class="table"
       :data="leaderboardDataO.slice(0,10)"
       style="width: 90%"
-      :header-cell-style="{background : '#D0E8F2', color : '#456268' }"
-      :cell-style="{background : '#D0E8F2' }"
+      :header-cell-style="{background : '#FCF8EC', color : '#456268' }"
+      :cell-style="{background : '#FCF8EC' }"
       @row-click="rowClick"
       :cell-class-name="cellCSS">
       <el-table-column
@@ -97,7 +97,7 @@
         <div class="col" v-for="column in columns" :key="column">
           <div class="item-container" v-for="item in column" :key="item.id">
               <el-avatar :src="item.img" @click.native="toGroupInner(item.id)"></el-avatar>
-              <span @click="toGroupInner(item.id)">{{item.groupName}}</span></div>
+              <span id="groupName" @click="toGroupInner(item.id)">{{item.groupName}}</span></div>
         </div></div>
     </el-row>
     <el-row v-else>
@@ -231,8 +231,11 @@ export default {
 
 <style scoped>
 .create button{
-  background-color: #D0E8F2; 
-  color: #456268;
+  background-color: rgb(255, 195, 82);
+  color: black;
+  /* background-color: rgb(69, 98, 104, 0.3);
+  color: rgb(69, 98, 104); */
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.25);
   font-size: 22px; 
   border-radius: 15px;
 }
@@ -242,7 +245,7 @@ export default {
   text-align: center;
 }
 .leaderboard{
-  background-color: #FCF8EC;
+  /* background-color: #FCF8EC; */
   height: 610px;
   /* width: 1376px; */
   margin-left: 80px;
@@ -270,7 +273,8 @@ export default {
   margin-bottom: 10px;
 }
 .title{
-  background-color: #E9FBFF;
+  /* background-color: #E9FBFF; */
+  background-color: #ffecb5fa;
   width: 100px;
   height: 50px;
   margin-left: 140px;
@@ -288,6 +292,7 @@ export default {
 }
 #line{
   background-color: #005773;
+  /* background-color: red; */
   height: 2px;
   width: 70px;
   margin-left: 15px;
@@ -307,9 +312,10 @@ export default {
   margin-left: 30px;
   margin-right: 20px;
 }
-.leaderboard .bg-blue {
-  background-color: #D0E8F2;
-  box-shadow: 0px 3px 20px rgba(0, 0, 0, 0.25);
+/* leaderboard color */
+.leaderboard .bg-blue { 
+  /* background-color: rgb(252, 255, 75, 0.4); */
+  background-color: #FCF8EC;
 }
 .leaderboard .grid-content {
   border-radius: 10px;
@@ -379,6 +385,9 @@ export default {
   padding: 30px 0;
   box-sizing: border-box;
 }
+#groupName{
+  margin-left: 10px;
+}
 #footer {
   bottom: 0;
 }
@@ -386,27 +395,27 @@ export default {
 
 <style>
 .el-table .cellCSS1 {
-  color: #077C96;
+  color: rgb(69, 98, 104);
   font-size: 22px;
   font-weight: bold;
 }
 .el-table--enable-row-hover .el-table__body tr:hover > td {
-    background-color: whitesmoke !important;
+    background-color: rgb(248, 240, 217) !important;
 }
 .el-table .cellCSS1:hover,.el-table .cellCSS2:hover,.el-table .cellCSS3:hover,.el-table .cellCSS4:hover {
   cursor: pointer;
 }
 .el-table .cellCSS3  {
-  color: #79A3B1;
+  color: rgb(114, 163, 173);
   font-weight: bold;
 }
 .el-table .cellCSS2 {
-  color: #0BA7CA;
+  color: rgb(91, 129, 136);
   font-size: 16px;
   font-weight: bold;
 }
 .el-table .cellCSS4 {
-  color: #077C96;
+  color: rgb(119, 168, 179);
   font-size: 18px;
   font-weight: bold;
 }

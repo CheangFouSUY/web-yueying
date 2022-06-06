@@ -3,7 +3,7 @@
       <p class="info">电话: 012-3456789</p>
       <p class="info">邮箱: pikatea@buaa.edu.cn</p>
       <span @click='Feedback' class="feedback">反馈</span>
-      <img class="icon" src="@/assets/Feedback.svg" alt="feedback_icon">
+      <i class="el-icon-chat-line-square icon" @click="Feedback"></i>
       <p class="info">地址: 北航大运村10号楼留学生公寓</p>
       <p class="info">Copyright © 2022 PikaTea. All Rights Reserved.</p>
   </div>
@@ -22,13 +22,12 @@ export default {
 
 <style scoped>
 .footer {
-    /* position: fixed; */
-    /* left: 0; */
-    /* bottom: 0; */
     width: 100%;
     height: 93px;
-    background-color: #D0E8F2;
-    color: #456268;
+    /* background-color: #D0E8F2; */
+    background-color: #456268;
+    /* color: #456268; */
+    color: white;
 }
 .footer p{
     text-align: left;
@@ -50,8 +49,11 @@ export default {
 .icon {
     float: right;
     /* border: 1px solid black; */
-    width: 35px;
-    /* position: relative;
-    top: -15px; */
+    font-size: 32px;
+    /* transform: scaleX(-1); */
+    margin-top: 2px;
+}
+.icon:hover{
+    cursor: pointer;
 }
 </style>
