@@ -168,6 +168,7 @@
           v-for="item in feeds"
           :key="item.id"
           :initialFeedId="item.id"
+              :initialIsGroup="false"
           :initialIsPin="false"
           :initialIsFeatured="false"
           :initialIsAdmin="false"

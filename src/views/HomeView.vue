@@ -497,13 +497,13 @@ export default {
   align-items: center;
 }
 
-::v-deep .el-tabs__item:hover {
+.hot-list-wrap ::v-deep .el-tabs__item:hover {
   color: #547379 !important;
 }
-::v-deep .el-tabs__item.is-active {
+.hot-list-wrap ::v-deep .el-tabs__item.is-active {
   color: #456268 !important;
 }
-::v-deep .el-tabs__item {
+.hot-list-wrap ::v-deep .el-tabs__item {
   font-size: 18px;
   font-weight: 600;
   background-color: #d0dde2;

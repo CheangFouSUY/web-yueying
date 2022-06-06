@@ -67,6 +67,8 @@
         </el-col>
         <el-col :span="20">
           <el-row class="feed-publisher">
+            <span v-if="!isGroup && !isPublic">{{groupName}}</span>
+            <el-divider v-if="!isGroup && !isPublic" direction="vertical"></el-divider>
             <span @click="enterProfile(createdBy)" style="cursor: pointer">
               {{ publisherName }}
             </span>
@@ -315,6 +317,7 @@ export default {
       isPin: this.initialIsPin,
       isFeatured: this.initialIsFeatured,
       isAdmin: this.initialIsAdmin,
+      isGroup: this.initialIsGroup,
       groupName: "八卦小组",
       title: "布魯斯威利罹失語症宣布息影　「壓箱作」導演：他是偉大的人",
       description:

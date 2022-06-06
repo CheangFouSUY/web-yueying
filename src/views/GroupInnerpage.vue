@@ -238,6 +238,7 @@
               :key="item.id"
               :initialFeedId="item.id"
               :initialIsInnerpage="false"
+              :initialIsGroup="true"
               :initialIsPin="item.isPin"
               :initialIsFeatured="item.isFeatured"
               :initialIsAdmin="isOwnerOrAdmin"

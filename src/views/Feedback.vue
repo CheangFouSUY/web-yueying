@@ -45,6 +45,7 @@ export default {
         return {
             form: {
                 feedbacker:'',
+                feedbackerId:'',
                 category:0,
                 title:'',
                 description:'',
@@ -54,7 +55,8 @@ export default {
     },
     created() {
         const userInfo = user.getters.getUser(user.state());
-        this.form.feedbacker = userInfo.user.username;
+        this.form.feedbackerId = userInfo.user.id;
+        this.getName();
     // this.mainMinHeight =
     //   document.documentElement.clientHeight -
     //   $("#header").outerHeight(true) -
@@ -104,6 +106,16 @@ export default {
             this.$message.warning("反馈失败")
          })     
         },
+        getName() {
+            this.$axios({
+                method: "get",
+                url: "/api/v1/user/" + this.form.feedbackerId,                
+            }).then((res) =>{
+                this.form.feedbacker = res.data.username;
+            }).catch(err => {
+                console.log(err);
+            })
+        }
     },
 
 }

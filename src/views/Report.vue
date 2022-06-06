@@ -62,7 +62,8 @@ export default {
     var userInfo;
     if ((userInfo = User.getters.getUser(User.state()))) {
       this.islogin = true;
-      this.Report.reporter = userInfo.user.username;
+      this.Report.reporterId = userInfo.user.id;
+      this.getName();
     }
     this.getDetail();
     this.mainMinHeight =
@@ -171,14 +172,27 @@ export default {
           });
       }
     },
+    
+        getName() {
+            this.$axios({
+                method: "get",
+                url: "/api/v1/user/" + this.Report.reporterId,                
+            }).then((res) =>{
+              console.log(res)
+                this.Report.reporter = res.data.username;
+            }).catch(err => {
+                console.log(err);
+            })
+        }
   },
   data() {
     return {
       Report: {
-        reporter: "乐乐",
-        getreportid: "123456",
-        getreport: "黄乐一",
-        con: "惊！到底是道德沦丧还是人性扭曲？为什么会出现这样惊人的现象，我们细看",
+        reporter: "",
+        reporterId: "",
+        getreportid: "",
+        getreport: "",
+        con: "",
         title: "",
         type: "",
         content: "",

@@ -47,6 +47,17 @@
         <el-button type="primary" @click="realLogout">确定</el-button>
       </span>
     </el-dialog>
+
+    <el-dialog title="收藏表" :visible.sync="bookmarkVisible" width="50%">
+      <el-tabs v-model="activeName" @tab-click="handleClick">
+        <el-tab-pane label="图书" name="book">
+          <li v-for="item in bookmarkBookList" :key="item.id">
+            {{ item.name }}
+          </li>
+        </el-tab-pane>
+        <el-tab-pane label="影视" name="movie">影视</el-tab-pane>
+      </el-tabs>
+    </el-dialog>
   </div>
 </template>
 
@@ -63,6 +74,7 @@ export default {
     return {
       status: false,
       dialogVisible: false,
+      bookmarkVisible: false,
       isLogin: false,
       userName: this.initialUsername,
       searchInfo: "",
@@ -70,6 +82,9 @@ export default {
       profileP: "",
       searchType: "all",
       searchName: "全部",
+      bookmarkBookList:[],
+      bookmarkMovieList:[],
+      activeName: "book"
     };
   },
   created() {
@@ -126,7 +141,7 @@ export default {
       }, 500);
     },
     viewBookmark() {
-
+      this.bookmarkVisible = true;
     },
     viewProfile() {
       this.$router.push({ path: `/profile/${this.userId}` });
@@ -214,13 +229,16 @@ a {
 #userInfo {
   margin-left: 10px;
   max-width: 150px;
-  vertical-align: middle;
   color: white;
   overflow: hidden;
   text-overflow: ellipsis;
+  position: relative;
+  top: -16px;
 }
 #userAvatar {
-  vertical-align: middle;
+  display: inline-block;
+  position: relative;
+  top: -2px;
 }
 #userAvatar:hover{
   cursor: pointer;
