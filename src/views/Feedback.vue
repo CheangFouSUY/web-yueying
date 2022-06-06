@@ -141,7 +141,7 @@ export default {
     white-space: nowrap;
 }
 .content {
-    margin: 20px auto 23px 100px;
+    margin: 20px auto 33px 100px;
     padding-top: 12px;
     width: 1300px;
     height: 420px;
