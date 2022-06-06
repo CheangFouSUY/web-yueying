@@ -25,7 +25,7 @@
           </div>
           <button @click='Submit'>提交</button>
       </div>
-      <Footer></Footer>
+      <Footer id="footer"></Footer>
   </div>
 </template>
 
@@ -138,7 +138,7 @@ export default {
 .content {
     background-color: #FCF8EC;
     /* border: black solid 1px; */
-    margin: 20px auto auto 100px;
+    margin: 20px auto 23px 100px;
     padding-top: 12px;
     width: 1300px;
     height: 480px;
@@ -202,5 +202,9 @@ export default {
     width: 1130px;
     padding-left: 5px;
     padding-top: 5px;
+}
+#footer{
+    position: relative;
+    height: 88px;
 }
 </style>
