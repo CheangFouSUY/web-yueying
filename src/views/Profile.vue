@@ -173,7 +173,8 @@
         ></FeedBox>
       </el-col>
     </el-row>
-    <Footer id="footer" />
+    <Footer v-if="feeds.length == 0 || feeds.length == 1" />
+    <Footer v-else id="footer" />
     <el-backtop target=".Profile">
       <i class="el-icon-arrow-up" style="color: #456268"></i>
     </el-backtop>

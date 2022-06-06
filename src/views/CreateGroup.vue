@@ -55,7 +55,7 @@
         <el-button id="createGroupButton" @click="createGroup">创建</el-button>
         </div></el-col>
     </el-row>
-      <Footer></Footer>
+      <Footer id="footer"></Footer>
   </div>
 </template>
 
@@ -297,6 +297,10 @@ export default {
 }
 #radiogroup{
   margin-left: 10px;
+}
+#footer{
+  position: relative;
+  height: 88px;
 }
 </style>
 
