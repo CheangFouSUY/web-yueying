@@ -61,8 +61,9 @@
             v-if="publisherAvatar"
             :size="50"
             :src="publisherAvatar"
+            @click.native="enterProfile(createdBy)"
           ></el-avatar>
-          <el-avatar v-else :size="50" icon="el-icon-user-solid"></el-avatar>
+          <el-avatar v-else :size="50" icon="el-icon-user-solid" @click="enterProfile(createdBy)"></el-avatar>
         </el-col>
         <el-col :span="20">
           <el-row class="feed-publisher">
@@ -192,11 +193,13 @@
                 v-if="c.publisherAvatar"
                 :size="50"
                 :src="c.publisherAvatar"
+                @click.native="enterProfile(c.createdBy)"
               ></el-avatar>
               <el-avatar
                 v-else
                 :size="50"
                 icon="el-icon-user-solid"
+                @click.native="enterProfile(c.createdBy)"
               ></el-avatar>
             </el-col>
             <el-col :span="22">
@@ -1058,5 +1061,8 @@ export default {
 }
 button {
   font-family: "Microsoft JhengHei", 微软正黑体, "Microsoft YaHei", 微软雅黑;
+}
+.el-avatar:hover{
+  cursor: pointer;
 }
 </style>

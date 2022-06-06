@@ -1126,7 +1126,8 @@ export default {
 .el-icon-more{
   margin-left: auto;
   margin-right: 5px;
-  order: 2,
+  order: 2;
+  transform: rotate(90deg);
 }
 .el-icon-more:hover{
   cursor: pointer;

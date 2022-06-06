@@ -52,11 +52,13 @@
                 v-if="item.publisherAvatar"
                 :size="50"
                 :src="item.publisherAvatar"
+                @click.native="enterProfile(item.createdBy)"
               ></el-avatar>
               <el-avatar
                 v-else
                 :size="50"
                 icon="el-icon-user-solid"
+                @click.native="enterProfile(item.createdBy)"
               ></el-avatar>
             </el-col>
             <el-col :span="22">
@@ -634,5 +636,8 @@ export default {
 #footer {
   position: relative;
   height: 88px;
+}
+.el-avatar:hover{
+  cursor: pointer;
 }
 </style>
