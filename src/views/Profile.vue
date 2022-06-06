@@ -1,6 +1,6 @@
 <template>
   <div class="Profile">
-    <Header id="header" :initialUsername="form.name"/>
+    <Header id="header" :initialUsername="form.name"></Header>
     <div id="main" :style="{ 'min-height': mainMinHeight + 'px' }">
       <el-row type="flex" justify="center">
       <el-col :span="20"
@@ -175,7 +175,7 @@
       </el-col>
     </el-row>
     </div>
-    <Footer id="footer" />
+    <Footer id="footer"></Footer>
     <el-backtop target=".Profile">
       <i class="el-icon-arrow-up" style="color: #456268"></i>
     </el-backtop>
@@ -233,6 +233,8 @@ export default {
     }
     this.getProfile();
     this.getFeed();
+  },
+  mounted(){
     this.mainMinHeight =
       document.documentElement.clientHeight -
       $("#header").outerHeight(true) -

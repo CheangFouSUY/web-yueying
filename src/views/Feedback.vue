@@ -213,7 +213,7 @@ export default {
 }
 #main {
   margin: auto;
-  padding: 30px 0;
+  padding: 20px 0;
   box-sizing: border-box;
 }
 #footer {

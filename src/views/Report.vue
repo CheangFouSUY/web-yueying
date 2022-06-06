@@ -239,7 +239,7 @@ export default {
 .content {
   background-color: #fcf8ec;
   /* border: black solid 1px; */
-  margin: 20px auto 18px 100px;
+  margin: 20px auto auto 100px;
   padding-top: 12px;
   width: 1300px;
   height: 400px;

@@ -69,8 +69,7 @@
         :initialIsAdmin="false"
       ></FeedBox>
     </div>
-    <Footer v-if="feeds.length == 0 || feeds.length == 1"></Footer>
-    <Footer v-else id="footer"></Footer>
+    <Footer id="footer"></Footer>
     <el-backtop target=".all">
       <i class="el-icon-arrow-up" style="color: #456268"></i>
     </el-backtop>

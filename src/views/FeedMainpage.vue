@@ -22,8 +22,7 @@
         :initialIsAdmin="false"
       ></FeedBox>
     </div>
-     <Footer v-if="notGroupFeedsLen == 0 || notGroupFeedsLen == 1"></Footer>
-    <Footer v-else id="footer"></Footer>
+    <Footer id="footer"></Footer>
     <el-backtop target=".all">
       <i class="el-icon-arrow-up" style="color: #456268"></i>
     </el-backtop>
@@ -53,7 +52,6 @@ export default {
       followColor: "#456268",
       formVisible: false,
       formLabelWidth: "120px",
-      notGroupFeedsLen: 0,
       form: {
         title: "",
         description: "",

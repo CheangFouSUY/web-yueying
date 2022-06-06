@@ -26,22 +26,22 @@
           <el-dropdown-item
             v-if="isMine"
             @click.native="deleteDialogVisible = true"
-            >删除话题
+            >删除帖子
           </el-dropdown-item>
           <el-dropdown-item
             v-else-if="isAdmin"
             @click.native="deleteDialogVisible = true"
-            >删除话题
+            >删除帖子
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
 
       <el-dialog
-        title="删除话题"
+        title="删除帖子"
         :visible.sync="deleteDialogVisible"
         width="30%"
       >
-        <span>确认是否需要删除话题</span>
+        <span>确认是否需要删除帖子</span>
         <span slot="footer" class="dialog-footer">
           <el-button @click="deleteDialogVisible = false">取 消</el-button>
           <el-button

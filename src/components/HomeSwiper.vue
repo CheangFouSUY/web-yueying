@@ -117,8 +117,10 @@ export default {
   display: block;
   float: left;
   width: 145px;
+  height: 50px;
   text-decoration: none;
   color: #456268;
+  overflow: hidden;
 }
 .title-wrap {
   height: 60px;

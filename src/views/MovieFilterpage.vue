@@ -183,8 +183,10 @@ export default {
   display: block;
   float: left;
   width: 150px;
+  height: 50px;
   text-decoration: none;
   color: #456268;
+  overflow: hidden;
 }
 .title-wrap {
   height: 60px;
