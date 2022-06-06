@@ -9,39 +9,37 @@
     <a href="/feed" class="navLink">话题</a>
     <a href="/group" class="navLink">小组</a>
     <div class="searchBox">
-      <select id="Type" name="Type" v-model="searchType">
-        <option value="all">全部</option>
-        <option value="book">图书</option>
-        <option value="drama">影视</option>
-        <option value="feed">话题</option>
-        <option value="group">小组</option>
-      </select>
-      <input
-        type="text"
-        v-model="searchInfo"
-        placeholder="输入你想搜索的内容"
-      />
-      <img
-        class="navicon"
-        @click="search"
-        src="@/assets/Search.svg"
-        alt="search_icon"
-      />
+      <el-dropdown @command="handleCommand">
+        <span id="Type">
+          {{searchName}}<i class="el-icon-arrow-down el-icon--right"></i>
+        </span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item command="all">全部</el-dropdown-item>
+          <el-dropdown-item command="book">图书</el-dropdown-item>
+          <el-dropdown-item command="drama">影视</el-dropdown-item>
+          <el-dropdown-item command="feed">话题</el-dropdown-item>
+          <el-dropdown-item command="group">小组</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+      <input type="text" v-model="searchInfo" placeholder="输入你想搜索的内容"/>
+      <img class="navicon" @click="search" src="@/assets/Search.svg" alt="search_icon"/>
     </div>
-    <el-button v-if="!isLogin" id="login" @click="login">登录</el-button>
-    <!-- <el-select v-else v-model="value"
-    class="loginOption"
-    popper-class="loginOption2">
-    <el-option
-      v-for="item in options"
-      :key="item.value"
-      :label="item.label"
-      :value="item.value">
-    </el-option>
-  </el-select> -->
-    <el-button slot="reference" v-if="isLogin" id="login" @click="logout"
-      >登出</el-button
-    >
+
+    <a href="/login" v-if="!isLogin" class="navLink" id="login">登录</a>
+    <el-dropdown v-else id="login" class="navLink">
+      <a>
+        <el-avatar v-if="profileP" id="userAvatar" :src="profileP"></el-avatar>
+        <el-avatar v-else id="userAvatar" icon="el-icon-user-solid"></el-avatar>
+        <span id="userInfo">{{ userName }}</span>
+      </a>
+
+      <el-dropdown-menu slot="dropdown">
+        <el-dropdown-item icon="el-icon-user-solid" @click.native="viewProfile()">个人主页</el-dropdown-item>
+        <el-dropdown-item icon="el-icon-collection-tag">收藏表</el-dropdown-item>
+        <el-dropdown-item icon="el-icon-lock" @click.native="logout()">登出</el-dropdown-item>
+      </el-dropdown-menu>
+    </el-dropdown>
+
     <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
       <span>你确定要登出吗？</span>
       <span slot="footer" class="dialog-footer">
@@ -49,21 +47,6 @@
         <el-button type="primary" @click="realLogout">确定</el-button>
       </span>
     </el-dialog>
-    <span v-if="isLogin" id="userInfo" @click="viewProfile">{{
-      userName
-    }}</span>
-    <!-- <span v-if="!isLogin" id="userInfo">MIKIWONGaaaaaaa</span> -->
-    <el-avatar
-      v-if="isLogin && profileP"
-      id="userAvatar"
-      :src="profileP"
-    ></el-avatar>
-    <el-avatar
-      v-else-if="isLogin && !profileP"
-      id="userAvatar"
-      icon="el-icon-user-solid"
-    ></el-avatar>
-    <!-- <span v-else id="loginname" @click="login">{{ userName }}</span> -->
   </div>
 </template>
 
@@ -85,8 +68,8 @@ export default {
       searchInfo: "",
       userId: "",
       profileP: "",
-      // userNames:'aaaaaaaaaaaaaaaaaaaaa',
       searchType: "all",
+      searchName: "全部",
     };
   },
   created() {
@@ -100,6 +83,14 @@ export default {
     }
   },
   methods: {
+    handleCommand(command) {
+        this.searchType = command;
+        if(command == "all") this.searchName = "全部";
+        else if(command == "book") this.searchName = "图书";
+        else if(command == "drama") this.searchName = "影视";
+        else if(command == "feed") this.searchName = "话题";
+        else if(command == "group") this.searchName = "小组";
+      },
     getUser() {
       this.$axios({
         method: "get",
@@ -111,7 +102,6 @@ export default {
       });
     },
     search() {
-      // this.$router.push("/empty");
       setTimeout(() => {
         this.$router.push(
           "/search" + this.searchType + "/?name=" + this.searchInfo
@@ -142,6 +132,13 @@ export default {
 };
 </script>
 
+<style>
+.el-dropdown-menu__item:not(is-disabled):hover {
+  background-color: #ebeef0 !important;
+  color: #456268 !important;
+}
+</style>
+
 <style scoped>
 #headerLogo {
   width: 55px;
@@ -169,12 +166,12 @@ a {
   display: block;
   float: left;
   height: 35px;
-  /* outline: 1px black solid; */
   margin: auto;
   padding: 10px 15px;
   padding-right: 15px;
   color: white;
   text-decoration: none;
+  cursor: pointer;
 }
 .searchBox {
   display: inline-block;
@@ -184,7 +181,6 @@ a {
   width: 400px;
   margin-top: 8px;
   margin-left: 180px;
-  /* border: 1px black solid; */
 }
 .searchBox input {
   font-family: "Microsoft JhengHei", 微软正黑体, "Microsoft YaHei", 微软雅黑;
@@ -194,10 +190,11 @@ a {
   margin-left: 10px;
   border: none;
   color: white;
+  font-size: 16px;
   background-color: rgba(208, 232, 242, 0.01);
 }
 .searchBox input::placeholder {
-  color: white;
+  color: rgb(192, 192, 192);
 }
 .searchBox input:focus {
   outline: none;
@@ -212,60 +209,23 @@ a {
   cursor: pointer;
 }
 #userInfo {
-  /* border: 1px solid black; */
-  float: right;
+  margin-left: 10px;
   max-width: 150px;
-  margin-top: 15px;
-  margin-right: 10px;
-  font-size: 18px;
+  vertical-align: middle;
   color: white;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-#userInfo:hover {
-  cursor: pointer;
-  color: #cef3ff;
-}
 #userAvatar {
-  float: right;
-  margin-top: 7px;
-  margin-right: 5px;
+  vertical-align: middle;
 }
 #login {
   float: right;
-  margin-top: 8px;
-  margin-right: 10px;
-  color: white;
-  background-color: rgba(208, 232, 242, 0.01);
-}
-#login:active {
-  border-color: white;
-}
-#loginname {
-  float: right;
-  margin-top: 13px;
-  margin-right: 20px;
-  color: white;
-  font-size: 20px;
 }
 #Type {
-  float: left;
-  height: 30px;
-  background-color: rgba(208, 232, 242, 0.01);
   margin-left: 10px;
-  margin-top: 5px;
   font-size: 16px;
   color: white;
-  font-family: "Microsoft JhengHei", 微软正黑体, "Microsoft YaHei", 微软雅黑;
-  outline: none;
-  position: relative;
-  border: none;
-}
-#Type:hover {
-  cursor: pointer;
-}
-#Type option {
-  background-color: #79a3b1;
 }
 </style>
 
