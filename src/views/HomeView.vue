@@ -35,7 +35,7 @@
         <!-- 热门评论 -->
         <el-row>
           <div class="Book">
-            <img src="@/assets/Video.svg" alt="video icon" /><span
+            <img src="@/assets/Comment.svg" alt="comment icon" /><span
               >热门评论</span
             >
           </div>

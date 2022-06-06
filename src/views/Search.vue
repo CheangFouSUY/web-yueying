@@ -12,16 +12,32 @@
             <el-row class="Text" align="middle" type="flex">
             <img src="@/assets/Book.svg" alt="book icon" /><span>图书</span>
             </el-row>
-            <el-row>
-                <Swiper :initialList="hotBook" :listType="'book'" v-if="hotBook.length"></Swiper>
+            <el-row class="result-wrap">
+                <div class="item-box" v-for="item in hotBook" :key="item.id">
+                  <el-image class="poster" :src="item.thumbnail" fit="cover" @click="goDetails(item.id)" ></el-image>
+                  <div class="title-wrap">
+                    <span class="book-title" @click="goDetails(item.id)">
+                      {{ item.title }}
+                    </span>
+                    <span class="rating">{{ item.rating }}</span>
+                  </div>
+                </div>
             </el-row>
         </el-row>
         <el-row v-if="!noMovieData" class="Drama">
             <el-row class="Text" align="middle" type="flex">
             <img src="@/assets/Video.svg" alt="video icon" /><span>影视</span>
             </el-row>
-            <el-row>
-                <Swiper :initialList="hotMovie" :listType="'movie'" v-if="hotMovie.length"></Swiper>
+            <el-row class="result-wrap">
+                <div class="item-box" v-for="item in hotMovie" :key="item.id">
+                  <el-image class="poster" :src="item.thumbnail" fit="cover" @click="goDetails(item.id)" ></el-image>
+                  <div class="title-wrap">
+                    <span class="book-title" @click="goDetails(item.id)">
+                      {{ item.title }}
+                    </span>
+                    <span class="rating">{{ item.rating }}</span>
+                  </div>
+                </div>
             </el-row>
         </el-row>
           <el-row v-if="!noTagData" class="Tag">
@@ -251,6 +267,54 @@ export default {
 </script>
 
 <style scoped>
+.rating {
+  display: block;
+  float: right;
+}
+.book-title:hover {
+  color: #79a3b1;
+  cursor: pointer;
+}
+.book-title {
+  display: block;
+  float: left;
+  width: 150px;
+  height: 50px;
+  text-decoration: none;
+  color: #456268;
+  overflow: hidden;
+}
+.title-wrap {
+  height: 60px;
+  padding: 5px;
+  position: relative;
+  top: -4px;
+  box-sizing: border-box;
+  font-size: 20px;
+  background-color: #fcf8ec;
+}
+.poster {
+  width: 200px;
+  height: 267px;
+  /* outline: 1px red solid; */
+}
+.poster:hover {
+  cursor: pointer;
+}
+.item-box a {
+  display: block;
+  /* overflow: hidden; */
+}
+.item-box {
+  display: inline-block;
+  margin: 20px 0;
+  width: 210px;
+  padding: 0 5px;
+  box-sizing: border-box;
+}
+.result-wrap {
+  margin: 0 60px;
+}
 .Top{
     font-size: 32px;
     color: #456268;
@@ -261,7 +325,7 @@ export default {
 .Book, .Drama, .Feed, .Group, .Tag{
     margin-top: 20px;
 }
-.Book span, .Drama span, .Feed span, .Group span, .Tag span{
+.Feed span, .Group span, .Tag span{
     font-size: 24px;
     color: #456268;
 }

@@ -10,7 +10,7 @@
           <span v-if="!isJoined" @click="joinTag()"> 参与话题 </span>
           <span v-else @click="unjoinTag()"> 退出话题 </span>
 
-          <el-dialog title="发布话题" :visible.sync="formVisible">
+          <el-dialog title="发布帖子" :visible.sync="formVisible">
             <el-form label-position="top" :model="form">
               <el-form-item label="标题" :label-width="formLabelWidth">
                 <el-input

@@ -200,7 +200,7 @@ export default {
       console.log(header);
       this.$axios({
         method: "get",
-        url: "/api/v1/feed/list",
+        url: "/api/v1/feed/list?orderBy=l",
         headers: header,
       }).then((res) => {
         console.log(res);
