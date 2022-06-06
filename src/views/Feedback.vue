@@ -1,7 +1,7 @@
 <template>
   <div class="feedback">
       <Header id="header"></Header>
-      <div id="main" :style="{ 'min-height': mainMinHeight + 'px' }">
+      <div id="main">
         <div class="name">
           <span id="namespan">反馈者姓名     :</span>
           <span id='name'>{{ form.feedbacker }}</span>
@@ -49,17 +49,17 @@ export default {
                 title:'',
                 description:'',
             },
-            mainMinHeight: "",
+            // mainMinHeight: "",
         }
     },
     created() {
         const userInfo = user.getters.getUser(user.state());
         this.form.feedbacker = userInfo.user.username;
-    this.mainMinHeight =
-      document.documentElement.clientHeight -
-      $("#header").outerHeight(true) -
-      $("#footer").outerHeight(true) -
-      6;
+    // this.mainMinHeight =
+    //   document.documentElement.clientHeight -
+    //   $("#header").outerHeight(true) -
+    //   $("#footer").outerHeight(true) -
+    //   6;
     },
     methods: {
         Submit() {
@@ -141,7 +141,7 @@ export default {
     white-space: nowrap;
 }
 .content {
-    margin: 20px auto 33px 100px;
+    margin: 20px auto 5px 100px;
     padding-top: 12px;
     width: 1300px;
     height: 420px;
@@ -207,10 +207,11 @@ export default {
 }
 #main {
   margin: auto;
-  padding: 20px 0;
+  padding: 30px 0;
   box-sizing: border-box;
 }
 #footer {
+    position: absolute;
   bottom: 0;
 }
 </style>

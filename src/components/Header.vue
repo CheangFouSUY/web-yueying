@@ -35,7 +35,7 @@
 
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item icon="el-icon-user-solid" @click.native="viewProfile()">个人主页</el-dropdown-item>
-        <el-dropdown-item icon="el-icon-collection-tag">收藏表</el-dropdown-item>
+        <el-dropdown-item icon="el-icon-collection-tag" @click.native="viewBookmark()">收藏表</el-dropdown-item>
         <el-dropdown-item icon="el-icon-lock" @click.native="logout()">登出</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
@@ -90,7 +90,7 @@ export default {
         else if(command == "drama") this.searchName = "影视";
         else if(command == "feed") this.searchName = "话题";
         else if(command == "group") this.searchName = "小组";
-      },
+    },
     getUser() {
       this.$axios({
         method: "get",
@@ -124,6 +124,9 @@ export default {
         this.$router.push({ path:'/'});
         location.reload();
       }, 500);
+    },
+    viewBookmark() {
+
     },
     viewProfile() {
       this.$router.push({ path: `/profile/${this.userId}` });
