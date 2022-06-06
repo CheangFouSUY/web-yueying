@@ -7,7 +7,7 @@
                 <h1>阅·影</h1>
             </div>
             <div class="Row">
-                <span>昵称</span>
+                <span>用户名</span>
                 <input type="text" v-model="form.username" placeholder="例 : 黄乐乐">
             </div>
             <div class="Row">
