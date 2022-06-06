@@ -95,7 +95,7 @@
         <div class="container">
         <div class="col" v-for="column in columns" :key="column">
           <div class="item-container" v-for="item in column" :key="item.id">
-              <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+              <el-avatar :src=item.img></el-avatar>
               <span @click="toGroupInner(item.id)">{{item.groupName}}</span></div>
         </div></div>
     </el-row>
@@ -215,28 +215,7 @@ export default {
           leaderboardDataB: [],
           leaderboardDataM: [],
           leaderboardDataO: [],
-        // groupData: [{
-        //   id:1,
-        //   gAvatar:<el-avatar icon="el-icon-user-solid"></el-avatar>,
-        //   gName:'皮卡一家亲',
-        // }, {
-        //   id:2,
-        //   gAvatar:<el-avatar icon="el-icon-user-solid"></el-avatar>,
-        //   gName:'皮卡两家亲',
-        // }, {
-        //   id:3,
-        //   gAvatar:<el-avatar icon="el-icon-user-solid"></el-avatar>,
-        //   gName:"WHAT?"
-        // }, {
-        //   id:4,
-        //   gAvatar:<el-avatar icon="el-icon-user-solid"></el-avatar>,
-        //   gName:'皮卡一家亲',
-        // }, {
-        //   id:5,
-        //   gAvatar:<el-avatar icon="el-icon-user-solid"></el-avatar>,
-        //   gName:'皮卡一家亲',
-        // }],
-        groupData: [],
+          groupData: [],
         }
       },
 }
