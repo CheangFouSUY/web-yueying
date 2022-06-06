@@ -401,7 +401,6 @@ export default {
             location.reload(true);
           }, 500);
           this.$message.success("成功加入小组");
-          // this.isGroupMember = !this.isGroupMember;
         })
         .catch((error) => {
           console.log(error);
@@ -439,7 +438,6 @@ export default {
             location.reload(true);
           }, 500);
           this.$message.success("成功退出小组");
-          // this.isGroupMember = !this.isGroupMember;
         })
         .catch((error) => {
           console.log(error.response.status);
@@ -475,12 +473,6 @@ export default {
         .then(
           this.$axios.spread((gDetail, gMAdmin, gAdmin, gMember) => {
             console.log(gDetail);
-            // if(gDetail.data.groupName.length > 10)
-            //   this.groupInfo.name = gDetail.data.groupName.slice(0,18) + "...";
-            // else
-            // console.log(gMAdmin);
-            // console.log(gAdmin);
-            // console.log(gMember);
             this.groupInfo.groupId = gDetail.data.id;
             this.groupInfo.name = gDetail.data.groupName;
             this.groupInfo.nameTemp = gDetail.data.groupName;
@@ -501,7 +493,6 @@ export default {
 
             for (let i = 0; i < gAdmin.data.results.length; i++) {
               if (gAdmin.data.results[i].id === this.userId) {
-                // console.log("YES");
                 this.isOwnerOrAdmin = true;
                 this.isGroupMember = true;
                 this.isAdmin = true;
@@ -518,7 +509,6 @@ export default {
             }
 
             if (gMAdmin.data.results[0].id === this.userId) {
-              // console.log("SUCCESS");
               this.isOwnerOrAdmin = true;
               this.isOwnerOrAdminTemp = true;
               this.isGroupMember = true;
@@ -727,7 +717,6 @@ export default {
       if (this.isGroupMember && !this.isOwnerOrAdmin) {
         this.$message.warning("非小组管理员，无法对用户进行操作");
       } else if (this.isOwnerOrAdmin) {
-        // this.$message.success("可以对用户进行操作");
         this.setRoleVisible = true;
         //abc is the userId that we're gonna do something like ban or set role
         this.banOrput = abc;
@@ -956,12 +945,9 @@ export default {
       setRoleVisible: false,
       feeds: [],
       formLabelWidth: "120px",
-      user: "栀子花开",
-      activeName: "all",
       isShowFeature: false,
       allColor: "#79A3B1",
       featureColor: "#456268",
-      feeds: [],
       mainMinHeight: "",
     };
   },
@@ -1008,29 +994,14 @@ export default {
   text-align: center;
   line-height: 40px;
 }
-.el-col {
-  border-radius: 4px;
-}
-.bg-red {
-  background: rgb(255, 0, 0);
-}
-.bg-blue {
-  background: blue;
-}
-.row-bg {
-  padding: 10px 0;
-  background-color: #f9fafc;
-}
 .groupInfo {
   width: 92%;
-  /* height: 350px; */
   margin-left: 50px;
   margin-top: 20px;
   margin-bottom: 40px;
   padding-bottom: 15px;
   background-color: #fcf8ec;
   box-shadow: 0px 0px 20px 3px rgba(0, 0, 0, 0.25);
-  /* border: solid black 1px; */
 }
 .title {
   margin-top: 20px;
@@ -1043,7 +1014,6 @@ export default {
   height: 50px;
 }
 .groupMember {
-  /* display: inline-block; */
   margin-top: 20px;
   max-height: 540px;
   box-shadow: 0px 0px 20px 2px rgba(0, 0, 0, 0.25);
@@ -1066,8 +1036,6 @@ export default {
 }
 .info2 {
   font-size: 24px;
-  /* max-height: 130px; */
-  /* border: 1px black solid; */
   display: flex;
 }
 .infoText {
@@ -1083,7 +1051,6 @@ export default {
 .infoText3 {
   color: #456268;
   display: inline-block;
-  /* border: 1px solid black; */
   max-width: 630px;
   word-break: auto;
   white-space: pre-wrap;
@@ -1102,7 +1069,6 @@ export default {
 .memberlist {
   display: flex;
   font-size: 20px;
-  /* border: 1px solid black; */
   padding-left: 5px;
   padding-top: 5px;
   padding-bottom: 5px;
@@ -1117,7 +1083,6 @@ export default {
   font-weight: 600;
   margin-bottom: 0px;
   color: #456268;
-  /* outline: 1px black solid; */
 }
 .el-icon-star-off {
   margin-top: 4px;

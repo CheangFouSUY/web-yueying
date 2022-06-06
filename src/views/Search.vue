@@ -115,7 +115,6 @@ export default {
   computed: {
     columns () {
       let columns = []
-    //   let mid = Math.ceil(this.items.length / this.cols)
       let cols = this.feeds.length/3;
       let mid = 3;
       for (let col = 0; col < cols; col++) {
@@ -125,7 +124,6 @@ export default {
     },
     columns2 () {
       let columns = []
-    //   let mid = Math.ceil(this.items.length / this.cols)
       let cols = this.groupData.length/3;
       let mid = 3;
       for (let col = 0; col < cols; col++) {
@@ -135,7 +133,6 @@ export default {
     },
     columns3 () {
       let columns = []
-    //   let mid = Math.ceil(this.items.length / this.cols)
       let cols = this.groupFeedData.length/3;
       let mid = 3;
       for (let col = 0; col < cols; col++) {
@@ -262,7 +259,6 @@ export default {
     height: 48px;
 }
 .Book, .Drama, .Feed, .Group, .Tag{
-    /* border: 1px solid black; */
     margin-top: 20px;
 }
 .Book span, .Drama span, .Feed span, .Group span, .Tag span{
@@ -279,34 +275,18 @@ export default {
 .main{
     margin: 20px 60px;
 }
-.bg-red{
-    background-color: red;
-}
-.bg-blue{
-    background-color: blue;
-}
-.bg-yellow{
-    background-color: yellow;
-}
 .col {
   margin: 10px;
-  /* border: 1px solid; */
   flex-grow: 1;
   display: flex;
   flex-direction: row;
 }
 .Feed .item-container {
-  /* border: 1px solid; */
   padding: 5px;
   margin: 10px;
   margin-bottom: 0px;
   width: 400px;
   height: 145px;
-  /* text-align: center; */
-  /* display: -webkit-box;
-  -webkit-line-clamp: 5;
-  -webkit-box-orient: vertical;
-  overflow: hidden; */
   text-overflow: ellipsis;
   box-shadow: 5px 8px #458998;
   word-wrap: break-word;
@@ -325,13 +305,11 @@ export default {
   word-wrap: break-word;
 }
 .noResult{
-  /* border: 1px solid; */
   margin-top: 20px;
   font-size: 24px;
   padding-left: 20px;
 }
 .textInside{
-  /* border: 1px solid; */
   text-align: center;
   width: 340px;
 }

@@ -233,8 +233,6 @@ export default {
 .create button{
   background-color: rgb(255, 195, 82);
   color: black;
-  /* background-color: rgb(69, 98, 104, 0.3);
-  color: rgb(69, 98, 104); */
   box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.25);
   font-size: 22px; 
   border-radius: 15px;
@@ -245,20 +243,16 @@ export default {
   text-align: center;
 }
 .leaderboard{
-  /* background-color: #FCF8EC; */
   height: 610px;
-  /* width: 1376px; */
   margin-left: 80px;
   margin-right: 80px;
   padding-top: 20px;
-  /* width: 1536px; */
 }
 .showgroups{
   background-color: #FCF8EC;
   margin-top: 20px;
   margin-bottom: 20px;
   min-height: 120px;
-  /* width: 1376px; */
   margin-left: 80px;
   margin-right: 80px;
   text-align: center;
@@ -273,7 +267,6 @@ export default {
   margin-bottom: 10px;
 }
 .title{
-  /* background-color: #E9FBFF; */
   background-color: #ffecb5fa;
   width: 100px;
   height: 50px;
@@ -283,7 +276,6 @@ export default {
 .noGroups span{
   color: grey;
   font-size: 16px;
-  /* font-weight: bold; */
 }
 #title {
   display: inline;
@@ -292,7 +284,6 @@ export default {
 }
 #line{
   background-color: #005773;
-  /* background-color: red; */
   height: 2px;
   width: 70px;
   margin-left: 15px;
@@ -314,16 +305,11 @@ export default {
 }
 /* leaderboard color */
 .leaderboard .bg-blue { 
-  /* background-color: rgb(252, 255, 75, 0.4); */
   background-color: #FCF8EC;
 }
 .leaderboard .grid-content {
   border-radius: 10px;
   min-height: 600px;
-}
-.row-bg {
-  padding: 10px 0;
-  background-color: #f9fafc;
 }
 .table{
   margin-left: 20px;
@@ -359,7 +345,6 @@ export default {
   margin-right: 20px;
 }
 .showgroups .item-container {
-  /* border: 1px solid; */
   padding: 5px;
   margin: 5px;
   width: 400px;
@@ -375,7 +360,6 @@ export default {
 }
 .col {
   margin: 10px;
-  /* border: 1px solid; */
   flex-grow: 1;
   display: flex;
   flex-direction: row;

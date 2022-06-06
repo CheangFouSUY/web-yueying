@@ -111,8 +111,6 @@ export default {
 
 <style scoped>
 .name{
-    /* background-color: #FCF8EC; */
-    /* border: black solid 1px; */
     margin: 20px auto auto 100px;
     width: 500px;
     height: 55px;
@@ -120,7 +118,6 @@ export default {
 }
 .name span{
     display: inline-block;
-    /* outline: black solid 1px; */
     font-size: 24px;
     vertical-align: middle;
     margin-left: 10px;
@@ -144,8 +141,6 @@ export default {
     white-space: nowrap;
 }
 .content {
-    /* background-color: #FCF8EC; */
-    /* border: black solid 1px; */
     margin: 20px auto 23px 100px;
     padding-top: 12px;
     width: 1300px;
@@ -156,7 +151,6 @@ export default {
     display: inline-block;
     font-size: 24px;
     margin-left: 20px;
-    /* vertical-align: middle; */
 }
 .content input, .content select{
     margin-left: 22px;

@@ -38,7 +38,6 @@ export default {
 
 <style>
 .registerSuccess{
-    /* border: 1px solid black; */
     margin-top: 130px;
 }
 .registerSuccess .el-result__icon svg{

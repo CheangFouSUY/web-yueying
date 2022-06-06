@@ -52,7 +52,6 @@ export default {
             })
             .then((res) => {
                 console.log(res);
-                // console.log(res.data.tokens.access);
                 localStorage.setItem('token', res.data.tokens.access);
             })
             .catch((error) => {
@@ -116,11 +115,9 @@ export default {
 }
 .Box{
     margin: 20px;
-    /* background-color: black; */
     text-align: center;
 }
 .Title{
-    /* margin: 20px; */
     font-size: 36px;
     font-weight: bold;
     margin-bottom: 20px;

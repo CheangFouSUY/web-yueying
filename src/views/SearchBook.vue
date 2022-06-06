@@ -25,7 +25,6 @@
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
 import Swiper from "@/components/MainpageSwiper.vue";
-import FeedBox from "@/components/FeedBox.vue";
 
 export default {
     name:'Search',
@@ -33,7 +32,6 @@ export default {
     Header,
     Footer,
     Swiper,
-    FeedBox,
   },
   data() {
       return {
@@ -88,11 +86,10 @@ export default {
 .searchicon{
     height: 48px;
 }
-.Book, .Drama, .Feed, .Group{
-    /* border: 1px solid black; */
+.Book{
     margin-top: 20px;
 }
-.Book span, .Drama span, .Feed span, .Group span{
+.Book span{
     font-size: 24px;
     color: #456268;
 }
@@ -106,15 +103,6 @@ export default {
 .main{
     margin: 20px 60px;
 }
-.bg-red{
-    background-color: red;
-}
-.bg-blue{
-    background-color: blue;
-}
-.bg-yellow{
-    background-color: yellow;
-}
 .col {
   margin: 10px;
   /* border: 1px solid; */
@@ -122,48 +110,10 @@ export default {
   display: flex;
   flex-direction: row;
 }
-.Feed .item-container {
-  /* border: 1px solid; */
-  padding: 5px;
-  margin: 10px;
-  margin-bottom: 0px;
-  width: 400px;
-  height: 145px;
-  /* text-align: center; */
-  display: -webkit-box;
-  -webkit-line-clamp: 5;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.Group .item-container {
-  /* border: 1px solid; */
-  padding: 5px;
-  margin: 5px;
-  width: 400px;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  font-size: 20px;
-}
 .noResult{
   /* border: 1px solid; */
   margin-top: 20px;
   font-size: 24px;
   padding-left: 20px;
-}
-#feedCon{
-  font-size: 20px;
-}
-#feedTitle{
-  font-size: 30px;
-  font-weight: bold;
-  text-decoration: underline;
-}
-#feedCon:hover, #feedTitle:hover{
-  cursor: pointer;
-}
-#feedCon:hover{
-  color: #79A3B1;
 }
 </style>
