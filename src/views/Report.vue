@@ -194,12 +194,12 @@ export default {
 
 <style scoped>
 .name {
-  background-color: #fcf8ec;
+  /* background-color: #fcf8ec; */
   /* border: black solid 1px; */
   margin: 20px auto auto 100px;
   width: 800px;
   height: 110px;
-  box-shadow: 0px 4px 5px rgba(0, 9, 236, 0.25);
+  box-shadow: 0px 4px 10px rgba(0, 9, 236, 0.25);
 }
 .name span {
   display: inline-block;
@@ -237,13 +237,13 @@ export default {
   white-space: nowrap;
 }
 .content {
-  background-color: #fcf8ec;
+  /* background-color: #fcf8ec; */
   /* border: black solid 1px; */
   margin: 20px auto auto 100px;
   padding-top: 12px;
   width: 1300px;
   height: 400px;
-  box-shadow: 0px 4px 5px rgba(0, 9, 236, 0.25);
+  box-shadow: 0px 4px 10px rgba(0, 9, 236, 0.25);
 }
 .content span {
   display: inline-block;

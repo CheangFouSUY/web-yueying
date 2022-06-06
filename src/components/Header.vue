@@ -219,6 +219,9 @@ a {
 #userAvatar {
   vertical-align: middle;
 }
+#userAvatar:hover{
+  cursor: pointer;
+}
 #login {
   float: right;
 }
