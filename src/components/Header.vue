@@ -55,11 +55,13 @@
     <!-- <span v-if="!isLogin" id="userInfo">MIKIWONGaaaaaaa</span> -->
     <el-avatar
       v-if="isLogin && profileP"
+      @click.native="viewProfile"
       id="userAvatar"
       :src="profileP"
     ></el-avatar>
     <el-avatar
       v-else-if="isLogin && !profileP"
+      @click.native="viewProfile"
       id="userAvatar"
       icon="el-icon-user-solid"
     ></el-avatar>
@@ -230,6 +232,9 @@ a {
   float: right;
   margin-top: 7px;
   margin-right: 5px;
+}
+#userAvatar:hover{
+  cursor: pointer;
 }
 #login {
   float: right;

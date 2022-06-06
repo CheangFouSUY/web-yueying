@@ -96,7 +96,7 @@
         <div class="container">
         <div class="col" v-for="column in columns" :key="column">
           <div class="item-container" v-for="item in column" :key="item.id">
-              <el-avatar :src="item.img"></el-avatar>
+              <el-avatar :src="item.img" @click.native="toGroupInner(item.id)"></el-avatar>
               <span @click="toGroupInner(item.id)">{{item.groupName}}</span></div>
         </div></div>
     </el-row>
