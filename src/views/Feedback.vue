@@ -141,7 +141,7 @@ export default {
     white-space: nowrap;
 }
 .content {
-    margin: 20px auto 33px 100px;
+    margin: 20px auto 5px 100px;
     padding-top: 12px;
     width: 1300px;
     height: 420px;
@@ -207,7 +207,7 @@ export default {
 }
 #main {
   margin: auto;
-  padding: 20px 0;
+  padding: 30px 0;
   box-sizing: border-box;
 }
 #footer {
