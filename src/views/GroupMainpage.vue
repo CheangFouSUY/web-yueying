@@ -1,7 +1,8 @@
 <template>
   <div class="group">
     <Header></Header>
-    <div class="create">
+    <div id="main">
+      <div class="create">
       <el-button @click="createGroup" icon="el-icon-s-flag">创建小组</el-button>
     </div>
   <div class="leaderboard">
@@ -95,7 +96,7 @@
         <div class="container">
         <div class="col" v-for="column in columns" :key="column">
           <div class="item-container" v-for="item in column" :key="item.id">
-              <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+              <el-avatar :src="item.img"></el-avatar>
               <span @click="toGroupInner(item.id)">{{item.groupName}}</span></div>
         </div></div>
     </el-row>
@@ -103,6 +104,7 @@
       <div class="noGroups"><span>目前无加入任何小组，马上去加入一个小组吧！</span></div>
     </el-row>
   </div>
+    </div>
     <Footer id="footer"></Footer>
   </div>
 </template>
@@ -125,6 +127,11 @@ export default {
       this.userId = userInfo.user.id;
     }
     this.getGroup();
+    this.mainMinHeight =
+      document.documentElement.clientHeight -
+      $("#header").outerHeight(true) -
+      $("#footer").outerHeight(true) -
+      6;
   },
   computed: {
     columns () {
@@ -207,7 +214,7 @@ export default {
       .catch((error) => {
         console.log(error);
       });
-    }
+    },
   },
   data() {
         return {
@@ -237,6 +244,7 @@ export default {
         //   gName:'皮卡一家亲',
         // }],
         groupData: [],
+        mainMinHeight: "",
         }
       },
 }
@@ -310,10 +318,6 @@ export default {
   height: 2px;
   width: 140px;
   margin-left: 20px;
-}
-#footer{
-  position: relative;
-  height: 88px;
 }
 .leaderboard .el-row {
   margin-left: 40px;
@@ -390,6 +394,14 @@ export default {
   flex-grow: 1;
   display: flex;
   flex-direction: row;
+}
+#main {
+  margin: auto;
+  padding: 30px 0;
+  box-sizing: border-box;
+}
+#footer {
+  bottom: 0;
 }
 </style>
 

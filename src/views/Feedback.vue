@@ -1,7 +1,8 @@
 <template>
   <div class="feedback">
-      <Header></Header>
-      <div class="name">
+      <Header id="header"></Header>
+      <div id="main" :style="{ 'min-height': mainMinHeight + 'px' }">
+        <div class="name">
           <span id="namespan">反馈者姓名     :</span>
           <span id='name'>{{ form.feedbacker }}</span>
       </div>
@@ -25,7 +26,8 @@
           </div>
           <button @click='Submit'>提交</button>
       </div>
-      <Footer></Footer>
+      </div>
+      <Footer id="footer"></Footer>
   </div>
 </template>
 
@@ -46,12 +48,18 @@ export default {
                 category:0,
                 title:'',
                 description:'',
-            }
+            },
+            mainMinHeight: "",
         }
     },
     created() {
         const userInfo = user.getters.getUser(user.state());
         this.form.feedbacker = userInfo.user.username;
+    this.mainMinHeight =
+      document.documentElement.clientHeight -
+      $("#header").outerHeight(true) -
+      $("#footer").outerHeight(true) -
+      6;
     },
     methods: {
         Submit() {
@@ -95,7 +103,7 @@ export default {
         .catch(err => {
             this.$message.warning("反馈失败")
          })     
-        }
+        },
     },
 
 }
@@ -141,7 +149,7 @@ export default {
     margin: 20px auto auto 100px;
     padding-top: 12px;
     width: 1300px;
-    height: 480px;
+    height: 420px;
     box-shadow: 0px 4px 5px rgba(0, 9, 236, 0.25);
 }
 .content span{
@@ -172,9 +180,9 @@ export default {
     display: block;
     float: right;
     margin-right: 20px;
-    margin-top: 270px;
-    width: 165px;
-    height: 50px;
+    margin-top: 210px;
+    width: 150px;
+    height: 45px;
     border: none;
     border-radius: 10px;
     background-color: #456268;
@@ -191,7 +199,7 @@ export default {
 }
 #content{
     display: inline-block;
-    height: 280px;
+    height: 210px;
     border: none;
     resize: none;
     position: absolute;
@@ -202,5 +210,13 @@ export default {
     width: 1130px;
     padding-left: 5px;
     padding-top: 5px;
+}
+#main {
+  margin: auto;
+  padding: 30px 0;
+  box-sizing: border-box;
+}
+#footer {
+  bottom: 0;
 }
 </style>

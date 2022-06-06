@@ -1,15 +1,14 @@
 <template>
   <div class="all">
-    <Header></Header>
-    <div class="main">
+    <Header id="header"></Header>
+    <div id="main" :style="{ 'min-height': mainMinHeight + 'px' }">
       <div class="page-title">
         <img src="@/assets/Feed.svg" alt="feed icon" />
         <span>话题广场</span>
       </div>
       <el-row class="tag-box">
-        
         <span v-for="item in tags" :key="item.id" @click="enterTag(item.id)">
-        #{{ item.title }}#
+          #{{ item.title }}#
         </span>
       </el-row>
 
@@ -61,6 +60,7 @@ export default {
       dataList: "",
       feeds: [],
       tags: [],
+      mainMinHeight: "",
     };
   },
   mounted() {
@@ -71,6 +71,11 @@ export default {
     }
     this.getTag();
     this.getFeed();
+    this.mainMinHeight =
+      document.documentElement.clientHeight -
+      $("#header").outerHeight(true) -
+      $("#footer").outerHeight(true) -
+      6;
   },
   computed: {
     notGroupFeeds() {
@@ -178,13 +183,15 @@ export default {
       this.$axios({
         method: "get",
         url: "/api/v1/tag/list",
-      }).then((res) => {
-        console.log(res);
-        this.tags = res.data.results;
-        console.log(this.tags);
-      }).then((err) =>{
-        console.log(err);
-      });
+      })
+        .then((res) => {
+          console.log(res);
+          this.tags = res.data.results;
+          console.log(this.tags);
+        })
+        .then((err) => {
+          console.log(err);
+        });
     },
     getFeed() {
       var header = {};
@@ -286,7 +293,7 @@ export default {
   color: #79a3b1;
   cursor: pointer;
 }
-.tag-box span{
+.tag-box span {
   display: inline-block;
   width: 33%;
   margin: 5px 0;
@@ -312,9 +319,14 @@ export default {
   color: #456268;
 }
 
-.main {
+#main {
   width: 1200px;
-  margin: 30px auto;
+  margin: auto;
+  padding: 30px 0;
+  box-sizing: border-box;
+}
+#footer {
+  bottom: 0;
 }
 .all {
   height: 100vh;
@@ -322,9 +334,5 @@ export default {
 }
 button {
   font-family: "Microsoft JhengHei", 微软正黑体, "Microsoft YaHei", 微软雅黑;
-}
-#footer {
-  position: relative;
-  height: 88px;
 }
 </style>

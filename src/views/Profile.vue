@@ -1,7 +1,8 @@
 <template>
   <div class="Profile">
-    <Header :initialUsername="form.name"/>
-    <el-row type="flex" justify="center">
+    <Header id="header" :initialUsername="form.name"/>
+    <div id="main" :style="{ 'min-height': mainMinHeight + 'px' }">
+      <el-row type="flex" justify="center">
       <el-col :span="20"
         ><div class="profile-box">
           <el-row>
@@ -173,6 +174,7 @@
         ></FeedBox>
       </el-col>
     </el-row>
+    </div>
     <Footer id="footer" />
     <el-backtop target=".Profile">
       <i class="el-icon-arrow-up" style="color: #456268"></i>
@@ -220,6 +222,7 @@ export default {
       changeVisible: false,
       formLabelWidth: "120px",
       feeds: [],
+      mainMinHeight: "",
     };
   },
   created() {
@@ -230,6 +233,11 @@ export default {
     }
     this.getProfile();
     this.getFeed();
+    this.mainMinHeight =
+      document.documentElement.clientHeight -
+      $("#header").outerHeight(true) -
+      $("#footer").outerHeight(true) -
+      6;
   },
   methods: {
     profileReload() {
@@ -462,9 +470,14 @@ export default {
   height: 100vh;
   overflow-x: hidden;
 }
+#main {
+  width: 1400px;
+  margin: auto;
+  padding: 30px 0;
+  box-sizing: border-box;
+}
 #footer {
-  position: relative;
-  height: 88px;
+  bottom: 0;
 }
 </style>
 

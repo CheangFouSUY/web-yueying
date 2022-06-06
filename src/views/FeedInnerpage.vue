@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Header></Header>
-    <div class="main">
+    <Header id="header"></Header>
+    <div id="main" :style="{ 'min-height': mainMinHeight + 'px' }">
       <FeedBox
       v-if="id"
         :initialFeedId="id"
@@ -30,10 +30,16 @@ export default {
   data() {
     return {
       id: "",
+      mainMinHeight: "",
     };
   },
   mounted() {
     this.id = this.$route.params.id;
+    this.mainMinHeight =
+      document.documentElement.clientHeight -
+      $("#header").outerHeight(true) -
+      $("#footer").outerHeight(true) -
+      6;
   },
   method: {
     getFeed() {
@@ -47,12 +53,13 @@ export default {
 </script>
 
 <style scoped>
-.main {
+#main {
   width: 1200px;
-  margin: 30px auto;
+  margin: auto;
+  padding: 30px 0;
+  box-sizing: border-box;
 }
 #footer {
-  position: relative;
-  height: 88px;
+  bottom: 0;
 }
 </style>

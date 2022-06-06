@@ -1,7 +1,8 @@
 <template>
   <div class="report">
-    <Header></Header>
-    <div class="name">
+    <Header id="header"></Header>
+    <div id="main" :style="{ 'min-height': mainMinHeight + 'px' }">
+        <div class="name">
       <el-row>
         <span id="namespan">举报者姓名&nbsp;:</span>
         <span id="name">{{ Report.reporter }}</span>
@@ -41,7 +42,8 @@
       </div>
       <button @click="Submit()">提交</button>
     </div>
-    <Footer></Footer>
+    </div>
+    <Footer id="footer"></Footer>
   </div>
 </template>
 
@@ -63,6 +65,11 @@ export default {
       this.Report.reporter = userInfo.user.username;
     }
     this.getDetail();
+    this.mainMinHeight =
+      document.documentElement.clientHeight -
+      $("#header").outerHeight(true) -
+      $("#footer").outerHeight(true) -
+      6;
   },
   methods: {
     Submit() {
@@ -179,6 +186,7 @@ export default {
         reviewId: "",
         feedId: "",
       },
+      mainMinHeight: "",
     };
   },
 };
@@ -234,7 +242,7 @@ export default {
   margin: 20px auto auto 100px;
   padding-top: 12px;
   width: 1300px;
-  height: 430px;
+  height: 400px;
   box-shadow: 0px 4px 5px rgba(0, 9, 236, 0.25);
 }
 .content span {
@@ -267,9 +275,9 @@ export default {
   display: block;
   float: right;
   margin-right: 20px;
-  margin-top: 225px;
-  width: 165px;
-  height: 50px;
+  margin-top: 200px;
+  width: 150px;
+  height: 45px;
   border: none;
   border-radius: 10px;
   background-color: #456268;
@@ -286,7 +294,7 @@ export default {
 }
 #content {
   display: inline-block;
-  height: 240px;
+  height: 200px;
   border: none;
   resize: none;
   position: absolute;
@@ -297,5 +305,13 @@ export default {
   width: 1130px;
   padding-left: 5px;
   padding-top: 5px;
+}
+#main {
+  margin: auto;
+  padding: 10px 0;
+  box-sizing: border-box;
+}
+#footer {
+  bottom: 0;
 }
 </style>

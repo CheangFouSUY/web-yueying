@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Header></Header>
-    <div class="main">
+    <Header id="header"></Header>
+    <div id="main" :style="{ 'min-height': mainMinHeight + 'px' }">
       <div class="page-title">
         <img src="@/assets/Book.svg" alt="book icon" />
         <span>图书</span>
@@ -77,6 +77,12 @@ export default {
   },
   mounted() {
     this.getAllBook();
+    this.setFooter();
+    this.mainMinHeight =
+      document.documentElement.clientHeight -
+      $("#header").outerHeight(true) -
+      $("#footer").outerHeight(true) -
+      6;
   },
   methods: {
     goFilter(id) {
@@ -157,6 +163,7 @@ export default {
       newBook: [],
       romanceBook: [],
       suspenseBook: [],
+      mainMinHeight: "",
     };
   },
 };
@@ -205,12 +212,13 @@ export default {
   color: #456268;
 }
 
-.main {
-  margin: 30px auto;
+#main {
   width: 1400px;
+  margin: auto;
+  padding: 30px 0;
+  box-sizing: border-box;
 }
 #footer {
-  position: relative;
-  height: 88px;
+  bottom: 0;
 }
 </style>

@@ -1,233 +1,243 @@
 <template>
   <div>
-    <Header></Header>
-    <div class="book-wrap">
-      <el-row :gutter="30">
-        <el-col :span="6">
-          <el-image class="poster" :src="src"></el-image>
-        </el-col>
-        <el-col :span="14">
-          <el-row id="book-title">{{ title }}</el-row>
-          <el-row class="book-detail">
-            <div class="book-detail-prop">作者</div>
-            <div class="symbol">：</div>
-            {{ author }}
-          </el-row>
-          <el-row class="book-detail">
-            <div class="book-detail-prop">类型</div>
-            <div class="symbol">：</div>
-            {{ category }}
-          </el-row>
-          <el-row class="book-detail">
-            <div class="book-detail-prop">年份</div>
-            <div class="symbol">：</div>
-            {{ year }}
-          </el-row>
-          <el-row class="book-detail">
-            <div class="book-detail-prop">出版社</div>
-            <div class="symbol">：</div>
-            {{ publish }}
-          </el-row>
-        </el-col>
-        <el-col :span="4">
-          <img
-            v-if="isBookmark === false"
-            class="bookmark"
-            @click="bookmark()"
-            src="@/assets/Bookmark.svg"
-            alt="bookmark"
-          />
-          <img
-            v-else
-            class="bookmark"
-            @click="bookmark()"
-            src="@/assets/Bookmark_fill.svg"
-            alt="bookmark"
-          />
-          <el-row class="rate-box" type="flex" justify="center">
-            <el-col id="rating" :span="10">{{ rating }}</el-col>
-            <el-col :span="8" :offset="0">
-              <img class="rating-icon" src="@/assets/Star_fill.svg" alt="" />
+    <Header id="header"></Header>
+    <div id="main" :style="{ 'min-height': mainMinHeight + 'px' }">
+      <div class="book-wrap">
+        <el-row :gutter="30">
+          <el-col :span="6">
+            <el-image class="poster" :src="src"></el-image>
+          </el-col>
+          <el-col :span="14">
+            <el-row id="book-title">{{ title }}</el-row>
+            <el-row class="book-detail">
+              <div class="book-detail-prop">作者</div>
+              <div class="symbol">：</div>
+              {{ author }}
+            </el-row>
+            <el-row class="book-detail">
+              <div class="book-detail-prop">类型</div>
+              <div class="symbol">：</div>
+              {{ category }}
+            </el-row>
+            <el-row class="book-detail">
+              <div class="book-detail-prop">年份</div>
+              <div class="symbol">：</div>
+              {{ year }}
+            </el-row>
+            <el-row class="book-detail">
+              <div class="book-detail-prop">出版社</div>
+              <div class="symbol">：</div>
+              {{ publish }}
+            </el-row>
+          </el-col>
+          <el-col :span="4">
+            <img
+              v-if="isBookmark === false"
+              class="bookmark"
+              @click="bookmark()"
+              src="@/assets/Bookmark.svg"
+              alt="bookmark"
+            />
+            <img
+              v-else
+              class="bookmark"
+              @click="bookmark()"
+              src="@/assets/Bookmark_fill.svg"
+              alt="bookmark"
+            />
+            <el-row class="rate-box" type="flex" justify="center">
+              <el-col id="rating" :span="10">{{ rating }}</el-col>
+              <el-col :span="8" :offset="0">
+                <img class="rating-icon" src="@/assets/Star_fill.svg" alt="" />
+              </el-col>
+            </el-row>
+            <el-rate
+              v-model="rateValue"
+              @change="selectRate(rateValue)"
+              :colors="rateColors"
+            ></el-rate>
+          </el-col>
+          <el-row :gutter="30" class="book-detail">
+            <el-col :span="17">
+              <div class="book-detail-prop">简介</div>
+              <div class="symbol">：</div>
+              <span>&nbsp;</span>
+              <span
+                style="word-wrap: break-word"
+                v-html="contentCalc(description)"
+              ></span>
             </el-col>
           </el-row>
-          <el-rate
-            v-model="rateValue"
-            @change="selectRate(rateValue)"
-            :colors="rateColors"
-          ></el-rate>
-        </el-col>
-        <el-row :gutter="30" class="book-detail">
-          <el-col :span="17">
-            <div class="book-detail-prop">简介</div>
-            <div class="symbol">：</div>
-            <span>&nbsp;</span>
-            <span
-              style="word-wrap: break-word"
-              v-html="contentCalc(description)"
-            ></span>
-          </el-col>
         </el-row>
-      </el-row>
-      <el-row class="like-comment-wrap">
-        <img
-          v-if="response === 'L'"
-          @click="like()"
-          src="@/assets/Love_fill.svg"
-          alt="love"
-        />
-        <img v-else @click="like()" src="@/assets/Love.svg" alt="love" />
-        <span class="like-count">{{ likeCount }}</span>
-        <img src="@/assets/Comment.svg" alt="comment" />
-        <span class="comment-count">{{ commentCount }}</span>
-      </el-row>
-    </div>
-    <div class="comment-wrap">
-      <el-row class="comment-header">书评</el-row>
-      <el-divider></el-divider>
-      <el-row v-if="islogin" class="publish-box">
-        <el-row :gutter="70">
-          <el-col :span="1">
-            <el-avatar
-              v-if="userAvatar"
-              :size="50"
-              :src="userAvatar"
-            ></el-avatar>
-            <el-avatar v-else :size="50" icon="el-icon-user-solid"></el-avatar>
-          </el-col>
-          <el-col :span="22">
-            <el-row class="comment-publisher">{{ user }}</el-row>
-            <el-row class="publish-write">
-              <form>
-                <input
-                  v-model="userComment.title"
-                  type="text"
-                  placeholder="书评标题："
-                />
-                <div class="comment-autosize-wrapper">
-                  <pre
-                    class="comment-autosize"
-                  ><br>{{ userComment.content }}</pre>
-                  <textarea
-                    v-model="userComment.content"
-                    placeholder="书评内容："
-                  ></textarea>
-                </div>
-                <span class="showFileName"></span>
-                <i
-                  v-if="userComment.img"
-                  class="el-icon-delete"
-                  @click="deleteImg()"
-                  style="cursor: pointer"
-                ></i>
-                <input
-                  id="imgUpload"
-                  type="file"
-                  accept="image/png,image/gif,image/jpeg"
-                  @change="getImg($event)"
-                />
-                <el-row class="publish-action" :span="20">
-                  <i
-                    class="el-icon-picture-outline-round"
-                    onclick="$('input[id=imgUpload]').click();"
-                  ></i>
-                  <i
-                    id="imgIcon"
-                    class="el-icon-position"
-                    @click="submitReview($event)"
-                  ></i>
-                </el-row>
-              </form>
-            </el-row>
-          </el-col>
+        <el-row class="like-comment-wrap">
+          <img
+            v-if="response === 'L'"
+            @click="like()"
+            src="@/assets/Love_fill.svg"
+            alt="love"
+          />
+          <img v-else @click="like()" src="@/assets/Love.svg" alt="love" />
+          <span class="like-count">{{ likeCount }}</span>
+          <img src="@/assets/Comment.svg" alt="comment" />
+          <span class="comment-count">{{ commentCount }}</span>
         </el-row>
-      </el-row>
-      <el-row class="comment-box" v-for="item in comments" :key="item.id">
+      </div>
+      <div class="comment-wrap">
+        <el-row class="comment-header">书评</el-row>
         <el-divider></el-divider>
-        <el-row :gutter="70">
-          <el-col :span="1">
-            <el-avatar
-              v-if="item.publisherAvatar"
-              :size="50"
-              :src="item.publisherAvatar"
-            ></el-avatar>
-            <el-avatar v-else :size="50" icon="el-icon-user-solid"></el-avatar>
-          </el-col>
-          <el-col :span="22">
-            <el-row v-if="status" class="comment-publisher">
-              <span
-                @click="enterProfile(item.createdBy)"
-                style="cursor: pointer"
-              >
-                {{ item.publisherName }}
-              </span>
-            </el-row>
-            <el-row v-if="status" class="comment-time">
-              <i class="el-icon-time"></i>
-              {{ dateStr(item.time) }}
-            </el-row>
-            <el-row class="comment-title">{{ item.title }}</el-row>
-            <el-row
-              class="comment-content"
-              v-html="contentCalc(item.description)"
-            ></el-row>
-            <el-image
-              v-if="item.img"
-              class="comment-image"
-              :src="item.img"
-            ></el-image>
-          </el-col>
-        </el-row>
-        <el-row class="comment-action">
-          <el-col :span="3" :offset="5">
-            <el-row type="flex" justify="center">
-              <img
-                v-if="item.response === 'L'"
-                @click="commentResponse(item, 'O')"
-                src="@/assets/Happy_fill.svg"
-                alt="happy icon"
-              />
-              <img
+        <el-row v-if="islogin" class="publish-box">
+          <el-row :gutter="70">
+            <el-col :span="1">
+              <el-avatar
+                v-if="userAvatar"
+                :size="50"
+                :src="userAvatar"
+              ></el-avatar>
+              <el-avatar
                 v-else
-                @click="commentResponse(item, 'L')"
-                src="@/assets/Happy.svg"
-                alt="happy icon"
-              />
-            </el-row>
-            <el-row class="comment-like-count" type="flex" justify="center">{{
-              item.likes
-            }}</el-row>
-          </el-col>
-          <el-col :span="3" :offset="1">
-            <el-row type="flex" justify="center">
-              <img
-                v-if="item.response === 'D'"
-                @click="commentResponse(item, 'O')"
-                src="@/assets/Sad_fill.svg"
-                alt="sad icon"
-              />
-              <img
-                v-else
-                @click="commentResponse(item, 'D')"
-                src="@/assets/Sad.svg"
-                alt="sad icon"
-              />
-            </el-row>
-            <el-row class="comment-like-count" type="flex" justify="center">{{
-              item.dislikes
-            }}</el-row>
-          </el-col>
-          <el-col :span="3" :offset="1">
-            <el-row type="flex" justify="center">
-              <img
-                id="report"
-                @click="report('r&' + item.id)"
-                src="@/assets/Report.svg"
-                alt="report icon"
-              />
-            </el-row>
-          </el-col>
+                :size="50"
+                icon="el-icon-user-solid"
+              ></el-avatar>
+            </el-col>
+            <el-col :span="22">
+              <el-row class="comment-publisher">{{ user }}</el-row>
+              <el-row class="publish-write">
+                <form>
+                  <input
+                    v-model="userComment.title"
+                    type="text"
+                    placeholder="书评标题："
+                  />
+                  <div class="comment-autosize-wrapper">
+                    <pre
+                      class="comment-autosize"
+                    ><br>{{ userComment.content }}</pre>
+                    <textarea
+                      v-model="userComment.content"
+                      placeholder="书评内容："
+                    ></textarea>
+                  </div>
+                  <span class="showFileName"></span>
+                  <i
+                    v-if="userComment.img"
+                    class="el-icon-delete"
+                    @click="deleteImg()"
+                    style="cursor: pointer"
+                  ></i>
+                  <input
+                    id="imgUpload"
+                    type="file"
+                    accept="image/png,image/gif,image/jpeg"
+                    @change="getImg($event)"
+                  />
+                  <el-row class="publish-action" :span="20">
+                    <i
+                      class="el-icon-picture-outline-round"
+                      onclick="$('input[id=imgUpload]').click();"
+                    ></i>
+                    <i
+                      id="imgIcon"
+                      class="el-icon-position"
+                      @click="submitReview($event)"
+                    ></i>
+                  </el-row>
+                </form>
+              </el-row>
+            </el-col>
+          </el-row>
         </el-row>
-      </el-row>
+        <el-row class="comment-box" v-for="item in comments" :key="item.id">
+          <el-divider></el-divider>
+          <el-row :gutter="70">
+            <el-col :span="1">
+              <el-avatar
+                v-if="item.publisherAvatar"
+                :size="50"
+                :src="item.publisherAvatar"
+              ></el-avatar>
+              <el-avatar
+                v-else
+                :size="50"
+                icon="el-icon-user-solid"
+              ></el-avatar>
+            </el-col>
+            <el-col :span="22">
+              <el-row v-if="status" class="comment-publisher">
+                <span
+                  @click="enterProfile(item.createdBy)"
+                  style="cursor: pointer"
+                >
+                  {{ item.publisherName }}
+                </span>
+              </el-row>
+              <el-row v-if="status" class="comment-time">
+                <i class="el-icon-time"></i>
+                {{ dateStr(item.time) }}
+              </el-row>
+              <el-row class="comment-title">{{ item.title }}</el-row>
+              <el-row
+                class="comment-content"
+                v-html="contentCalc(item.description)"
+              ></el-row>
+              <el-image
+                v-if="item.img"
+                class="comment-image"
+                :src="item.img"
+              ></el-image>
+            </el-col>
+          </el-row>
+          <el-row class="comment-action">
+            <el-col :span="3" :offset="5">
+              <el-row type="flex" justify="center">
+                <img
+                  v-if="item.response === 'L'"
+                  @click="commentResponse(item, 'O')"
+                  src="@/assets/Happy_fill.svg"
+                  alt="happy icon"
+                />
+                <img
+                  v-else
+                  @click="commentResponse(item, 'L')"
+                  src="@/assets/Happy.svg"
+                  alt="happy icon"
+                />
+              </el-row>
+              <el-row class="comment-like-count" type="flex" justify="center">{{
+                item.likes
+              }}</el-row>
+            </el-col>
+            <el-col :span="3" :offset="1">
+              <el-row type="flex" justify="center">
+                <img
+                  v-if="item.response === 'D'"
+                  @click="commentResponse(item, 'O')"
+                  src="@/assets/Sad_fill.svg"
+                  alt="sad icon"
+                />
+                <img
+                  v-else
+                  @click="commentResponse(item, 'D')"
+                  src="@/assets/Sad.svg"
+                  alt="sad icon"
+                />
+              </el-row>
+              <el-row class="comment-like-count" type="flex" justify="center">{{
+                item.dislikes
+              }}</el-row>
+            </el-col>
+            <el-col :span="3" :offset="1">
+              <el-row type="flex" justify="center">
+                <img
+                  id="report"
+                  @click="report('r&' + item.id)"
+                  src="@/assets/Report.svg"
+                  alt="report icon"
+                />
+              </el-row>
+            </el-col>
+          </el-row>
+        </el-row>
+      </div>
     </div>
     <Footer id="footer"></Footer>
   </div>
@@ -333,6 +343,7 @@ export default {
         "哲学",
         "文学",
       ],
+      mainMinHeight: "",
     };
   },
   mounted() {
@@ -342,6 +353,11 @@ export default {
       this.userId = userInfo.user.id;
     }
     this.getAll();
+    this.mainMinHeight =
+      document.documentElement.clientHeight -
+      $("#header").outerHeight(true) -
+      $("#footer").outerHeight(true) -
+      6;
   },
   methods: {
     async commentResponse(item, r) {
@@ -968,8 +984,13 @@ export default {
 #report:hover {
   cursor: pointer;
 }
+#main {
+  width: 1400px;
+  margin: auto;
+  padding: 30px 0;
+  box-sizing: border-box;
+}
 #footer {
-  position: relative;
-  height: 88px;
+  bottom: 0;
 }
 </style>

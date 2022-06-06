@@ -1,7 +1,7 @@
 <template>
   <div class="groupInner">
-    <Header></Header>
-    <el-row>
+    <Header id="header"></Header>
+    <el-row id="main" :style="{ 'min-height': mainMinHeight + 'px' }">
       <el-col :span="20">
         <div class="groupInfo">
           <el-row>
@@ -370,6 +370,11 @@ export default {
   mounted() {
     this.getGroupInfo();
     this.getFeed();
+    this.mainMinHeight =
+      document.documentElement.clientHeight -
+      $("#header").outerHeight(true) -
+      $("#footer").outerHeight(true) -
+      6;
   },
   created() {
     const userInfo = user.getters.getUser(user.state());
@@ -882,7 +887,28 @@ export default {
     },
     toProfile(userid) {
       this.$router.push({ path: `/profile/${userid}` });
-    }
+    },
+    setFooter() {
+      console.log(
+        ">>",
+        $("#header").outerHeight(),
+        $("#main").outerHeight(),
+        $("#footer").outerHeight(),
+        document.body.clientHeight
+      );
+      if (
+        $("#header").outerHeight() + $("#main").outerHeight() + $("#footer").outerHeight() <=
+        document.body.clientHeight
+      ) {
+        $("#footer").css({
+          position: "absolute",
+        });
+      } else {
+        $("#footer").css({
+          position: "static",
+        });
+      }
+    },
   },
   computed: {
     featuredFeeds() {
@@ -936,6 +962,7 @@ export default {
       allColor: "#79A3B1",
       featureColor: "#456268",
       feeds: [],
+      mainMinHeight: "",
     };
   },
 };
@@ -1174,11 +1201,15 @@ export default {
   height: 100vh;
   overflow-x: hidden;
 }
-
-#footer {
-  position: relative;
-  height: 88px;
+#main {
+  margin: auto;
+  padding: 30px 0;
+  box-sizing: border-box;
 }
+#footer {
+  bottom: 0;
+}
+
 </style>
 
 <style>

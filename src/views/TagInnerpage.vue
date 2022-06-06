@@ -1,7 +1,7 @@
 <template>
   <div class="all">
-    <Header></Header>
-    <div class="main">
+    <Header id="header"></Header>
+    <div id="main" :style="{ 'min-height': mainMinHeight + 'px' }">
       <el-row>
         <span class="tag-title">#{{ tagTitle }}#</span>
         <el-row class="action">
@@ -106,6 +106,7 @@ export default {
       },
       dataList: "",
       feeds: [],
+      mainMinHeight: "",
     };
   },
   mounted() {
@@ -116,6 +117,11 @@ export default {
     }
     this.getTag();
     this.getFeed();
+    this.mainMinHeight =
+      document.documentElement.clientHeight -
+      $("#header").outerHeight(true) -
+      $("#footer").outerHeight(true) -
+      6;
   },
   computed: {
     notGroupFeeds() {
@@ -454,9 +460,11 @@ export default {
   bottom: 2px;
   margin: auto 15px;
 }
-.main {
+#main {
   width: 1200px;
-  margin: 30px auto;
+  margin: auto;
+  padding: 30px 0;
+  box-sizing: border-box;
 }
 .all {
   height: 100vh;
@@ -466,7 +474,6 @@ button {
   font-family: "Microsoft JhengHei", 微软正黑体, "Microsoft YaHei", 微软雅黑;
 }
 #footer {
-  position: relative;
-  height: 88px;
+  bottom: 0;
 }
 </style>

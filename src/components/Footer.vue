@@ -22,10 +22,11 @@ export default {
 
 <style scoped>
 .footer {
-    position: fixed;
-    left: 0;
-    bottom: 0;
+    /* position: fixed; */
+    /* left: 0; */
+    /* bottom: 0; */
     width: 100%;
+    height: 93px;
     background-color: #D0E8F2;
     color: #456268;
 }

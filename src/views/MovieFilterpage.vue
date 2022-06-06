@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Header></Header>
-    <div class="main">
+    <Header id="header"></Header>
+    <div id="main" :style="{ 'min-height': mainMinHeight + 'px' }">
       <div class="page-title">
         <img src="@/assets/Video.svg" alt="video icon" />
         <span>影视</span>
@@ -72,6 +72,11 @@ export default {
   },
   mounted() {
     this.getMovie();
+    this.mainMinHeight =
+      document.documentElement.clientHeight -
+      $("#header").outerHeight(true) -
+      $("#footer").outerHeight(true) -
+      6;
   },
   watch: {
     $route: {
@@ -159,6 +164,7 @@ export default {
         { id: "0", des: "其他", isActive: false },
       ],
       filterResult: [],
+      mainMinHeight: "",
     };
   },
 };
@@ -256,13 +262,13 @@ export default {
   margin-top: 20px;
 }
 
-.main {
-  margin: 30px auto;
+#main {
   width: 1400px;
-  /* outline: 1px black solid; */
+  margin: auto;
+  padding: 30px 0;
+  box-sizing: border-box;
 }
 #footer {
-  position: relative;
-  height: 88px;
+  bottom: 0;
 }
 </style>

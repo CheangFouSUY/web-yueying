@@ -1,7 +1,7 @@
 <template>
   <div class="creategroups">
-      <Header></Header>
-    <el-row type="flex" justify="center">
+      <Header id="header"></Header>
+    <el-row id="main" type="flex" justify="center" :style="{ 'min-height': mainMinHeight + 'px' }">
       <el-col :span="6"><div class="grid-content bg-yellow">
         <div class="profilePic">
         <el-upload
@@ -55,7 +55,7 @@
         <el-button id="createGroupButton" @click="createGroup">创建</el-button>
         </div></el-col>
     </el-row>
-      <Footer></Footer>
+      <Footer id="footer"></Footer>
   </div>
 </template>
 
@@ -79,7 +79,14 @@ export default {
         desc:'',
         imageFile:'',
       },
+      mainMinHeight:"",
     };
+  },
+  mounted(){
+    this.mainMinHeight =
+      document.documentElement.clientHeight -
+      $("#header").outerHeight(true) -
+      $("#footer").outerHeight(true) - 6;
   },
   methods: {
       handleChange(file, fileList) {
@@ -173,8 +180,9 @@ export default {
       let file = input.files
       file[0] = null;
       console.log(file);
-    }
     },
+    },
+    
 }
 </script>
 
@@ -225,7 +233,7 @@ export default {
   background-color: #FCF8EC;
 }
 .grid-content {
-  min-height: 520px;
+  min-height: 450px;
   padding-top: 50px;
 }
 .row-bg {
@@ -238,7 +246,7 @@ export default {
   height: 256px;
 }
 .inputBox {
-  height: 450px;
+  height: 380px;
 }
 .inputBox input{
   font-size: 20px;
@@ -264,7 +272,7 @@ export default {
 #createGroupButton{
   float: right;
   margin-right: 55px;
-  font-size: 24px;
+  font-size: 20px;
   width: 120px;
   background-color: #456268;
   color: #FCF8EC;
@@ -279,7 +287,7 @@ export default {
 }
 #gDesc{
   display: inline-block;
-  height: 300px;
+  height: 200px;
   width: 600px;
   resize: none;
   position: absolute;
@@ -297,6 +305,14 @@ export default {
 }
 #radiogroup{
   margin-left: 10px;
+}
+#main {
+  margin: auto;
+  padding: 30px 0;
+  box-sizing: border-box;
+}
+#footer {
+  bottom: 0;
 }
 </style>
 
