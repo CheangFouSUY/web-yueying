@@ -22,7 +22,8 @@
         :initialIsAdmin="false"
       ></FeedBox>
     </div>
-    <Footer id="footer"></Footer>
+     <Footer v-if="notGroupFeedsLen == 0 || notGroupFeedsLen == 1"></Footer>
+    <Footer v-else id="footer"></Footer>
     <el-backtop target=".all">
       <i class="el-icon-arrow-up" style="color: #456268"></i>
     </el-backtop>
@@ -52,6 +53,7 @@ export default {
       followColor: "#456268",
       formVisible: false,
       formLabelWidth: "120px",
+      notGroupFeedsLen: 0,
       form: {
         title: "",
         description: "",
@@ -206,6 +208,13 @@ export default {
         console.log(res);
         this.feeds = res.data.results;
         console.log(this.feeds);
+
+        for(let i = 0; i < this.feeds.length; i++) {
+          if(this.feeds[i].isPublic) {
+            this.notGroupFeedsLen += 1;
+            console.log("not Group Feeds + 1")
+          }
+        }
       });
     },
     getImg(event) {

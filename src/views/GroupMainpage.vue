@@ -222,27 +222,6 @@ export default {
           leaderboardDataB: [],
           leaderboardDataM: [],
           leaderboardDataO: [],
-        // groupData: [{
-        //   id:1,
-        //   gAvatar:<el-avatar icon="el-icon-user-solid"></el-avatar>,
-        //   gName:'皮卡一家亲',
-        // }, {
-        //   id:2,
-        //   gAvatar:<el-avatar icon="el-icon-user-solid"></el-avatar>,
-        //   gName:'皮卡两家亲',
-        // }, {
-        //   id:3,
-        //   gAvatar:<el-avatar icon="el-icon-user-solid"></el-avatar>,
-        //   gName:"WHAT?"
-        // }, {
-        //   id:4,
-        //   gAvatar:<el-avatar icon="el-icon-user-solid"></el-avatar>,
-        //   gName:'皮卡一家亲',
-        // }, {
-        //   id:5,
-        //   gAvatar:<el-avatar icon="el-icon-user-solid"></el-avatar>,
-        //   gName:'皮卡一家亲',
-        // }],
         groupData: [],
         mainMinHeight: "",
         }
