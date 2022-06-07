@@ -41,7 +41,7 @@
             <button id="goLogin" @click='Login'>已有帐号，立即登录</button>
             <div>
                 <span></span>
-                <button id="submit" @click="Submit">注册</button>
+                <button id="submit" @click="Submit" v-loading.fullscreen.lock="fullscreenLoading">注册</button>
             </div>
         </div>
     </div>
@@ -49,7 +49,6 @@
 
 <script>
 import Header from '@/components/Header.vue'
- import user from "@/store/user";
 
 export default {
     name:'Register',
@@ -65,7 +64,8 @@ export default {
                 password2:'',
                 securityQ:0,
                 securityQans:'',
-            }
+            },
+            fullscreenLoading: false,
 
         }
     },
@@ -83,6 +83,7 @@ export default {
                 this.$message.warning("名字字符数不超过10");
                 return;
             }
+            this.fullscreenLoading = true;
             const formData = new FormData();
             formData.append("email",this.form.email);
             formData.append("username", this.form.username);
@@ -102,6 +103,7 @@ export default {
             case 201:
                 // this.$message.success("注册成功，请到邮箱进行认证");
                 this.$router.push('/registersuccess');
+                this.fullscreenLoading = false;
                 this.$store.dispatch('saveUserInfo', {
                 user: {
                     "confirmed": false,

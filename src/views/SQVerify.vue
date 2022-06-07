@@ -36,7 +36,7 @@
         <span class='symbol'>|</span>
         <button @click='RegisterNow'>立即注册</button>
       </div>
-      <button id="submit" @click="Submit">确定设置</button>
+      <button id="submit" @click="Submit" v-loading.fullscreen.lock="fullscreenLoading">确定设置</button>
     </div>
   </div>
   </div>
@@ -59,6 +59,7 @@ export default {
       password1:'',
       password2:'',
       isCorrect: false,
+      fullscreenLoading: false,
     }
   },
   methods:{
@@ -76,7 +77,7 @@ export default {
         this.$message.warning("请填写所有空格");
         return;
       }
-
+      this.fullscreenLoading = true;
       const formData = new FormData();
       formData.append("username", this.username);
       formData.append("newpassword", this.password1);
@@ -91,6 +92,7 @@ export default {
       })
       .then(res =>{
         console.log(res);
+        this.fullscreenLoading = false;
         this.$message.success("设置成功！快用新密码登录吧~")
         this.$router.push({ path:'/login'})
       })
