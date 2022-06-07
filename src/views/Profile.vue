@@ -142,7 +142,7 @@
               </el-form>
               <div slot="footer" class="dialog-footer">
                 <el-button @click="cancelChanges">取消</el-button>
-                <el-button type="primary" @click="updateProfileInfo"
+                <el-button type="primary" @click="updateProfileInfo" v-loading.fullscreen.lock="fullscreenLoading"
                   >完成编辑</el-button
                 >
               </div>
@@ -205,6 +205,7 @@ export default {
     return {
       userId: "123456",
       isOwnProfile: false,
+      fullscreenLoading: false,
       form: {
         imageUrl: "",
         isEdit: false,
@@ -334,6 +335,7 @@ export default {
       this.form.dobTemp = this.form.dob;
     },
     async updateProfileInfo() {
+      this.fullscreenLoading = true;
       const formData = new FormData();
       formData.append("email", this.form.email);
       formData.append("username", this.form.nameTemp);
@@ -368,6 +370,7 @@ export default {
             this.form.sexWord = "其他";
           }
           this.changeVisible = false;
+          this.fullscreenLoading = false;
           setTimeout(function () {
             location.reload(true);
           }, 500);

@@ -54,7 +54,7 @@
               <el-button class="button-no" @click="formVisible = false"
                 >取 消</el-button
               >
-              <el-button class="button-yes" @click="postFeed()">发布</el-button>
+              <el-button class="button-yes" @click="postFeed()" v-loading.fullscreen.lock="fullscreenLoading">发布</el-button>
             </div>
           </el-dialog>
         </el-row>
@@ -92,6 +92,7 @@ export default {
   data() {
     return {
       islogin: false,
+      fullscreenLoading: false,
       count: 0,
       user: "栀子花开",
       id: "",
@@ -193,6 +194,7 @@ export default {
         });
         return;
       }
+      this.fullscreenLoading = true;
       let formData = new FormData();
       formData.append("title", this.form.title);
       formData.append("description", this.form.description);
@@ -212,6 +214,7 @@ export default {
         .then((res) => {
           console.log(res);
           this.formVisible = false;
+          this.fullscreenLoading = false;
           switch (res.status) {
             case 201:
               this.$notify({

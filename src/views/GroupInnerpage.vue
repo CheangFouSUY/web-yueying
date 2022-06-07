@@ -204,7 +204,7 @@
                   </el-form>
                   <div slot="footer" class="dialog-footer">
                     <el-button @click="formVisible = false">取消</el-button>
-                    <el-button type="primary" @click="postFeed()"
+                    <el-button type="primary" @click="postFeed()" v-loading.fullscreen.lock="fullscreenLoading"
                       >发布</el-button
                     >
                   </div>
@@ -576,6 +576,7 @@ export default {
         });
         return;
       }
+      this.fullscreenLoading = true;
       let formData = new FormData();
       formData.append("title", this.form.title);
       formData.append("description", this.form.description);
@@ -595,6 +596,7 @@ export default {
         .then((res) => {
           this.formVisible = false;
           console.log(res);
+          this.fullscreenLoading = false;
           switch (res.status) {
             case 201:
               this.$notify({
@@ -910,6 +912,7 @@ export default {
   data() {
     return {
       status: false,
+      fullscreenLoading: false,
       isGroupMember: false,
       isOwnerOrAdmin: false,
       isOwnerOrAdminTemp: false,
