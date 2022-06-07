@@ -2,8 +2,8 @@
   <div>
     <Header></Header>
     <el-carousel :interval="5000" height="540px">
-      <el-carousel-item v-for="item in carouselImg" :key="item">
-        <img class="poster" :src="item" alt="" />
+      <el-carousel-item v-for="item in carouselImg" :key="item.id">
+        <img class="poster" :src="item.src" alt="" @click="enterMovie(item.id)"/>
       </el-carousel-item>
     </el-carousel>
 
@@ -234,11 +234,11 @@ export default {
     return {
       status: false,
       carouselImg: [
-        require("../assets/poster/poster1.jpg"),
-        require("../assets/poster/poster2.jpg"),
-        require("../assets/poster/poster3.jpg"),
-        require("../assets/poster/poster4.jpg"),
-        require("../assets/poster/poster5.jpg"),
+        {id: "3af561db-bb49-49cd-b91c-67a932382bb9", src: require("../assets/poster/poster1.jpg")},
+        {id: "146b7554-148f-4f1e-baaf-7358202cac33", src: require("../assets/poster/poster2.jpg")},
+        {id: "b16ed87f-5071-4022-a58d-f61a4a466aa4", src: require("../assets/poster/poster3.jpg")},
+        {id: "a60925c2-d6da-41d9-8270-fc1ef944712d", src: require("../assets/poster/poster4.jpg")},
+        {id: "c6a4ca6a-2c40-46ce-874f-36dbebeb424b", src: require("../assets/poster/poster5.jpg")},
       ],
       activeName: "book",
       listColor: [
@@ -579,6 +579,7 @@ export default {
   background-color: black;
 }
 .el-carousel .poster {
+  cursor: pointer;
   height: 100%;
 }
 .el-col,

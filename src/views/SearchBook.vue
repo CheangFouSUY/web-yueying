@@ -15,7 +15,7 @@
             </el-row>
             <el-row class="result-wrap">
                 <div class="item-box" v-for="item in hotBook" :key="item.id">
-                  <el-image class="poster" :src="item.thumbnail" fit="cover" @click="goDetails(item.id)" ></el-image>
+                  <el-image class="poster" :src="item.thumbnail" fit="cover" @click="enterBook(item.id)" ></el-image>
                   <div class="title-wrap">
                     <span class="book-title" @click="enterBook(item.id)">
                       {{ item.title }}
