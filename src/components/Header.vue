@@ -48,14 +48,20 @@
       </span>
     </el-dialog>
 
-    <el-dialog title="收藏表" :visible.sync="bookmarkVisible" width="50%">
+    <el-dialog class="bookmark-dialog" title="收藏表" :visible.sync="bookmarkVisible" width="50%">
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="图书" name="book">
           <li v-for="item in bookmarkBookList" :key="item.id">
-            {{ item.name }}
+            <span class="bookmark-name" @click="enterBook(item.id)">{{ item.title }}</span>
+            <span class="bookmark-delete" @click="deleteBook(item.id, item.score)">取消收藏</span>
           </li>
         </el-tab-pane>
-        <el-tab-pane label="影视" name="movie">影视</el-tab-pane>
+        <el-tab-pane label="影视" name="movie">
+          <li v-for="item in bookmarkMovieList" :key="item.id">
+            <span class="bookmark-name" @click="enterMovie(item.id)">{{ item.title }}</span>
+            <span class="bookmark-delete" @click="deleteMovie(item.id, item.score)">取消收藏</span>
+          </li>
+        </el-tab-pane>
       </el-tabs>
     </el-dialog>
   </div>
@@ -94,10 +100,62 @@ export default {
         this.isLogin = true;
         this.userId = userInfo.user.id;
         this.getUser();
+        this.getBookmarkList();
       }
     }
   },
   methods: {
+    async deleteBook(bookid, score) {
+      var formData = new FormData();
+      formData.append("isSaved", false);
+      formData.append("bookId", bookid);
+      formData.append("rateScore", score);
+
+      var header = {};
+      if (localStorage.getItem("token"))
+        header = { Authorization: "Bearer " + localStorage.getItem("token") };
+
+      await this.$axios({
+        method: "put",
+        url: "/api/v1/book/react/" + bookid,
+        data: formData,
+        headers: header,
+      })
+        .then((res) => {
+          console.log(res);
+          this.bookmarkBookList = this.bookmarkBookList.filter(item => item.id != bookid);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    async deleteMovie(movieid, score) {
+      var formData = new FormData();
+      formData.append("isSaved", false);
+      formData.append("movieId", movieid);
+      formData.append("rateScore", score);
+
+      var header = {};
+      if (localStorage.getItem("token"))
+        header = { Authorization: "Bearer " + localStorage.getItem("token") };
+
+      await this.$axios({
+        method: "put",
+        url: "/api/v1/movie/react/" + movieid,
+        data: formData,
+        headers: header,
+      })
+        .then((res) => {
+          console.log(res);
+          this.bookmarkMovieList = this.bookmarkMovieList.filter(item => item.id != movieid);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    handleClick(tab, event) {
+      console.log(tab, event);
+    },
     handleCommand(command) {
         this.searchType = command;
         if(command == "all") this.searchName = "全部";
@@ -114,6 +172,26 @@ export default {
         this.userName = res.data.username;
         this.profileP = res.data.profile;
         this.status = true;
+      });
+    },
+    getBookmarkList() {
+      var header = {};
+      if (localStorage.getItem("token"))
+        header = { Authorization: "Bearer " + localStorage.getItem("token") };
+      
+      this.$axios({
+        method: "get",
+        url: "/api/v1/book/list?isSaved=True",
+        headers: header,
+      }).then((res) => {
+        this.bookmarkBookList = res.data.results;
+      });
+      this.$axios({
+        method: "get",
+        url: "/api/v1/movie/list?isSaved=True",
+        headers: header,
+      }).then((res) => {
+        this.bookmarkMovieList = res.data.results;
       });
     },
     search() {
@@ -146,6 +224,12 @@ export default {
     viewProfile() {
       this.$router.push({ path: `/profile/${this.userId}` });
     },
+    enterBook(bookid) {
+      this.$router.push({ path: `/book/detail/${bookid}` });
+    },
+    enterMovie(movieid) {
+      this.$router.push({ path: `/movie/detail/${movieid}` });
+    },
   },
 };
 </script>
@@ -158,6 +242,36 @@ export default {
 </style>
 
 <style scoped>
+.bookmark-delete {
+  float: right;
+  cursor: pointer;
+  color: red;
+}
+.bookmark-name:hover {
+  cursor: pointer;
+  color: #79a3b1;
+}
+.bookmark-name {
+  color: #456268;
+}
+.bookmark-dialog li{
+  list-style: none;
+  font-size: 16px;
+  line-height: 24px;
+}
+.bookmark-dialog ::v-deep .el-tabs__active-bar {
+  background-color: #79a3b1 !important;
+}
+.bookmark-dialog ::v-deep .el-tabs__item:hover {
+  color: #79a3b1 !important;
+}
+.bookmark-dialog ::v-deep .el-tabs__item.is-active {
+  color: #79a3b1 !important;
+}
+.bookmark-dialog ::v-deep .el-tabs__item {
+  color: #456268 !important;
+  font-size: 20px;
+}
 #headerLogo {
   width: 55px;
   float: left;

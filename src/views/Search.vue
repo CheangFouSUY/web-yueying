@@ -16,7 +16,7 @@
                 <div class="item-box" v-for="item in hotBook" :key="item.id">
                   <el-image class="poster" :src="item.thumbnail" fit="cover" @click="goDetails(item.id)" ></el-image>
                   <div class="title-wrap">
-                    <span class="book-title" @click="goDetails(item.id)">
+                    <span class="book-title" @click="enterBook(item.id)">
                       {{ item.title }}
                     </span>
                     <span class="rating">{{ item.rating }}</span>
@@ -32,7 +32,7 @@
                 <div class="item-box" v-for="item in hotMovie" :key="item.id">
                   <el-image class="poster" :src="item.thumbnail" fit="cover" @click="goDetails(item.id)" ></el-image>
                   <div class="title-wrap">
-                    <span class="book-title" @click="goDetails(item.id)">
+                    <span class="book-title" @click="enterMovie(item.id)">
                       {{ item.title }}
                     </span>
                     <span class="rating">{{ item.rating }}</span>
@@ -257,7 +257,12 @@ export default {
         array[index].rating = array[index].rating.toFixed(1);
       });
     },
-    
+    enterBook(id) {
+        this.$router.push({ path: `/book/detail/${id}` });
+    },
+    enterMovie(id) {
+        this.$router.push({ path: `/movie/detail/${id}` });
+    },
   },
   mounted() {
     this.searchItem = this.$route.query.name;

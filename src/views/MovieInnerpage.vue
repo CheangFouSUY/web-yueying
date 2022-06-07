@@ -362,6 +362,11 @@ export default {
       $("#footer").outerHeight(true) -
       6;
   },
+  watch: {
+    $route: {
+      handler: "movieReload",
+    },
+  },
   methods: {
     async commentResponse(item, r) {
       var formData = new FormData();
@@ -769,6 +774,9 @@ export default {
     report(id) {
       this.$router.push({ path: `/report/${id}` });
     },
+    movieReload() {
+      location.reload();
+    }
   },
 };
 </script>

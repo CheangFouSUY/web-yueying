@@ -359,6 +359,11 @@ export default {
       $("#footer").outerHeight(true) -
       6;
   },
+  watch: {
+    $route: {
+      handler: "bookReload",
+    },
+  },
   methods: {
     async commentResponse(item, r) {
       var formData = new FormData();
@@ -484,6 +489,7 @@ export default {
       var header = {};
       if (localStorage.getItem("token"))
         header = { Authorization: "Bearer " + localStorage.getItem("token") };
+      console.log(localStorage.getItem("token"));
       console.log(header);
 
       await this.$axios({
@@ -768,6 +774,9 @@ export default {
     report(id) {
       this.$router.push({ path: `/report/${id}` });
     },
+    bookReload() {
+      location.reload();
+    }
   },
 };
 </script>

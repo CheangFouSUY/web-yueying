@@ -3,7 +3,8 @@ const user = {
     /* 定义 user 数据对象和它的初始值 */
     state() {
         return {
-            user: null
+            user: null,
+            // token: "",
         }
     },
     /* 定义读取方法 getUser，从 localStorage 中读取 user 数据并转换成 JSON 格式 */
@@ -21,12 +22,13 @@ const user = {
         $_setStorage (state, value) {
             state.user = value
             localStorage.setItem(key, JSON.stringify(value))
+            // console.log("stateUser", state.user)
         },
         /* 清空数据，将状态恢复初始值，并从 localStorage 中移除对象 */
         $_removeStorage (state) {
             state.user = null
             localStorage.removeItem(key)
-        }
+        },
     },
     /* 定义调用 mutations 的方法，向上提供调用接口 */
     actions: {
@@ -37,7 +39,7 @@ const user = {
         /* 调用 _removeStorage 方法清空数据 */
         clearUserInfo({ commit }) {
             commit('$_removeStorage');
-        }
+        },
     }
 };
 

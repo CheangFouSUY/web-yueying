@@ -77,7 +77,6 @@ export default {
   },
   mounted() {
     this.getAllBook();
-    this.setFooter();
     this.mainMinHeight =
       document.documentElement.clientHeight -
       $("#header").outerHeight(true) -
