@@ -1,8 +1,8 @@
 <template>
   <div class="nav">
     <a href="/" id="logoName">
-      <img id="headerLogo" src="@/assets/LogoWhite.svg" />
-      阅·影
+      <img id="headerLogo" src="@/assets/logo.png" />
+      <!-- 阅·影 -->
     </a>
     <a href="/book" class="navLink">图书</a>
     <a href="/movie" class="navLink">影视</a>
@@ -273,10 +273,10 @@ export default {
   font-size: 20px;
 }
 #headerLogo {
-  width: 55px;
+  height: 50px;
   float: left;
-  margin-left: 30px;
-  margin-top: -4px;
+  margin-left: 25px;
+  margin-top: 0px;
 }
 #logoName {
   height: 45px;

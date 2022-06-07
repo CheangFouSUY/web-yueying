@@ -7,7 +7,7 @@
         <span>话题广场</span>
       </div>
       <el-row class="tag-box">
-        <span v-for="item in tags" :key="item.id" @click="enterTag(item.id)">
+        <span v-for="item in tags.slice(0, 9)" :key="item.id" @click="enterTag(item.id)">
           #{{ item.title }}#
         </span>
       </el-row>

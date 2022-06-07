@@ -3,8 +3,9 @@
         <Header/>
         <div class="info">
         <div id='logo'>
-        <img id="logoBook" src="@/assets/LogoBlue.svg">
-        <h1>阅·影</h1>
+            <img src="@/assets/logo.png" />
+        <!-- <img id="logoBook" src="@/assets/LogoBlue.svg"> -->
+        <!-- <h1>阅·影</h1> -->
         </div>
         <div class='inputBox'>
         <img class="icon" src="@/assets/Email.svg" alt="email_icon">
@@ -105,9 +106,12 @@ export default {
 ::placeholder{
     font-size: 18px;
 }
+.login #logo img{
+    width: 300px;
+}
 .login #logo{
     width: 350px;
-    margin: 0px auto 40px;
+    margin: 0 auto;
 }
 .login #logoBook{
     display: inline-block;
@@ -213,11 +217,12 @@ input::placeholder{
 .info{
     text-align: center;
     margin: auto;
-    width: 480px;
-    margin-top: 80px;
-    padding-top: 40px;
-    padding-bottom: 40px;
-    border-radius: 10px;
+    width: 600px;
+    margin: 50px auto;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    /* border-radius: 10px; */
+    /* background-color: rgba(121, 163, 177, 0.5); */
     box-shadow: 0px 3px 20px rgba(0, 0, 0, 0.25);
 }
 </style>
