@@ -631,7 +631,7 @@ export default {
             this.actor = r.actor;
             this.category = this.categoryList[r.category];
             this.area = this.areaList[r.area];
-            this.year = r.year.toString().subString(0,4);
+            this.year = r.year.toString().substring(0,4);
             this.description = r.description;
             this.src = r.thumbnail;
             this.rating = r.rating.toFixed(1);
