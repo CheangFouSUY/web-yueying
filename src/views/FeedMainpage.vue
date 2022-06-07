@@ -13,7 +13,7 @@
       </el-row>
 
       <FeedBox
-        v-for="item in notGroupFeeds"
+        v-for="item in notGroupFeeds.slice(0, 20)"
         :key="item.id"
         :initialFeedId="item.id"
         :initialIsInnerpage="false"
