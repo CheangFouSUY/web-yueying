@@ -58,6 +58,7 @@
                   </div>
                 </el-dialog>
                 <el-button id="manageGroup" v-if="isOwnerOrAdmin" @click="manageGroup">查看管理员申请</el-button>
+                <el-button id="disbandGroup" type="danger" v-if="isOwner" @click="disbandGroup">解散小组</el-button>
                 <el-button id="joinGroup" @click="join" v-if="!isGroupMember && isLogin"
                   >加入小组</el-button
                 >
@@ -852,6 +853,25 @@ export default {
     manageGroup() {
       this.$router.push({ path:'/managegroup/' + this.groupInfo.groupId})
 
+    },
+    disbandGroup() {
+      var header = {};
+      if (localStorage.getItem("token"))
+        header = { Authorization: "Bearer " + localStorage.getItem("token") };
+
+      this.$axios({
+        method:'delete',
+        url:'/api/v1/group/' + this.groupInfo.groupId,
+        headers: header,
+      })
+      .then(res =>{
+        console.log(res);
+        this.$message.success("解散小组成功！");
+        this.$router.push({ path:'/group'})
+      })
+      .catch(err =>{
+        console.log(err);
+      })
     },
     requestAdmin() {
       const formData = new FormData();

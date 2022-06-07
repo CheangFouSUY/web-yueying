@@ -41,7 +41,7 @@
           </div>
           <div>
              <span>小组类型</span>
-              <el-radio-group id="radiogroup" fill="#D0E8F2" v-model="form.type">
+              <el-radio-group id="radiogroup" fill="rgb(252, 219, 156)" v-model="form.type">
                 <el-radio-button id="radiogroupbutton" label="b">图书</el-radio-button>
                 <el-radio-button id="radiogroupbutton" label="m">影视</el-radio-button>
                 <el-radio-button id="radiogroupbutton" label="o">其他</el-radio-button>
@@ -52,7 +52,7 @@
             <textarea id="gDesc" v-model="form.desc" placeholder="输入小组简介(最多50字符)"></textarea>
           </div>
         </div>
-        <el-button id="createGroupButton" @click="createGroup">创建</el-button>
+        <el-button id="createGroupButton" @click="createGroup" v-loading.fullscreen.lock="fullscreenLoading">创建</el-button>
         </div></el-col>
     </el-row>
       <Footer id="footer"></Footer>
@@ -80,6 +80,7 @@ export default {
         imageFile:'',
       },
       mainMinHeight:"",
+      fullscreenLoading: false,
     };
   },
   mounted(){
@@ -118,6 +119,16 @@ export default {
         return (isTypeTrue && isLt2M);
       },
       createGroup() {
+        if(this.form.gName == '' || this.form.desc == '') {
+          this.$message.warning("小组名/小组简介不可为空！");
+          return;
+        }
+        if(this.form.gName.length > 10) {
+          this.$message.warning("小组名最多10个字符");
+          return;
+        }
+
+        this.fullscreenLoading = true;
         const formData = new FormData();
         // var imageFile = document.querySelector('#file');
         formData.append("groupName", this.form.gName);
@@ -145,6 +156,7 @@ export default {
                 message: '创建成功！',
                 type: 'success'
                 })
+              this.fullscreenLoading = false;
               this.$router.push({ path: `/group/${id}` });
               }
         })
@@ -158,9 +170,6 @@ export default {
         this.form.imageFile = event.target.files[0];
         console.log("Get IMG", this.form.imageFile);
     },
-    // selectImage () {
-    //   this.$refs.fileInput.click()
-    // },
     pickFile () {
       let input = this.$refs.fileInput
       let file = input.files
@@ -236,10 +245,6 @@ export default {
   min-height: 450px;
   padding-top: 50px;
 }
-.row-bg {
-  padding: 10px 0;
-  background-color: #f9fafc;
-}
 .profilePic{
   margin: auto;
   width: 256px;
@@ -251,8 +256,8 @@ export default {
 .inputBox input{
   font-size: 20px;
   border-radius: 10px;
-  /* background: rgba(121, 163, 177, 0.4); */
-  background-color: #D0E8F2;
+  /* background-color: #D0E8F2; */
+  background-color: rgb(252, 219, 156);
   margin-left: 35px;
   padding-left: 5px;
   padding-right: 5px;
@@ -292,8 +297,8 @@ export default {
   resize: none;
   position: absolute;
   border-radius: 10px;
-  /* background: rgba(121, 163, 177, 0.4); */
-  background-color: #D0E8F2;
+  /* background-color: #D0E8F2; */
+  background-color: rgb(252, 219, 156);
   font-size: 20px;
   margin-left: 10px;
   border: none;
@@ -327,30 +332,5 @@ export default {
   color:grey;
   background-color: whitesmoke;
 }
-/* .avatar-uploader .el-upload {
-  border: 1px dashed #d9d9d9;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-.avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 256px;
-  height: 256px;
-  line-height: 256px;
-  text-align: center;
-  background-color: white;
-}
-.avatar {
-  width: 256px;
-  height: 256px;
-  display: block;
-  cursor: pointer;
-}
-.avatar-uploader .el-upload:hover {
-  border-color: #409EFF;
-} */
 </style>
 
