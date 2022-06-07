@@ -629,7 +629,7 @@ export default {
             this.isbn = r.isbn;
             this.author = r.author;
             this.category = this.categoryList[r.category];
-            this.year = r.year;
+            this.year = r.year.toString().subString(0,4);
             this.publish = r.publisher;
             this.description = r.description;
             this.src = r.thumbnail;
