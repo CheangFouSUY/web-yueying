@@ -255,7 +255,8 @@ export default {
       })
         .then(res => {
           console.log(res);
-          location.reload();
+          if (this.initialIsInnerpage) this.$router.push("/feed");
+          else location.reload();
         })
         .catch(err => {
           console.log(err);
