@@ -219,7 +219,7 @@ export default {
             case 201:
               this.$notify({
                 showClose: true,
-                message: "已发表话题",
+                message: "已发表帖子",
                 type: "success",
                 position: "top-left",
               });
