@@ -287,7 +287,7 @@ export default {
           switch(error.response.data.message) {
             case "User already join the group":
                 this.$notify({
-                title: "用户已被小组禁止，无法加入",
+                title: "您已被该小组移除，请于7天后再申请加入小组。",
                 type: "warning",
                 position: "top-left",
               });
