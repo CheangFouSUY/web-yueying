@@ -1,188 +1,107 @@
 <template>
   <div class="groupInner">
     <Header id="header"></Header>
+
     <el-row id="main" :style="{ 'min-height': mainMinHeight + 'px' }">
       <el-col :span="20">
         <div class="groupInfo">
           <el-row>
-            <el-col :span="7" :offset="1"
-              ><div class="title">
+            <el-col :span="7" :offset="1">
+              <div class="title">
                 <span>{{ groupInfo.name }}</span>
-              </div></el-col
-            >
-            <el-col :span="15" :offset="1"
-              ><div class="buttonSlot">
-                <el-button
-                  id="changeName"
-                  @click="changeVisible = true"
-                  v-if="isOwnerOrAdmin"
-                  >更改小组信息</el-button
-                >
-                <el-dialog
-                  title="更改小组信息"
-                  :visible.sync="changeVisible"
-                  :close-on-click-modal="false"
-                  :show-close="false"
-                >
+              </div>
+            </el-col>
+            <el-col :span="15" :offset="1">
+              <div class="buttonSlot">
+                <el-button id="changeName" @click="changeVisible = true" v-if="isOwnerOrAdmin">更改小组信息</el-button>
+                <el-dialog title="更改小组信息" :visible.sync="changeVisible" :close-on-click-modal="false" :show-close="false">
                   <el-form label-position="top" :model="groupInfo">
-                    <el-form-item
-                      label="小组名字"
-                      :label-width="formLabelWidth"
-                    >
-                      <el-input
-                        v-model="groupInfo.nameTemp"
-                        autocomplete="off"
-                        maxlength="10"
-                        show-word-limit
-                      ></el-input>
+                    <el-form-item label="小组名字" :label-width="formLabelWidth">
+                      <el-input v-model="groupInfo.nameTemp" autocomplete="off" maxlength="10" show-word-limit></el-input>
                     </el-form-item>
-                    <el-form-item
-                      label="小组简介"
-                      :label-width="formLabelWidth"
-                    >
-                      <el-input
-                        type="textarea"
-                        autosize
-                        v-model="groupInfo.descTemp"
-                        autocomplete="off"
-                        show-word-limit
-                        resize="none"
-                      ></el-input>
+                    <el-form-item label="小组简介" :label-width="formLabelWidth">
+                      <el-input type="textarea" autosize v-model="groupInfo.descTemp" autocomplete="off" show-word-limit resize="none"></el-input>
                     </el-form-item>
                   </el-form>
                   <div slot="footer" class="dialog-footer">
                     <el-button @click="cancelChanges">取消</el-button>
-                    <el-button type="primary" @click="updateGroupInfo"
-                      >确定更改</el-button
-                    >
+                    <el-button type="primary" @click="updateGroupInfo">
+                      确定更改
+                    </el-button>
                   </div>
                 </el-dialog>
                 <el-button id="manageGroup" v-if="isOwnerOrAdmin" @click="manageGroup">查看管理员申请</el-button>
                 <el-button id="disbandGroup" type="danger" v-if="isOwner" @click="disbandGroup">解散小组</el-button>
-                <el-button id="joinGroup" @click="join" v-if="!isGroupMember && isLogin"
-                  >加入小组</el-button
-                >
-                <el-button id="leaveGroup" @click="leave" v-if="isGroupMember && isLogin"
-                  >退出小组</el-button
-                >
+                <el-button id="joinGroup" @click="join" v-if="!isGroupMember && isLogin">加入小组</el-button>
+                <el-button id="leaveGroup" @click="leave" v-if="isGroupMember && isLogin">退出小组</el-button>
                 <el-button id="requestAdmin" v-if="isGroupMember && !isOwnerOrAdmin" @click="requestAdmin">申请成为管理员</el-button>
-              </div></el-col
-            >
-          </el-row>
-          <el-row>
-            <el-col :span="5" :offset="1"
-              ><div class="groupPic">
-
-                <el-upload
-                    v-if="isOwnerOrAdmin"
-                    id="avatar-uploader"
-                    action=""
-                    :http-request="uploadAvatar"
-                    :show-file-list="false"
-                    accept="image/jpeg,image/gif,image/png,image/jpg"
-                  >
-                    <el-avatar
-                      v-if="groupInfo.pic"
-                      shape="square"
-                      :size="256"
-                      :src="groupInfo.pic"
-                    >
-                    </el-avatar>
-                    <el-avatar
-                      v-else
-                      shape="square"
-                      :size="256"
-                      icon="el-icon-lollipop"
-                    >
-                    </el-avatar>
-                    <div id="change-pic">更换头像</div>
-                  </el-upload>
-
-                  <div v-else>
-                    <el-avatar
-                      v-if="groupInfo.pic"
-                      shape="square"
-                      :size="256"
-                      :src="groupInfo.pic"
-                    >
-                    </el-avatar>
-                    <el-avatar
-                      v-else
-                      shape="square"
-                      :size="256"
-                      icon="el-icon-lollipop"
-                    >
-                    </el-avatar>
-                  </div>
               </div>
             </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="5" :offset="1">
+            <div class="groupPic">
+              <el-upload v-if="isOwnerOrAdmin" id="avatar-uploader" action="" :http-request="uploadAvatar" :show-file-list="false" accept="image/jpeg,image/gif,image/png,image/jpg">
+                <el-avatar v-if="groupInfo.pic" shape="square" :size="256" :src="groupInfo.pic"></el-avatar>
+                <el-avatar v-else shape="square" :size="256" icon="el-icon-lollipop"></el-avatar>
+                <div id="change-pic">更换头像</div>
+                </el-upload>
+                <div v-else>
+                  <el-avatar v-if="groupInfo.pic" shape="square" :size="256" :src="groupInfo.pic"></el-avatar>
+                  <el-avatar v-else shape="square" :size="256" icon="el-icon-lollipop"></el-avatar>
+                </div>
+              </div>
+            </el-col>
+
             <el-col :span="18">
               <div class="groupInfoInfo">
                 <el-row>
-                  <el-col :span="12"
-                    ><div class="info">
-                      <span class="infoText">创建人&nbsp;:&nbsp;</span
-                      ><span class="infoText2">{{ groupInfo.owner }}</span>
+                  <el-col :span="12">
+                    <div class="info">
+                      <span class="infoText">创建人&nbsp;:&nbsp;</span>
+                      <span class="infoText2">{{ groupInfo.owner }}</span>
                     </div>
                   </el-col>
-                  <el-col :span="12"
-                    ><div class="info">
-                      <span class="infoText">类型&nbsp;:&nbsp;</span
-                      ><span class="infoText2">{{ groupInfo.type }}</span>
-                    </div>
-                  </el-col>
-                </el-row>
-                <el-row>
-                  <el-col :span="12"
-                    ><div class="info">
-                      <span class="infoText">创建日期&nbsp;:&nbsp;</span
-                      ><span class="infoText2">{{ groupInfo.date }}</span>
-                    </div>
-                  </el-col>
-                  <el-col :span="12"
-                    ><div class="info">
-                      <span class="infoText">人数&nbsp;:&nbsp;</span
-                      ><span class="infoText2">{{
-                        groupInfo.peoplecount
-                      }}</span>
+                  <el-col :span="12">
+                    <div class="info">
+                      <span class="infoText">类型&nbsp;:&nbsp;</span>
+                      <span class="infoText2">{{ groupInfo.type }}</span>
                     </div>
                   </el-col>
                 </el-row>
                 <el-row>
-                  <el-col :span="20"
-                    ><div class="info2">
-                      <span class="infoText">简介&nbsp;:&nbsp;</span
-                      ><span class="infoText3">{{ groupInfo.desc }}</span>
+                  <el-col :span="12">
+                    <div class="info">
+                      <span class="infoText">创建日期&nbsp;:&nbsp;</span>
+                      <span class="infoText2">{{ groupInfo.date }}</span>
+                    </div>
+                  </el-col>
+                  <el-col :span="12">
+                    <div class="info">
+                      <span class="infoText">人数&nbsp;:&nbsp;</span>
+                      <span class="infoText2">
+                        {{ groupInfo.peoplecount }}
+                      </span>
                     </div>
                   </el-col>
                 </el-row>
-                <el-button
-                  id="post"
-                  v-if="isGroupMember"
-                  @click="openPostFeed"
-                  icon="el-icon-position"
-                  >发表帖子</el-button
-                >
+                <el-row>
+                  <el-col :span="20">
+                    <div class="info2">
+                      <span class="infoText">简介&nbsp;:&nbsp;</span>
+                      <span class="infoText3">{{ groupInfo.desc }}</span>
+                    </div>
+                  </el-col>
+                </el-row>
+                <el-button id="post" v-if="isGroupMember" @click="openPostFeed" icon="el-icon-position">发表帖子</el-button>
+                
                 <el-dialog title="发布帖子" :visible.sync="formVisible">
                   <el-form label-position="top" :model="form">
                     <el-form-item label="标题" :label-width="formLabelWidth">
-                      <el-input
-                        v-model="form.title"
-                        autocomplete="off"
-                        maxlength="25"
-                        show-word-limit
-                      ></el-input>
+                      <el-input v-model="form.title" autocomplete="off" maxlength="25" show-word-limit></el-input>
                     </el-form-item>
                     <el-form-item label="内容" :label-width="formLabelWidth">
-                      <el-input
-                        type="textarea"
-                        autosize
-                        v-model="form.description"
-                        autocomplete="off"
-                        minlength="25"
-                        show-word-limit
-                        resize="none"
-                      ></el-input>
+                      <el-input type="textarea" autosize v-model="form.description" autocomplete="off" minlength="25" show-word-limit resize="none"></el-input>
                       <el-upload
                         action=""
                         :auto-upload="false"
@@ -192,11 +111,7 @@
                         accept="image/jpeg,image/gif,image/png,image/jpg"
                         :on-exceed="handleExceed"
                       >
-                        <el-button
-                          class="form-upload-img"
-                          size="small"
-                          type="primary"
-                        >
+                        <el-button class="form-upload-img" size="small" type="primary">
                           <i class="el-icon-picture-outline-round"></i>
                           上传图片
                         </el-button>
@@ -205,15 +120,14 @@
                   </el-form>
                   <div slot="footer" class="dialog-footer">
                     <el-button @click="formVisible = false">取消</el-button>
-                    <el-button type="primary" @click="postFeed()" v-loading.fullscreen.lock="fullscreenLoading"
-                      >发布</el-button
-                    >
+                    <el-button type="primary" @click="postFeed()" v-loading.fullscreen.lock="fullscreenLoading">发布</el-button>
                   </div>
                 </el-dialog>
               </div>
             </el-col>
           </el-row>
         </div>
+
         <el-row>
           <el-row class="feed-header">
             <span :style="{ color: allColor }" @click="showAll()"> 所有 </span>
@@ -250,92 +164,59 @@
       <el-col :span="4">
         <div class="groupMember">
           <el-row>
-            <el-col :span="24"
-              ><div class="adminbar">
-                <span
-                  >管理员&nbsp;({{
-                    groupInfo.admin.length + groupInfo.mainadmin.length
-                  }})</span
-                >
-              </div></el-col
-            >
+            <el-col :span="24">
+              <div class="adminbar">
+                <span>
+                  管理员&nbsp;({{ groupInfo.admin.length + groupInfo.mainadmin.length }})
+                </span>
+              </div>
+            </el-col>
           </el-row>
           <el-row v-for="item in groupInfo.mainadmin" :key="item.id">
-            <el-col :span="24"
-              ><div class="adminlist">
-                <el-avatar
-                  v-if="item.profile"
-                  :size="30"
-                  :src="item.profile"
-                ></el-avatar>
-                <el-avatar
-                  v-else
-                  :size="30"
-                  icon="el-icon-user-solid"
-                ></el-avatar>
+            <el-col :span="24">
+              <div class="adminlist">
+                <el-avatar v-if="item.profile" :size="30" :src="item.profile"></el-avatar>
+                <el-avatar v-else :size="30" icon="el-icon-user-solid"></el-avatar>
                 <span @click="toProfile(item.id)" class="setRole">&nbsp;{{ item.username }}</span>
-                <i class="el-icon-star-off"></i></div
-            ></el-col>
+                <i class="el-icon-star-off"></i>
+              </div>
+            </el-col>
           </el-row>
           <el-row v-for="item in groupInfo.admin" :key="item.id">
-            <el-col :span="24"
-              ><div class="adminlist">
-                <el-avatar
-                  v-if="item.profile"
-                  :size="30"
-                  :src="item.profile"
-                ></el-avatar>
-                <el-avatar
-                  v-else
-                  :size="30"
-                  icon="el-icon-user-solid"
-                ></el-avatar>
-                <span @click="toProfile(item.id)" class="setRole"
-                  >&nbsp;{{ item.username }}</span
-                >
+            <el-col :span="24">
+              <div class="adminlist">
+                <el-avatar v-if="item.profile" :size="30" :src="item.profile"></el-avatar>
+                <el-avatar v-else :size="30" icon="el-icon-user-solid"></el-avatar>
+                <span @click="toProfile(item.id)" class="setRole">&nbsp;{{ item.username }}</span>
                 <i class="el-icon-star-off"></i>
-                <i class="el-icon-more" @click="setRole1(item.id)" v-if="isOwner"></i></div
-            ></el-col>
+                <i class="el-icon-more" @click="setRole1(item.id)" v-if="isOwner"></i>
+              </div>
+            </el-col>
           </el-row>
           <el-row>
-            <el-col :span="24"
-              ><div class="memberbar">
+            <el-col :span="24">
+              <div class="memberbar">
                 <span>成员&nbsp;({{ groupInfo.member.length }})</span>
-              </div></el-col
-            >
+              </div>
+            </el-col>
           </el-row>
           <el-row v-for="item in groupInfo.member" :key="item.id">
-            <el-col :span="24"
-              ><div class="memberlist">
-                <el-avatar
-                  v-if="item.profile"
-                  :size="30"
-                  :src="item.profile"
-                ></el-avatar>
-                <el-avatar
-                  v-else
-                  :size="30"
-                  icon="el-icon-user-solid"
-                ></el-avatar>
-                <span @click="toProfile(item.id)" class="setRole"
-                  >&nbsp;{{ item.username }}</span
-                >
+            <el-col :span="24">
+              <div class="memberlist">
+                <el-avatar v-if="item.profile" :size="30" :src="item.profile"></el-avatar>
+                <el-avatar v-else :size="30" icon="el-icon-user-solid"></el-avatar>
+                <span @click="toProfile(item.id)" class="setRole">
+                  &nbsp;{{ item.username }}
+                </span>
                 <i class="el-icon-more" @click="setRole2(item.id)" v-if="isOwnerOrAdmin"></i>
-              </div></el-col
-            >
+              </div>
+            </el-col>
           </el-row>
         </div>
-        <el-dialog
-          title="组员设置"
-          :visible.sync="setRoleVisible"
-          :close-on-click-modal="false"
-          :show-close="false"
-        >
+        <el-dialog title="组员设置" :visible.sync="setRoleVisible" :close-on-click-modal="false" :show-close="false">
           <el-form label-position="top" :model="groupInfo">
             <el-form-item label="设置小组职位">
-              <el-button type="primary" v-if="isOwner" @click="setOwner"
-                >主管理员</el-button
-              >
+              <el-button type="primary" v-if="isOwner" @click="setOwner">主管理员</el-button>
               <el-button type="primary" @click="setAdmin">管理员</el-button>
               <el-button type="primary" @click="setMember">普通成员</el-button>
             </el-form-item>
@@ -349,6 +230,7 @@
         </el-dialog>
       </el-col>
     </el-row>
+
     <Footer id="footer"></Footer>
     <el-backtop target=".groupInner">
       <i class="el-icon-arrow-up" style="color: #456268"></i>
@@ -372,11 +254,7 @@ export default {
   mounted() {
     this.getGroupInfo();
     this.getFeed();
-    this.mainMinHeight =
-      document.documentElement.clientHeight -
-      $("#header").outerHeight(true) -
-      $("#footer").outerHeight(true) -
-      6;
+    this.mainMinHeight = document.documentElement.clientHeight - $("#header").outerHeight(true) - $("#footer").outerHeight(true) - 6;
   },
   created() {
     const userInfo = user.getters.getUser(user.state());
@@ -900,27 +778,6 @@ export default {
     toProfile(userid) {
       this.$router.push({ path: `/profile/${userid}` });
     },
-    setFooter() {
-      console.log(
-        ">>",
-        $("#header").outerHeight(),
-        $("#main").outerHeight(),
-        $("#footer").outerHeight(),
-        document.body.clientHeight
-      );
-      if (
-        $("#header").outerHeight() + $("#main").outerHeight() + $("#footer").outerHeight() <=
-        document.body.clientHeight
-      ) {
-        $("#footer").css({
-          position: "absolute",
-        });
-      } else {
-        $("#footer").css({
-          position: "static",
-        });
-      }
-    },
   },
   computed: {
     featuredFeeds() {
@@ -1184,9 +1041,6 @@ export default {
   background-color: #d0e8f2;
   color: #456268;
 }
-/* button {
-  font-family: "Microsoft JhengHei", 微软正黑体, "Microsoft YaHei", 微软雅黑;
-} */
 .groupInner {
   height: 100vh;
   overflow-x: hidden;

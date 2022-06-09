@@ -5,29 +5,29 @@
         <div class="name">
           <span id="namespan">反馈者姓名     :</span>
           <span id='name'>{{ form.feedbacker }}</span>
-      </div>
-      <div class="content">
+        </div>
+        <div class="content">
           <div>
-          <span>反馈标题     :</span>
-          <input type="text" v-model="form.title" placeholder="请输入反馈标题">
+            <span>反馈标题     :</span>
+            <input type="text" v-model="form.title" placeholder="请输入反馈标题">
           </div>
           <div>
-          <span>反馈类型     :</span>
-          <select id="feedbackType" name="feedbackType" v-model="form.category">
-                    <option value=0 style="display: none"></option>
-                    <option value=1>网页bug</option>
-                    <option value=2>网页意见</option>
-                    <option value=3>其他</option>
-                </select>
+            <span>反馈类型     :</span>
+            <select id="feedbackType" name="feedbackType" v-model="form.category">
+                <option value=0 style="display: none"></option>
+                <option value=1>网页bug</option>
+                <option value=2>网页意见</option>
+                <option value=3>其他</option>
+            </select>
           </div>
           <div class="concontent">
-          <span>反馈详情     :</span>
-          <textarea id="content" name="content" v-model="form.description" placeholder="请输入反馈详情(不少于15字符)"></textarea>
+            <span>反馈详情     :</span>
+            <textarea id="content" name="content" v-model="form.description" placeholder="请输入反馈详情(不少于15字符)"></textarea>
           </div>
           <button @click='Submit'>提交</button>
-      </div>
-      </div>
-      <Footer id="footer"></Footer>
+        </div>
+    </div>
+    <Footer id="footer"></Footer>
   </div>
 </template>
 
@@ -50,18 +50,12 @@ export default {
                 title:'',
                 description:'',
             },
-            // mainMinHeight: "",
         }
     },
     created() {
         const userInfo = user.getters.getUser(user.state());
         this.form.feedbackerId = userInfo.user.id;
         this.getName();
-    // this.mainMinHeight =
-    //   document.documentElement.clientHeight -
-    //   $("#header").outerHeight(true) -
-    //   $("#footer").outerHeight(true) -
-    //   6;
     },
     methods: {
         Submit() {

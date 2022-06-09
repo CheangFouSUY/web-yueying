@@ -1,38 +1,26 @@
 <template>
   <div class="creategroups">
       <Header id="header"></Header>
-    <el-row id="main" type="flex" justify="center" :style="{ 'min-height': mainMinHeight + 'px' }">
-      <el-col :span="6"><div class="grid-content bg-yellow">
-        <div class="profilePic">
-        <el-upload
-        :class="{disabled: uploadDisabled}"
-        class="imgUpload"
-        list-type="picture-card"
-        action=""
-        :auto-upload="false"
-        :limit="1"
-        accept="image/jpeg,image/gif,image/png,image/jpg"
-        :on-change="handleChange"
-        :on-remove="handleRemove"
-        :on-success="handleAvatarSuccess"
-        :before-upload="beforeAvatarUpload">
-        <!-- <img v-if="form.imageUrl" :src="form.imageUrl" class="avatar"> -->
-        <!-- <i v-else class="el-icon-plus avatar-uploader-icon"></i> -->
-         <i class="el-icon-plus"></i>
-      </el-upload>
-        <!-- <img v-if="form.imageUrl" :src="form.imageUrl" onclick="$('input[id=imgUpload]').click();" class="avatar">
-        <i v-else class="el-icon-plus avatar-uploader-icon" onclick="$('input[id=imgUpload]').click();"></i>
-          <input
-          id="imgUpload"
-          ref="fileInput"
-          type="file"
-          accept="image/png,image/gif,image/jpeg"
-          @change="getImg($event);"
-          @input="pickFile"
-        /> -->
-        <!-- <el-button v-if="form.imageUrl" type="danger" icon="el-icon-delete" circle @click="cancelImgUrl"></el-button> -->
-        </div>
-        </div></el-col>
+      <el-row id="main" type="flex" justify="center" :style="{ 'min-height': mainMinHeight + 'px' }">
+        <el-col :span="6">
+          <div class="grid-content bg-yellow">
+            <div class="profilePic">
+              <el-upload
+                :class="{disabled: uploadDisabled}"
+                class="imgUpload"
+                list-type="picture-card"
+                action=""
+                :auto-upload="false"
+                :limit="1"
+                accept="image/jpeg,image/gif,image/png,image/jpg"
+                :on-change="handleChange"
+                :on-remove="handleRemove"
+                :before-upload="beforeAvatarUpload">
+                <i class="el-icon-plus"></i>
+              </el-upload>
+            </div>
+          </div>
+        </el-col>
       <el-col :span="12" ><div class="grid-content bg-yellow">
         <div class="inputBox">
           <div>
@@ -53,9 +41,10 @@
           </div>
         </div>
         <el-button id="createGroupButton" @click="createGroup" v-loading.fullscreen.lock="fullscreenLoading">创建</el-button>
-        </div></el-col>
-    </el-row>
-      <Footer id="footer"></Footer>
+      </div>
+    </el-col>
+  </el-row>
+  <Footer id="footer"></Footer>
   </div>
 </template>
 
@@ -84,10 +73,7 @@ export default {
     };
   },
   mounted(){
-    this.mainMinHeight =
-      document.documentElement.clientHeight -
-      $("#header").outerHeight(true) -
-      $("#footer").outerHeight(true) - 6;
+    this.mainMinHeight = document.documentElement.clientHeight - $("#header").outerHeight(true) - $("#footer").outerHeight(true) - 6;
   },
   methods: {
       handleChange(file, fileList) {
@@ -98,10 +84,6 @@ export default {
       },
       handleRemove(file, fileList){
         this.uploadDisabled = fileList.length >= 1;
-      },
-      handleAvatarSuccess(res, file) {
-        // this.form.imageUrl = file.raw;
-        // console.log(this.form.imageUrl)
       },
       beforeAvatarUpload(file) {
         const isTypeTrue = 
@@ -130,7 +112,6 @@ export default {
 
         this.fullscreenLoading = true;
         const formData = new FormData();
-        // var imageFile = document.querySelector('#file');
         formData.append("groupName", this.form.gName);
         formData.append("description", this.form.desc);
         formData.append("category", this.form.type);
@@ -191,7 +172,6 @@ export default {
       console.log(file);
     },
     },
-    
 }
 </script>
 
@@ -256,7 +236,6 @@ export default {
 .inputBox input{
   font-size: 20px;
   border-radius: 10px;
-  /* background-color: #D0E8F2; */
   background-color: rgb(252, 219, 156);
   margin-left: 35px;
   padding-left: 5px;
@@ -297,7 +276,6 @@ export default {
   resize: none;
   position: absolute;
   border-radius: 10px;
-  /* background-color: #D0E8F2; */
   background-color: rgb(252, 219, 156);
   font-size: 20px;
   margin-left: 10px;

@@ -11,11 +11,7 @@
       <el-row class="ctg-list">
         <el-col :span="2" class="ctg-list-type">类型</el-col>
         <el-col :span="18">
-          <li
-            v-for="item in categoryList"
-            :key="item.id"
-            @click="goFilter(item.id + '&99')"
-          >
+          <li v-for="item in categoryList" :key="item.id" @click="goFilter(item.id + '&99')">
             {{ item.des }}
           </li>
         </el-col>
@@ -23,11 +19,7 @@
       <el-row class="ctg-list">
         <el-col :span="2" class="ctg-list-type">地区</el-col>
         <el-col :span="18">
-          <li
-            v-for="item in areaList"
-            :key="item.id"
-            @click="goFilter('99&' + item.id)"
-          >
+          <li v-for="item in areaList" :key="item.id" @click="goFilter('99&' + item.id)">
             {{ item.des }}
           </li>
         </el-col>
@@ -36,38 +28,22 @@
 
       <el-row class="ctg-title">热门</el-row>
       <el-row>
-        <Swiper
-          :initialList="hotMovie"
-          :listType="'movie'"
-          v-if="hotMovie.length"
-        ></Swiper>
+        <Swiper :initialList="hotMovie" :listType="'movie'" v-if="hotMovie.length"></Swiper>
       </el-row>
 
       <el-row class="ctg-title">最新上架</el-row>
       <el-row>
-        <Swiper
-          :initialList="newMovie"
-          :listType="'movie'"
-          v-if="newMovie.length"
-        ></Swiper>
+        <Swiper :initialList="newMovie" :listType="'movie'" v-if="newMovie.length"></Swiper>
       </el-row>
 
       <el-row class="ctg-title">爱情</el-row>
       <el-row>
-        <Swiper
-          :initialList="romanceMovie"
-          :listType="'movie'"
-          v-if="romanceMovie.length"
-        ></Swiper>
+        <Swiper :initialList="romanceMovie" :listType="'movie'" v-if="romanceMovie.length"></Swiper>
       </el-row>
 
       <el-row class="ctg-title">恐怖</el-row>
       <el-row>
-        <Swiper
-          :initialList="horrorMovie"
-          :listType="'movie'"
-          v-if="horrorMovie.length"
-        ></Swiper>
+        <Swiper :initialList="horrorMovie" :listType="'movie'" v-if="horrorMovie.length"></Swiper>
       </el-row>
     </div>
 
@@ -89,11 +65,7 @@ export default {
   },
   mounted() {
     this.getAllMovie();
-    this.mainMinHeight =
-      document.documentElement.clientHeight -
-      $("#header").outerHeight(true) -
-      $("#footer").outerHeight(true) -
-      6;
+    this.mainMinHeight = document.documentElement.clientHeight - $("#header").outerHeight(true) - $("#footer").outerHeight(true) - 6;
   },
   methods: {
     goFilter(id) {
@@ -219,7 +191,6 @@ export default {
 
 .page-title img {
   width: 60px;
-  /* margin: auto 0 auto 80px; */
   vertical-align: middle;
 }
 .page-title span {
