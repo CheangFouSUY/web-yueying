@@ -92,7 +92,7 @@
           <el-row class="hot-list-title">热 榜</el-row>
           <el-tabs v-model="activeName" type="border-card" stretch>
             <el-tab-pane label="图书" name="book">
-              <li class="hot-list" v-for="(item, index) in bookHotList.slice(0, 10)" :key="item.id" :style="{ color: listColor[index + 1 - 1] }">
+              <li class="hot-list" v-for="(item, index) in bookHotList.slice(0, 20)" :key="item.id" :style="{ color: listColor[index + 1 - 1] }">
                 <img id="hot" v-if="index + 1 === 1" src="@/assets/Hot.jpg" alt="hot icon"/>
                 <span v-else>&nbsp;&nbsp;&nbsp;&nbsp;</span>
                 <span class="hot-list-number">{{ index + 1 }}</span>
@@ -102,7 +102,7 @@
               </li>
             </el-tab-pane>
             <el-tab-pane label="影视" name="drama">
-              <li class="hot-list" v-for="(item, index) in movieHotList.slice(0, 10)" :key="item.title" :style="{ color: listColor[index + 1 - 1] }">
+              <li class="hot-list" v-for="(item, index) in movieHotList.slice(0, 20)" :key="item.title" :style="{ color: listColor[index + 1 - 1] }">
                 <img id="hot" v-if="index + 1 === 1" src="@/assets/Hot.jpg" alt="hot icon"/>
                 <span v-else>&nbsp;&nbsp;&nbsp;&nbsp;</span>
                 <span class="hot-list-number">{{ index + 1 }}</span>
@@ -115,7 +115,7 @@
         </el-col>
         <el-col class="hot-list-wrap">
           <el-row class="tag-list-title">热门话题</el-row>
-          <div class="tag-list" v-for="item in tagList.slice(0, 10)" :key="item.id" @click="enterTag(item.id)">
+          <div class="tag-list" v-for="item in tagList.slice(0, 20)" :key="item.id" @click="enterTag(item.id)">
             #{{ item.title }}#
           </div>
         </el-col>

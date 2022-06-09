@@ -11,7 +11,7 @@
       <el-row class="ctg-list">
         <el-col :span="2" class="ctg-list-type">类型</el-col>
         <el-col :span="18">
-          <li v-for="item in categoryList" :key="item.id" class="normalCategory" :class="{ activeCategory: item.isActive }" @click="changeFilter(item.id + '&' + nowArea)">
+          <li v-for="item in categoryList.slice(0, 12)" :key="item.id" class="normalCategory" :class="{ activeCategory: item.isActive }" @click="changeFilter(item.id + '&' + nowArea)">
             {{ item.des }}
           </li>
         </el-col>

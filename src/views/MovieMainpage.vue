@@ -11,7 +11,7 @@
       <el-row class="ctg-list">
         <el-col :span="2" class="ctg-list-type">类型</el-col>
         <el-col :span="18">
-          <li v-for="item in categoryList" :key="item.id" @click="goFilter(item.id + '&99')">
+          <li v-for="item in categoryList.slice(0, 12)" :key="item.id" @click="goFilter(item.id + '&99')">
             {{ item.des }}
           </li>
         </el-col>

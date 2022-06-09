@@ -221,7 +221,7 @@
               <el-button type="primary" @click="setMember">普通成员</el-button>
             </el-form-item>
             <el-form-item v-if="isOwnerOrAdmin" label="其他">
-              <el-button type="danger" @click="banUser">禁止用户</el-button>
+              <el-button type="danger" @click="banUser">移出小组</el-button>
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
