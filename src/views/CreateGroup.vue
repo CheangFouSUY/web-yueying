@@ -16,21 +16,8 @@
         :on-remove="handleRemove"
         :on-success="handleAvatarSuccess"
         :before-upload="beforeAvatarUpload">
-        <!-- <img v-if="form.imageUrl" :src="form.imageUrl" class="avatar"> -->
-        <!-- <i v-else class="el-icon-plus avatar-uploader-icon"></i> -->
          <i class="el-icon-plus"></i>
       </el-upload>
-        <!-- <img v-if="form.imageUrl" :src="form.imageUrl" onclick="$('input[id=imgUpload]').click();" class="avatar">
-        <i v-else class="el-icon-plus avatar-uploader-icon" onclick="$('input[id=imgUpload]').click();"></i>
-          <input
-          id="imgUpload"
-          ref="fileInput"
-          type="file"
-          accept="image/png,image/gif,image/jpeg"
-          @change="getImg($event);"
-          @input="pickFile"
-        /> -->
-        <!-- <el-button v-if="form.imageUrl" type="danger" icon="el-icon-delete" circle @click="cancelImgUrl"></el-button> -->
         </div>
         </div></el-col>
       <el-col :span="12" ><div class="grid-content bg-yellow">
