@@ -4,7 +4,7 @@
       <!-- 小组帖子标签 -->
       <div v-if="isPin || isFeatured" class="feed-tag"></div>
       <span v-if="isPin" class="feed-tag-span">置顶</span>
-      <span v-if="isFeatured && !isPin" class="feed-tag-span">精选</span>
+      <span v-if="isFeatured && !isPin" class="feed-tag-span">精华</span>
 
       <!-- 发布者/管理员对帖子的操作 -->
       <el-dropdown v-if="isAdmin || isMine" trigger="click">
@@ -12,8 +12,8 @@
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item v-if="isAdmin && !isPin" @click.native="pin()">置顶</el-dropdown-item>
           <el-dropdown-item v-else-if="isAdmin && isPin" @click.native="pin()">取消置顶</el-dropdown-item>
-          <el-dropdown-item v-if="isAdmin && !isFeatured" @click.native="feature()">精选</el-dropdown-item>
-          <el-dropdown-item v-if="isAdmin && isFeatured" @click.native="feature()">取消精选</el-dropdown-item>
+          <el-dropdown-item v-if="isAdmin && !isFeatured" @click.native="feature()">精华</el-dropdown-item>
+          <el-dropdown-item v-if="isAdmin && isFeatured" @click.native="feature()">取消精华</el-dropdown-item>
           <el-dropdown-item v-if="isMine" @click.native="deleteDialogVisible = true">删除帖子</el-dropdown-item>
           <el-dropdown-item v-else-if="isAdmin" @click.native="deleteDialogVisible = true">删除帖子</el-dropdown-item>
         </el-dropdown-menu>

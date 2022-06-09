@@ -11,13 +11,7 @@
       <el-row class="ctg-list">
         <el-col :span="2" class="ctg-list-type">类型</el-col>
         <el-col :span="18">
-          <li
-            v-for="item in categoryList"
-            :key="item.id"
-            class="normalCategory"
-            :class="{ activeCategory: item.isActive }"
-            @click="changeFilter(item.id + '&' + nowArea)"
-          >
+          <li v-for="item in categoryList.slice(0, 12)" :key="item.id" class="normalCategory" :class="{ activeCategory: item.isActive }" @click="changeFilter(item.id + '&' + nowArea)">
             {{ item.des }}
           </li>
         </el-col>
@@ -25,13 +19,7 @@
       <el-row class="ctg-list">
         <el-col :span="2" class="ctg-list-type">地区</el-col>
         <el-col :span="18">
-          <li
-            v-for="item in placeList"
-            :key="item.id"
-            class="normalCategory"
-            :class="{ activeCategory: item.isActive }"
-            @click="changeFilter(nowCategory + '&' + item.id)"
-          >
+          <li v-for="item in placeList" :key="item.id" class="normalCategory" :class="{ activeCategory: item.isActive }" @click="changeFilter(nowCategory + '&' + item.id)">
             {{ item.des }}
           </li>
         </el-col>
@@ -40,12 +28,7 @@
 
       <el-row class="result-wrap">
         <div class="item-box" v-for="item in filterResult" :key="item.id">
-          <el-image
-            class="poster"
-            :src="item.thumbnail"
-            fit="cover"
-            @click="goDetails(item.id)"
-          ></el-image>
+          <el-image class="poster" :src="item.thumbnail" fit="cover" @click="goDetails(item.id)"></el-image>
           <div class="title-wrap">
             <span class="book-title" @click="goDetails(item.id)">
               {{ item.title }}
@@ -72,11 +55,7 @@ export default {
   },
   mounted() {
     this.getMovie();
-    this.mainMinHeight =
-      document.documentElement.clientHeight -
-      $("#header").outerHeight(true) -
-      $("#footer").outerHeight(true) -
-      6;
+    this.mainMinHeight = document.documentElement.clientHeight - $("#header").outerHeight(true) - $("#footer").outerHeight(true) - 6;
   },
   watch: {
     $route: {
@@ -200,14 +179,12 @@ export default {
 .poster {
   width: 200px;
   height: 267px;
-  /* outline: 1px red solid; */
 }
 .poster:hover {
   cursor: pointer;
 }
 .item-box a {
   display: block;
-  /* overflow: hidden; */
 }
 .item-box {
   display: inline-block;

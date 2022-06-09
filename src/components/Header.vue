@@ -364,6 +364,7 @@ a {
   margin-left: 10px;
   font-size: 16px;
   color: white;
+  cursor: pointer;
 }
 </style>
 

@@ -35,19 +35,7 @@ export default {
   },
   mounted() {
     this.id = this.$route.params.id;
-    this.mainMinHeight =
-      document.documentElement.clientHeight -
-      $("#header").outerHeight(true) -
-      $("#footer").outerHeight(true) -
-      6;
-  },
-  method: {
-    getFeed() {
-      this.$axios({
-        method: "get",
-        url: "",
-      });
-    },
+    this.mainMinHeight = document.documentElement.clientHeight - $("#header").outerHeight(true) - $("#footer").outerHeight(true) - 6;
   },
 };
 </script>

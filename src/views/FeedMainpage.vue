@@ -45,13 +45,9 @@ export default {
   data() {
     return {
       islogin: false,
-      user: "栀子花开",
+      user: "",
       activeName: "all",
-      isShowFollow: false,
-      allColor: "#79A3B1",
-      followColor: "#456268",
       formVisible: false,
-      formLabelWidth: "120px",
       form: {
         title: "",
         description: "",
@@ -71,11 +67,7 @@ export default {
     }
     this.getTag();
     this.getFeed();
-    this.mainMinHeight =
-      document.documentElement.clientHeight -
-      $("#header").outerHeight(true) -
-      $("#footer").outerHeight(true) -
-      6;
+    this.mainMinHeight = document.documentElement.clientHeight - $("#header").outerHeight(true) - $("#footer").outerHeight(true) - 6;
   },
   computed: {
     notGroupFeeds() {
@@ -169,16 +161,6 @@ export default {
           }
         });
     },
-    showAll() {
-      this.isShowFollow = false;
-      this.allColor = "#79A3B1";
-      this.followColor = "#456268";
-    },
-    showFollow() {
-      this.isShowFollow = true;
-      this.followColor = "#79A3B1";
-      this.allColor = "#456268";
-    },
     getTag() {
       this.$axios({
         method: "get",
@@ -197,7 +179,6 @@ export default {
       var header = {};
       if (localStorage.getItem("token"))
         header = { Authorization: "Bearer " + localStorage.getItem("token") };
-      console.log(header);
       this.$axios({
         method: "get",
         url: "/api/v1/feed/list?orderBy=l",
@@ -216,8 +197,6 @@ export default {
       });
     },
     getImg(event) {
-      console.log("!!!!!");
-      console.log(document.querySelector("#imgUpload").files[0]);
       var fileName = event.target.files[0].name;
       $(".showFileName").html(fileName);
       console.log(fileName);
@@ -306,14 +285,12 @@ export default {
   margin: 5px 0;
   font-size: 20px;
   color: #456268;
-  /* outline: 1px black solid; */
 }
 .tag-box {
   margin: 10px 0 30px;
 }
 .page-title img {
   width: 65px;
-  /* margin: auto 0 auto 80px; */
   vertical-align: middle;
 }
 .page-title span {

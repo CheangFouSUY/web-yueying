@@ -13,75 +13,40 @@
           <div class="Book">
             <img src="@/assets/Book.svg" alt="book icon" /><span>热门图书</span>
           </div>
-          <Swiper
-            v-if="status"
-            :initialList="bookHotList"
-            :initialIsBook="true"
-          ></Swiper>
+          <Swiper v-if="status" :initialList="bookHotList" :initialIsBook="true"></Swiper>
         </el-row>
         <el-row>
           <div class="Book">
-            <img src="@/assets/Video.svg" alt="video icon" /><span
-              >热门影视</span
-            >
+            <img src="@/assets/Video.svg" alt="video icon" />
+            <span>热门影视</span>
           </div>
-          <Swiper
-            v-if="status"
-            :initialList="movieHotList"
-            :initialIsBook="false"
-          ></Swiper>
+          <Swiper v-if="status" :initialList="movieHotList" :initialIsBook="false"></Swiper>
         </el-row>
 
         <!-- 热门评论 -->
         <el-row>
           <div class="Book">
-            <img src="@/assets/Comment.svg" alt="comment icon" /><span
-              >热门评论</span
-            >
+            <img src="@/assets/Comment.svg" alt="comment icon" />
+            <span>热门评论</span>
           </div>
         </el-row>
-        <el-row
-          class="comment-box"
-          v-for="item in reviewList.slice(0, 10)"
-          :key="item.id"
-        >
+        <el-row class="comment-box" v-for="item in reviewList.slice(0, 10)" :key="item.id">
           <el-divider></el-divider>
           <el-row :gutter="70">
             <el-col :span="1">
-              <el-avatar
-                v-if="item.publisherAvatar"
-                :size="50"
-                :src="item.publisherAvatar"
-                @click.native="enterProfile(item.createdBy)"
-              ></el-avatar>
-              <el-avatar
-                v-else
-                :size="50"
-                icon="el-icon-user-solid"
-                @click.native="enterProfile(item.createdBy)"
-              ></el-avatar>
+              <el-avatar v-if="item.publisherAvatar" :size="50" :src="item.publisherAvatar" @click.native="enterProfile(item.createdBy)"></el-avatar>
+              <el-avatar v-else :size="50" icon="el-icon-user-solid" @click.native="enterProfile(item.createdBy)"></el-avatar>
             </el-col>
             <el-col :span="22">
               <el-row v-if="status" class="comment-publisher">
-                <span
-                  @click="enterProfile(item.createdBy)"
-                  style="cursor: pointer"
-                >
+                <span @click="enterProfile(item.createdBy)" style="cursor: pointer">
                   {{ item.publisherName }}
                 </span>
                 <i class="el-icon-caret-right"></i>
-                <span
-                v-if="item.bookName"
-                  @click="enterBook(item.book)"
-                  style="cursor: pointer"
-                >
+                <span v-if="item.bookName" @click="enterBook(item.book)" style="cursor: pointer">
                   {{ item.bookName }}
                 </span>
-                <span
-                v-if="item.movieName"
-                  @click="enterMovie(item.movie)"
-                  style="cursor: pointer"
-                >
+                <span v-if="item.movieName" @click="enterMovie(item.movie)" style="cursor: pointer">
                   {{ item.movieName }}
                 </span>
               </el-row>
@@ -90,64 +55,32 @@
                 {{ dateStr(item.time) }}
               </el-row>
               <el-row class="comment-title">{{ item.title }}</el-row>
-              <el-row
-                class="comment-content"
-                v-html="contentCalc(item.description)"
-              ></el-row>
-              <el-image
-                v-if="item.img"
-                class="comment-image"
-                :src="item.img"
-              ></el-image>
+              <el-row class="comment-content" v-html="contentCalc(item.description)"></el-row>
+              <el-image v-if="item.img" class="comment-image" :src="item.img"></el-image>
             </el-col>
           </el-row>
           <el-row class="comment-action">
             <el-col :span="3" :offset="5">
               <el-row type="flex" justify="center">
-                <img
-                  v-if="item.response === 'L'"
-                  @click="commentResponse(item, 'O')"
-                  src="@/assets/Happy_fill.svg"
-                  alt="happy icon"
-                />
-                <img
-                  v-else
-                  @click="commentResponse(item, 'L')"
-                  src="@/assets/Happy.svg"
-                  alt="happy icon"
-                />
+                <img v-if="item.response === 'L'" @click="commentResponse(item, 'O')" src="@/assets/Happy_fill.svg" alt="happy icon"/>
+                <img v-else @click="commentResponse(item, 'L')" src="@/assets/Happy.svg" alt="happy icon"/>
               </el-row>
-              <el-row class="comment-like-count" type="flex" justify="center">{{
-                item.likes
-              }}</el-row>
+              <el-row class="comment-like-count" type="flex" justify="center">
+                {{ item.likes }}
+              </el-row>
             </el-col>
             <el-col :span="3" :offset="1">
               <el-row type="flex" justify="center">
-                <img
-                  v-if="item.response === 'D'"
-                  @click="commentResponse(item, 'O')"
-                  src="@/assets/Sad_fill.svg"
-                  alt="sad icon"
-                />
-                <img
-                  v-else
-                  @click="commentResponse(item, 'D')"
-                  src="@/assets/Sad.svg"
-                  alt="sad icon"
-                />
+                <img v-if="item.response === 'D'" @click="commentResponse(item, 'O')" src="@/assets/Sad_fill.svg" alt="sad icon"/>
+                <img v-else @click="commentResponse(item, 'D')" src="@/assets/Sad.svg" alt="sad icon"/>
               </el-row>
-              <el-row class="comment-like-count" type="flex" justify="center">{{
-                item.dislikes
-              }}</el-row>
+              <el-row class="comment-like-count" type="flex" justify="center">
+                {{ item.dislikes }}
+              </el-row>
             </el-col>
             <el-col :span="3" :offset="1">
               <el-row type="flex" justify="center">
-                <img
-                  id="report"
-                  @click="report('r&' + item.id)"
-                  src="@/assets/Report.svg"
-                  alt="report icon"
-                />
+                <img id="report" @click="report('r&' + item.id)" src="@/assets/Report.svg" alt="report icon"/>
               </el-row>
             </el-col>
           </el-row>
@@ -159,55 +92,30 @@
           <el-row class="hot-list-title">热 榜</el-row>
           <el-tabs v-model="activeName" type="border-card" stretch>
             <el-tab-pane label="图书" name="book">
-              <li
-                class="hot-list"
-                v-for="(item, index) in bookHotList.slice(0, 10)"
-                :key="item.id"
-                :style="{ color: listColor[index + 1 - 1] }"
-              >
-                <img
-                  id="hot"
-                  v-if="index + 1 === 1"
-                  src="@/assets/Hot.jpg"
-                  alt="hot icon"
-                />
+              <li class="hot-list" v-for="(item, index) in bookHotList.slice(0, 20)" :key="item.id" :style="{ color: listColor[index + 1 - 1] }">
+                <img id="hot" v-if="index + 1 === 1" src="@/assets/Hot.jpg" alt="hot icon"/>
                 <span v-else>&nbsp;&nbsp;&nbsp;&nbsp;</span>
                 <span class="hot-list-number">{{ index + 1 }}</span>
-                <span class="hot-list-name" @click="enterBook(item.id)">{{
-                  item.title
-                }}</span>
+                <span class="hot-list-name" @click="enterBook(item.id)">
+                  {{ item.title }}
+                </span>
               </li>
             </el-tab-pane>
             <el-tab-pane label="影视" name="drama">
-              <li
-                class="hot-list"
-                v-for="(item, index) in movieHotList.slice(0, 10)"
-                :key="item.title"
-                :style="{ color: listColor[index + 1 - 1] }"
-              >
-                <img
-                  id="hot"
-                  v-if="index + 1 === 1"
-                  src="@/assets/Hot.jpg"
-                  alt="hot icon"
-                />
+              <li class="hot-list" v-for="(item, index) in movieHotList.slice(0, 20)" :key="item.title" :style="{ color: listColor[index + 1 - 1] }">
+                <img id="hot" v-if="index + 1 === 1" src="@/assets/Hot.jpg" alt="hot icon"/>
                 <span v-else>&nbsp;&nbsp;&nbsp;&nbsp;</span>
                 <span class="hot-list-number">{{ index + 1 }}</span>
-                <span class="hot-list-name" @click="enterMovie(item.id)">{{
-                  item.title
-                }}</span>
+                <span class="hot-list-name" @click="enterMovie(item.id)">
+                  {{ item.title }}
+                </span>
               </li>
             </el-tab-pane>
           </el-tabs>
         </el-col>
         <el-col class="hot-list-wrap">
           <el-row class="tag-list-title">热门话题</el-row>
-          <div
-            class="tag-list"
-            v-for="item in tagList.slice(0, 10)"
-            :key="item.id"
-            @click="enterTag(item.id)"
-          >
+          <div class="tag-list" v-for="item in tagList.slice(0, 20)" :key="item.id" @click="enterTag(item.id)">
             #{{ item.title }}#
           </div>
         </el-col>
@@ -469,12 +377,9 @@ export default {
   -webkit-line-clamp: 1;
   line-clamp: 2;
   -webkit-box-orient: vertical;
-  /* text-align: center; */
   overflow: hidden;
-  /* text-overflow: ellipsis; */
   position: absolute;
   margin-left: 90px;
-  /* outline: 1px slateblue solid; */
 }
 .hot-list-name:hover {
   color: #79a3b1;
@@ -483,8 +388,6 @@ export default {
 .hot-list-number {
   display: inline-block;
   width: 60px;
-  /* text-align: center; */
-  /* outline: 1px slateblue solid; */
   padding-left: 15px;
 }
 .hot-list {
@@ -492,7 +395,6 @@ export default {
   line-height: 45px;
   list-style-type: none;
   color: #456268;
-  /* outline: 1px fuchsia solid; */
   display: flex;
   align-items: center;
 }
@@ -547,7 +449,6 @@ export default {
 }
 .tag-list-title {
   border-bottom: #456268 2px solid;
-  /* text-align: center; */
   font-size: 26px;
   font-weight: 600;
   color: #456268;
@@ -571,7 +472,6 @@ export default {
   margin: 10px 10px;
   font-size: 20px;
   color: #456268;
-  /* outline: 1px black solid; */
 }
 
 .el-carousel {
@@ -581,10 +481,6 @@ export default {
 .el-carousel .poster {
   cursor: pointer;
   height: 100%;
-}
-.el-col,
-.el-row {
-  /* outline: 1px red solid; */
 }
 #footer {
   position: relative;
@@ -614,22 +510,9 @@ export default {
   text-align: center;
   font-size: 24px;
 }
-.lbType1 {
-  /* border-right: 1px solid white; */
-}
-.lbType2 {
-  /* border-left: 1px solid white; */
-}
-.bg-red {
-  background-color: red;
-}
-.bg-blue {
-  background-color: blue;
-}
 .hot-list img {
   height: 25px;
   width: 25px;
-  /* border: solid 1px black; */
 }
 .main {
   margin-bottom: 30px;
