@@ -403,7 +403,8 @@ export default {
               type: "success",
               position: "top-left",
             });
-          }
+          };
+          location.reload();
         })
         .catch((err) => {
           console.log(err);
