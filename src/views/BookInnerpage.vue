@@ -31,142 +31,77 @@
             </el-row>
           </el-col>
           <el-col :span="4">
-            <img
-              v-if="isBookmark === false"
-              class="bookmark"
-              @click="bookmark()"
-              src="@/assets/Bookmark.svg"
-              alt="bookmark"
-            />
-            <img
-              v-else
-              class="bookmark"
-              @click="bookmark()"
-              src="@/assets/Bookmark_fill.svg"
-              alt="bookmark"
-            />
+            <img v-if="isBookmark === false" class="bookmark" @click="bookmark()" src="@/assets/Bookmark.svg" alt="bookmark"/>
+            <img v-else class="bookmark" @click="bookmark()" src="@/assets/Bookmark_fill.svg" alt="bookmark"/>
             <el-row class="rate-box" type="flex" justify="center">
               <el-col id="rating" :span="10">{{ rating }}</el-col>
               <el-col :span="8" :offset="0">
                 <img class="rating-icon" src="@/assets/Star_fill.svg" alt="" />
               </el-col>
             </el-row>
-            <el-rate
-              v-model="rateValue"
-              @change="selectRate(rateValue)"
-              :colors="rateColors"
-            ></el-rate>
+            <el-rate v-model="rateValue" @change="selectRate(rateValue)" :colors="rateColors"></el-rate>
           </el-col>
           <el-row :gutter="30" class="book-detail">
             <el-col :span="17">
               <div class="book-detail-prop">简介</div>
               <div class="symbol">：</div>
               <span>&nbsp;</span>
-              <span
-                style="word-wrap: break-word"
-                v-html="contentCalc(description)"
-              ></span>
+              <span style="word-wrap: break-word" v-html="contentCalc(description)"></span>
             </el-col>
           </el-row>
         </el-row>
         <el-row class="like-comment-wrap">
-          <img
-            v-if="response === 'L'"
-            @click="like()"
-            src="@/assets/Love_fill.svg"
-            alt="love"
-          />
+          <img v-if="response === 'L'" @click="like()" src="@/assets/Love_fill.svg" alt="love" />
           <img v-else @click="like()" src="@/assets/Love.svg" alt="love" />
           <span class="like-count">{{ likeCount }}</span>
           <img src="@/assets/Comment.svg" alt="comment" />
           <span class="comment-count">{{ commentCount }}</span>
         </el-row>
       </div>
+
       <div class="comment-wrap">
         <el-row class="comment-header">书评</el-row>
         <el-divider></el-divider>
         <el-row v-if="islogin" class="publish-box">
           <el-row :gutter="70">
             <el-col :span="1">
-              <el-avatar
-                v-if="userAvatar"
-                :size="50"
-                :src="userAvatar"
-              ></el-avatar>
-              <el-avatar
-                v-else
-                :size="50"
-                icon="el-icon-user-solid"
-              ></el-avatar>
+              <el-avatar v-if="userAvatar" :size="50" :src="userAvatar"></el-avatar>
+              <el-avatar v-else :size="50" icon="el-icon-user-solid"></el-avatar>
             </el-col>
             <el-col :span="22">
               <el-row class="comment-publisher">{{ user }}</el-row>
               <el-row class="publish-write">
                 <form>
-                  <input
-                    v-model="userComment.title"
-                    type="text"
-                    placeholder="书评标题："
-                  />
+                  <input v-model="userComment.title" type="text" placeholder="书评标题："/>
                   <div class="comment-autosize-wrapper">
-                    <pre
-                      class="comment-autosize"
-                    ><br>{{ userComment.content }}</pre>
-                    <textarea
-                      v-model="userComment.content"
-                      placeholder="书评内容："
-                    ></textarea>
+                    <pre class="comment-autosize">
+                      <br>{{ userComment.content }}
+                    </pre>
+                    <textarea v-model="userComment.content" placeholder="书评内容："></textarea>
                   </div>
                   <span class="showFileName"></span>
-                  <i
-                    v-if="userComment.img"
-                    class="el-icon-delete"
-                    @click="deleteImg()"
-                    style="cursor: pointer"
-                  ></i>
-                  <input
-                    id="imgUpload"
-                    type="file"
-                    accept="image/png,image/gif,image/jpeg"
-                    @change="getImg($event)"
-                  />
+                  <i v-if="userComment.img" class="el-icon-delete" @click="deleteImg()" style="cursor: pointer"></i>
+                  <input id="imgUpload" type="file" accept="image/png,image/gif,image/jpeg" @change="getImg($event)"/>
                   <el-row class="publish-action" :span="20">
-                    <i
-                      class="el-icon-picture-outline-round"
-                      onclick="$('input[id=imgUpload]').click();"
-                    ></i>
-                    <i
-                      id="imgIcon"
-                      class="el-icon-position"
-                      @click="submitReview($event)"
-                    ></i>
+                    <i class="el-icon-picture-outline-round" onclick="$('input[id=imgUpload]').click();"></i>
+                    <i id="imgIcon" class="el-icon-position" @click="submitReview($event)"></i>
                   </el-row>
                 </form>
               </el-row>
             </el-col>
           </el-row>
         </el-row>
+
         <el-row class="comment-box" v-for="item in comments" :key="item.id">
           <el-divider></el-divider>
           <el-row :gutter="70">
             <el-col :span="1">
-              <el-avatar
-                v-if="item.publisherAvatar"
-                :size="50"
-                :src="item.publisherAvatar"
-              ></el-avatar>
-              <el-avatar
-                v-else
-                :size="50"
-                icon="el-icon-user-solid"
-              ></el-avatar>
+              <el-avatar v-if="item.publisherAvatar" :size="50" :src="item.publisherAvatar"></el-avatar>
+              <el-avatar v-else :size="50" icon="el-icon-user-solid"></el-avatar>
             </el-col>
             <el-col :span="22">
               <el-row v-if="status" class="comment-publisher">
-                <span
-                  @click="enterProfile(item.createdBy)"
-                  style="cursor: pointer"
-                >
+                <span @click="enterProfile(item.createdBy)" style="cursor: pointer">
                   {{ item.publisherName }}
                 </span>
               </el-row>
@@ -175,64 +110,32 @@
                 {{ dateStr(item.time) }}
               </el-row>
               <el-row class="comment-title">{{ item.title }}</el-row>
-              <el-row
-                class="comment-content"
-                v-html="contentCalc(item.description)"
-              ></el-row>
-              <el-image
-                v-if="item.img"
-                class="comment-image"
-                :src="item.img"
-              ></el-image>
+              <el-row class="comment-content" v-html="contentCalc(item.description)"></el-row>
+              <el-image v-if="item.img" class="comment-image" :src="item.img"></el-image>
             </el-col>
           </el-row>
           <el-row class="comment-action">
             <el-col :span="3" :offset="5">
               <el-row type="flex" justify="center">
-                <img
-                  v-if="item.response === 'L'"
-                  @click="commentResponse(item, 'O')"
-                  src="@/assets/Happy_fill.svg"
-                  alt="happy icon"
-                />
-                <img
-                  v-else
-                  @click="commentResponse(item, 'L')"
-                  src="@/assets/Happy.svg"
-                  alt="happy icon"
-                />
+                <img v-if="item.response === 'L'" @click="commentResponse(item, 'O')" src="@/assets/Happy_fill.svg" alt="happy icon"/>
+                <img v-else @click="commentResponse(item, 'L')" src="@/assets/Happy.svg" alt="happy icon"/>
               </el-row>
-              <el-row class="comment-like-count" type="flex" justify="center">{{
-                item.likes
-              }}</el-row>
+              <el-row class="comment-like-count" type="flex" justify="center">
+                {{ item.likes }}
+              </el-row>
             </el-col>
             <el-col :span="3" :offset="1">
               <el-row type="flex" justify="center">
-                <img
-                  v-if="item.response === 'D'"
-                  @click="commentResponse(item, 'O')"
-                  src="@/assets/Sad_fill.svg"
-                  alt="sad icon"
-                />
-                <img
-                  v-else
-                  @click="commentResponse(item, 'D')"
-                  src="@/assets/Sad.svg"
-                  alt="sad icon"
-                />
+                <img v-if="item.response === 'D'" @click="commentResponse(item, 'O')" src="@/assets/Sad_fill.svg" alt="sad icon"/>
+                <img v-else @click="commentResponse(item, 'D')" src="@/assets/Sad.svg" alt="sad icon"/>
               </el-row>
-              <el-row class="comment-like-count" type="flex" justify="center">{{
-                item.dislikes
-              }}</el-row>
+              <el-row class="comment-like-count" type="flex" justify="center">
+                {{ item.dislikes }}
+              </el-row>
             </el-col>
             <el-col :span="3" :offset="1">
               <el-row type="flex" justify="center">
-                <img
-                  id="report"
-                  @click="report('r&' + item.id)"
-                  src="@/assets/Report.svg"
-                  alt="report icon"
-                />
+                <img id="report" @click="report('r&' + item.id)" src="@/assets/Report.svg" alt="report icon"/>
               </el-row>
             </el-col>
           </el-row>
@@ -258,23 +161,22 @@ export default {
     return {
       status: false, //控制数据渲染
       islogin: false,
-      user: "陌上花开",
+      user: "",
       userId: "",
       userAvatar: "",
-      id: "B11111",
-      title: "盗墓笔记",
-      isbn: "20134568",
-      author: "南派三叔",
-      category: "科幻",
-      year: "2007",
-      publish: "上海文化出版社",
-      description:
-        "故事起源於1952年，主角吴邪的祖父吴老狗在长沙的血屍墓里发现战国帛书，而引发後来吴邪从帛书解谜途中的一段段冒险。五十年後，吴邪一个看似单纯的吴家富二代，大学毕业後便经营著古董店，日子过一天是一天，殊不知其身世冒险之离奇，因为发现先人笔记中一个秘密就此展开。抱著好奇和一颗想见世面的心，他硬是跟上他三叔及一群盗墓高手的鲁王宫之旅，欲解开帛书之谜。在这个过程中他遇见了闷油瓶和胖子。在途中，很多他一辈子都没见过的东西，或是连想都没想过的东西，一个接著一个出现。遭遇的每件事，越来越离奇。就在他发现自己的生活满是谜题，并欲寻求解答时，唯一的线索──「三叔」却消失了。不甘放弃的吴邪，决定追根究柢，也决定今後不凡但却不为人知的冒险旅程。",
-      src: require("@/assets/poster/DaoMuBiJi.jpg"),
-      rating: "4.6",
-      likeCount: "50",
-      commentCount: "3",
-      response: "L",
+      id: "",
+      title: "",
+      isbn: "",
+      author: "",
+      category: "",
+      year: "",
+      publish: "",
+      description: "",
+      src: "",
+      rating: 0,
+      likeCount: 0,
+      commentCount: 0,
+      response: "O",
       isBookmark: false,
       userComment: {
         title: "",
@@ -284,51 +186,7 @@ export default {
       isRate: false,
       rateValue: -1,
       rateColors: ["#99A9BF", "#F7BA2A", "#FF9900"],
-      comments: [
-        // {
-        //   id: "C0001",
-        //   title: "大推！",
-        //   createdBy: "b3e86355-9f73-4272-b2d2-badd776acccb",
-        //   publisherName: "我直呼牛比",
-        //   feed: null,
-        //   book: "dfc78b5a-32f8-418c-b315-784ee8d5ee32",
-        //   movie: null,
-        //   updatedAt: "2022-05-22T12:22:00.813064Z",
-        //   createdAt: "2022-05-22T12:22:00.813064Z",
-        //   likes: 12,
-        //   dislikes: 0,
-        //   description:
-        //     "《盗墓笔记》其实一点都不可怕，因为它并不是一个关于鬼怪和僵尸的小说。它讲述的，是一群人，在一个跨越千年的阴谋中，彼此牵绊了的一生。迷雾掩盖了真相，却让身在迷雾中的人，在分分合合中参悟了世间人情冷暖。三叔说，比鬼神更可怕的是人心。但我说，比金石更不朽的亦是人心。到头来，该散的人们各自散了。该留在心里的，也一个没有少。",
-        // },
-        // {
-        //   id: "C0002",
-        //   title: "真的很好看",
-        //   publisherName: "一只高冷喵",
-        //   feed: null,
-        //   book: "dfc78b5a-32f8-418c-b315-784ee8d5ee32",
-        //   movie: null,
-        //   updatedAt: "2022-05-21T12:32:00.813064Z",
-        //   createdAt: "2022-05-21T12:32:00.813064Z",
-        //   likes: 1,
-        //   dislikes: 2,
-        //   description:
-        //     "其实原来我以为自己是看不进去盗墓探险类的小说的。就像几年前流行天下霸唱的《鬼吹灯》，当时我也试着看了，但是完全没有进入状态，奇幻的景象可以想象，但是没有关键人物揪着你的心，让你继有读下去的欲望。而这次看《盗墓笔记》则不同，我一开始完全是冲着吴邪和张起灵这对暧昧的CP去的，没想到这一通看下来，除了对书中人物一通YY以外，我还对每一次华华丽丽的大冒险，都像亲身经历过一样，记忆犹新，回味无穷。",
-        // },
-        // {
-        //   id: "C0003",
-        //   title: "铁三角yyds",
-        //   publisherName: "橘子东南飞",
-        //   feed: null,
-        //   book: "dfc78b5a-32f8-418c-b315-784ee8d5ee32",
-        //   movie: null,
-        //   updatedAt: "2022-05-19T10:57:18.048199Z",
-        //   createdAt: "2022-05-19T10:57:18.048199Z",
-        //   likes: 4,
-        //   dislikes: 3,
-        //   description:
-        //     "还记得那时候，三叔因为看鬼吹灯，更新太慢，而自己动手，丰衣足食。结果，唉，实在不想说三叔都拖成了啥。那时候看书的男生很多，不想现在，基本是女的了。还记得那个时候每章下面的吐槽。出场较多的应该是红旗牌轿车，还有小哥堪比周杰伦的出场费啊等等。那个时候小哥对我来说就像神一样，每次无论多可怕的场景，只要他出现，就一点都不怕了，所以在秦岭神树那里，真的看的战战兢兢又期待，会不会有易容的小哥突然的出现。当然，现在的小哥也依然是我的男神。永远都会是。吴邪性格的变化，也让我们感觉像真的陪着他们走过了这么多年，这么多路。三叔真的坑，到现在，很多自己都圆不了。但我真的很感恩他当初没有按原计划把小哥写成女的。其实我是很排斥二次元和三次元破壁的。太久了，他们在心中已经生了根，他们属于三叔，但同样属于一路陪他们走来的人。他们在我的心中，早有他们的形象，不是任何人能代替扮演的，像真实存在一般，是鲜活存在的。我不是针对任何演员，但我不看任何电视电影，也很讨厌有人真人化。很多人走了，又有一些人走进，我不知道他们是不是因为喜欢他们偶像演的剧才进的，还是迟到了的发现与喜爱。也许将来我会不再看三叔的书。但对于书中的人物，对于瓶邪，对于铁三角，我永远都在。",
-        // },
-      ],
+      comments: [],
       categoryList: [
         "其他",
         "爱情",
@@ -353,11 +211,7 @@ export default {
       this.userId = userInfo.user.id;
     }
     this.getAll();
-    this.mainMinHeight =
-      document.documentElement.clientHeight -
-      $("#header").outerHeight(true) -
-      $("#footer").outerHeight(true) -
-      6;
+    this.mainMinHeight = document.documentElement.clientHeight - $("#header").outerHeight(true) - $("#footer").outerHeight(true) - 6;
   },
   watch: {
     $route: {
@@ -649,8 +503,6 @@ export default {
         .catch((error) => {
           console.log(error);
         });
-      // console.log("getAll() done");
-      // console.log("!!!!!", this.comments);
 
       if (this.islogin)
         await this.$axios
@@ -683,11 +535,6 @@ export default {
             this.comments[i].publisherName = res.data.username;
             if (res.data.profile)
               this.comments[i].publisherAvatar = res.data.profile;
-
-            // for (let j = i + 1; j < this.comments.length; j++) {
-            //   if (this.comments[i].createdBy == this.comments[j].createdBy)
-            //     this.comments[j].publisherName = this.comments[i].publisherName;
-            // }
             if (i == this.comments.length - 1) this.status = true;
           })
           .catch((error) => {
@@ -699,7 +546,6 @@ export default {
       var header = {};
       if (localStorage.getItem("token"))
         header = { Authorization: "Bearer " + localStorage.getItem("token") };
-      console.log(header);
       return this.$axios({
         method: "get",
         url: "/api/v1/book/" + this.$route.params.id,
@@ -738,7 +584,6 @@ export default {
         s = Math.floor(time / 60 / 60 / 24);
         return s + "天前";
       } else {
-        // console.log(date);
         var date = new Date(parseInt(date));
         let y = date.getFullYear();
         let m =
@@ -759,14 +604,12 @@ export default {
       var fileName = event.target.files[0].name;
       $(".showFileName").html(fileName);
       this.userComment.img = event.target.files[0];
-      console.log("get img! ", this.userComment);
     },
     deleteImg() {
       $("#imgUpload").attr("type", "text");
       $("#imgUpload").attr("type", "file");
       $(".showFileName").html("");
       this.userComment.img = "";
-      console.log(this.userComment);
     },
     enterProfile(userid) {
       this.$router.push({ path: `/profile/${userid}` });

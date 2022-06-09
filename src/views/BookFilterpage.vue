@@ -11,13 +11,7 @@
       <el-row class="ctg-list">
         <el-col :span="2" class="ctg-list-type">类型</el-col>
         <el-col :span="18">
-          <li
-            v-for="item in categoryList"
-            :key="item.id"
-            class="normalCategory"
-            :class="{ activeCategory: item.isActive }"
-            @click="changeFilter(item.id)"
-          >
+          <li v-for="item in categoryList" :key="item.id" class="normalCategory" :class="{ activeCategory: item.isActive }" @click="changeFilter(item.id)">
             {{ item.des }}
           </li>
         </el-col>
@@ -26,12 +20,7 @@
 
       <el-row class="result-wrap">
         <div class="item-box" v-for="item in filterResult" :key="item.id">
-          <el-image
-            class="poster"
-            :src="item.thumbnail"
-            fit="cover"
-            @click="goDetails(item.id)"
-          ></el-image>
+          <el-image class="poster" :src="item.thumbnail" fit="cover" @click="goDetails(item.id)"></el-image>
           <div class="title-wrap">
             <span class="book-title" @click="goDetails(item.id)">
               {{ item.title }}
@@ -58,11 +47,7 @@ export default {
   },
   mounted() {
     this.getBook();
-    this.mainMinHeight =
-      document.documentElement.clientHeight -
-      $("#header").outerHeight(true) -
-      $("#footer").outerHeight(true) -
-      6;
+    this.mainMinHeight = document.documentElement.clientHeight - $("#header").outerHeight(true) - $("#footer").outerHeight(true) - 6;
   },
   watch: {
     $route: {
