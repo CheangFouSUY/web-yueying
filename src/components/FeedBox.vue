@@ -101,7 +101,7 @@
                     <pre class="comment-autosize" >
                       <br>{{ userComment.content }}
                     </pre>
-                    <textarea v-model="userComment.content" placeholder="书评内容："></textarea>
+                    <textarea v-model="userComment.content" placeholder="留下评论："></textarea>
                   </div>
                   <span class="showFileName"></span>
                   <i v-if="userComment.img" class="el-icon-delete" @click="deleteImg()" style="cursor: pointer"></i>
