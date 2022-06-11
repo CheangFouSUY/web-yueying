@@ -1,5 +1,9 @@
 # se_project
 
+### [`PikaTea`](https://github.com/PikaTea)
+
+### [`leyi`](https://github.com/leyiiiii)
+
 ## Project setup
 ```
 npm install

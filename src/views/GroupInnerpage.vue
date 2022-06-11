@@ -93,7 +93,7 @@
                     </div>
                   </el-col>
                 </el-row>
-                <el-button id="post" v-if="isGroupMember" @click="openPostFeed" icon="el-icon-position">发表帖子</el-button>
+                <el-button id="post" v-if="isGroupMember" @click="openPostFeed" icon="el-icon-position">发布帖子</el-button>
                 
                 <el-dialog title="发布帖子" :visible.sync="formVisible">
                   <el-form label-position="top" :model="form">
@@ -480,7 +480,7 @@ export default {
             case 201:
               this.$notify({
                 showClose: true,
-                message: "已发表帖子",
+                message: "已发布帖子",
                 type: "success",
                 position: "top-left",
               });
