@@ -12,7 +12,7 @@ Vue.use(ElementUI);
 Vue.prototype.$axios = axios
 Vue.prototype.$qs = qs
 // axios.defaults.baseURL = 'http://123.12.123.12:8000';
-axios.defaults.baseURL = 'http://127.0.0.1:8000'
+axios.defaults.baseURL = 'http://api.cheangfou.com'
 window.jQuery = $
 window.$ = $
 router.beforeEach((to, from, next) => {
